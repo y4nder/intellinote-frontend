@@ -1,14 +1,10 @@
 import { PropsWithChildren } from "react"
-import { ModeToggle } from "../ui/mode-toggle"
 
 const AppLayout = ({ children }: PropsWithChildren) => {
 
   return (
-    <div className="h-screen bg-background mx-auto">
-        <header className="py-2 flex justify-end">
-            {/* <ModeToggle /> */}
-        </header>
 
+    <div className="">
         <main>
             {children}
         </main>
