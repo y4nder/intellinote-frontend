@@ -43,3 +43,13 @@ export function getGradientClassesFromString(input: string): {
     hover: `hover:bg-gradient-to-br hover:${gradients[nextIndex]}`,
   };
 }
+
+// utils/breadcrumb.ts
+export function extractTitleFromSlug(slug: string): string {
+  const match = slug.match(/^(.*?)-\d+$/);
+  const title = match ? match[1] : slug;
+  return title
+    .split("-")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}

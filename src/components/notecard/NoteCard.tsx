@@ -3,6 +3,10 @@ import { Note } from "@/types/note";
 import { formatDistanceToNow } from "date-fns";
 import { MoreHorizontal } from "lucide-react";
 import { GradientBadge } from "../ui/gradient-badge";
+import { useNavigate } from "react-router-dom";
+import { AppDispatch } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { setSelectedNote } from "@/redux/slice/folder-note";
 
 interface NoteCardProps {
   note: Note;
@@ -10,6 +14,8 @@ interface NoteCardProps {
 
 export default function NoteCard({ note }: NoteCardProps) {
   const { title, content, tags, createdAt } = note;
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const getTimeAgo = (date: string) => {
     const dateObj = new Date(date);
@@ -33,8 +39,16 @@ export default function NoteCard({ note }: NoteCardProps) {
     ? formattedTimeAgo.replace(" minutes", "m").replace(" minute", "m") + " ago"
     : formattedTimeAgo + " ago";
 
+  const handleNavigation = () => {
+    dispatch(setSelectedNote(note));
+    const titleSlug = note.title.toLowerCase().replace(/\s+/g, "-");
+    navigate(`/${titleSlug}-${note.id}`)
+  }
+
   return (
-    <div className="bg-white rounded-3xl md:max-w-sm lg:max-w-sm shadow-sm hover:shadow-md transition-all  cursor-pointer group active:scale-95">
+    <div className="bg-white rounded-3xl md:max-w-sm lg:max-w-sm shadow-sm hover:shadow-md transition-all  cursor-pointer group active:scale-95"
+      onClick={handleNavigation}
+    >
       <div className="bg-primary-fixed h-[40px] rounded-t-3xl"/>
       <div className="p-5 flex flex-col justify-between">
         <div className="mb-3 flex justify-between items-start">
@@ -59,4 +73,4 @@ export default function NoteCard({ note }: NoteCardProps) {
   );
 }
 
-      
+  
