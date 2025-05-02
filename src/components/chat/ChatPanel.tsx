@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ChatMessage } from "@/data/mockData";
 import { cn } from "@/lib/utils";
-import { Send, ChevronLeft, ChevronRight, Bot } from "lucide-react";
+import { Send, ChevronLeft, ChevronRight, Bot, ChevronDown } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
@@ -22,15 +22,33 @@ export default function ChatPanel({
 }: ChatPanelProps) {
   const isMobile = useIsMobile();
   const [newChatMessage, setNewChatMessage] = useState("");
-  
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  //scroll button
+  const [showScrollButton, setShowScrollButton] = useState(false);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
   // Update panel appearance based on mobile state
   useEffect(() => {
-    // Scroll to bottom of messages on new message
-    const scrollArea = document.querySelector('.scrollarea-content');
-    if (scrollArea) {
-      scrollArea.scrollTop = scrollArea.scrollHeight;
-    }
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages]);
+
+  useEffect(() => {
+    const el = scrollAreaRef.current;
+    if (!el) return;
+  
+    el.addEventListener("scroll", handleScroll);
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, []);
+  
+  const handleScroll = () => {
+    const el = scrollAreaRef.current;
+    if (!el) return;
+  
+    const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 50;
+    setShowScrollButton(!isAtBottom);
+  };
+
 
   const handleSendMessage = () => {
     if (newChatMessage.trim()) {
@@ -60,7 +78,7 @@ export default function ChatPanel({
   }
 
   return (
-    <div className="h-full">
+    <div className="h-screen">
       {/* Overlay when chat is open on mobile */}
       {isMobile && !isChatCollapsed && (
         <div 
@@ -85,44 +103,60 @@ export default function ChatPanel({
           </button>
         </div>
 
-        <ScrollArea className="flex-1 p-4">
-          <div className="space-y-4">
-            {chatMessages.map((message: ChatMessage) => (
-              <div
-                key={message.id}
-                className={cn(
-                  "flex items-start",
-                  message.isUser && "justify-end",
-                )}
-              >
-                {!message.isUser && (
-                  <Avatar className="w-8 h-8 mr-3">
-                    <AvatarFallback className="bg-secondary text-white">
-                      <Bot className="h-4 w-4" />
-                    </AvatarFallback>
-                  </Avatar>
-                )}
+        <div
+          className="flex-1 overflow-y-auto p-4"
+          ref={scrollAreaRef}
+          onScroll={handleScroll}
+        >
+          <ScrollArea>
+            <div className="space-y-4">
+              {chatMessages.map((message: ChatMessage) => (
                 <div
+                  key={message.id}
                   className={cn(
-                    "p-3 rounded-lg max-w-[85%]",
-                    message.isUser
-                      ? "bg-primary/10 rounded-tr-none mr-3"
-                      : "bg-gray-100 rounded-tl-none",
+                    "flex items-start",
+                    message.isUser && "justify-end",
                   )}
                 >
-                  <p className="text-sm">{message.content}</p>
+                  {!message.isUser && (
+                    <Avatar className="w-8 h-8 mr-3">
+                      <AvatarFallback className="bg-secondary text-white">
+                        <Bot className="h-4 w-4" />
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
+                  <div
+                    className={cn(
+                      "p-3 rounded-lg max-w-[85%]",
+                      message.isUser
+                        ? "bg-primary/10 rounded-tr-none mr-3"
+                        : "bg-gray-100 rounded-tl-none",
+                    )}
+                  >
+                    <p className="text-sm">{message.content}</p>
+                  </div>
+                  {message.isUser && (
+                    <Avatar className="w-8 h-8">
+                      <AvatarFallback className="bg-gray-200 text-gray-500">
+                        ME
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
                 </div>
-                {message.isUser && (
-                  <Avatar className="w-8 h-8">
-                    <AvatarFallback className="bg-gray-200 text-gray-500">
-                      ME
-                    </AvatarFallback>
-                  </Avatar>
-                )}
-              </div>
-            ))}
-          </div>
-        </ScrollArea>
+              ))}
+              <div ref={scrollRef} className="h-0"></div>
+            </div>
+          </ScrollArea>
+        </div>
+
+        {showScrollButton && (
+          <button
+            className="absolute bottom-24 right-4 z-40 p-2 rounded-full bg-secondary text-white shadow-lg hover:bg-secondary/90"
+            onClick={() => scrollRef.current?.scrollIntoView({ behavior: "smooth" })}
+          >
+            <ChevronDown className="h-5 w-5" />
+          </button>
+        )}
 
         <div className="p-4 border-t border-gray-100">
           <div className="relative">

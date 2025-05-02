@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import {
   Note,
   Folder,
@@ -9,7 +8,6 @@ import {
   mockFolders,
   mockTags,
 } from "@/data/mockData";
-
 import { Search, X, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -19,6 +17,10 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import NoteCard from "@/components/notecard/NoteCard";
 import FolderCard from "@/components/foldercard/FolderCard";
 import ChatPanel from "@/components/chat/ChatPanel";
+
+//todo create sidebar context
+//todo create chat agent context
+//todo modularize this page
 
 
 export default function Home() {
@@ -135,7 +137,7 @@ export default function Home() {
           tags={tags}
         />
       </div>
-
+      {/* todo this section will have its own component */}
       <main
         className={cn(
           "flex-1 overflow-y-auto transition-all duration-300 relative",
@@ -205,7 +207,7 @@ export default function Home() {
         isChatCollapsed ? 
           "translate-x-[100%] md:translate-x-[100%] md:w-0 w-0" : 
           "translate-x-0 right-0 w-full md:w-80",
-        "transition-all duration-300 h-full"
+          "transition-all duration-300 h-full"
       )}>
         <ChatPanel
           isChatCollapsed={isChatCollapsed}
