@@ -4,10 +4,11 @@ import { BackgroundGradientAnimation } from "@/components/ui/background-gradient
 import { ModeToggle } from "@/components/ui/mode-toggle"
 import { useIsMobile } from "@/hooks/use-is-mobile"
 import { useEffect, useRef } from "react"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 
 const Login = () => {
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const mobileScrollRef = useRef<HTMLDivElement>(null);
 
@@ -19,6 +20,12 @@ const Login = () => {
       }, 1000);
     }
   }, [isMobile]);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Login form submitted");
+    navigate("/");
+  }
 
 
   return (
@@ -63,7 +70,7 @@ const Login = () => {
           <h1 className="text-primary-foreground text-2xl md:text-3xl font-extrabold">Login</h1>
           <p className="text-gray-600 text-sm mb-4 md:mb-6">You can sign in or join with us if you're new to IntelliNote</p>
 
-          <form className="space-y-3 md:space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-3 md:space-y-4" onSubmit={handleLogin}>
             <div>
               <input
                 type="email"

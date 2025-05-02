@@ -1,5 +1,4 @@
 import React from "react";
-import { Tag as TagType } from "@/data/mockData";
 import { cn } from "@/lib/utils";
 
 import { 
@@ -13,21 +12,22 @@ import {
   ChevronRight 
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-is-mobile";
+import { useSidebar } from "@/providers/sidebar";
 
-interface SidebarProps {
-  isSidebarCollapsed: boolean;
-  toggleSidebar: () => void;
-  tags?: TagType[];
-}
+// interface SidebarProps {
+//   tags?: TagType[];
+// }
 
 interface SidebarItemProps {
   icon: React.ReactNode;
   label: string;
   isActive?: boolean;
-  isCollapsed: boolean;
 }
 
-function SidebarItem({ icon, label, isActive, isCollapsed }: SidebarItemProps) {
+function SidebarItem({ icon, label, isActive }: SidebarItemProps) {
+
+  const {isCollapsed} = useSidebar();
+
   return (
     <li className="px-4 py-2">
       <a
@@ -47,40 +47,37 @@ function SidebarItem({ icon, label, isActive, isCollapsed }: SidebarItemProps) {
   );
 }
 
-export default function Sidebar({ 
-  isSidebarCollapsed, 
-  toggleSidebar, 
-  tags = [] 
-}: SidebarProps) {
+export default function Sidebar() {
+  const {isCollapsed, toggleSidebar} = useSidebar();
+
   const isMobile = useIsMobile();
 
   return (
     <div className="relative h-full">
       {/* Overlay for mobile when sidebar is open */}
-      {isMobile && !isSidebarCollapsed && (
+      {isMobile && !isCollapsed && (
         <div 
           className="fixed inset-0 bg-opacity-50 z-20"
-          // onClick={toggleSidebar}
         ></div>
       )}
       
       <div
         className={cn(
           "bg-white shadow-lg h-screen flex flex-col transition-all duration-300 ease-in-out border-r border-gray-100",
-          isSidebarCollapsed ? "w-16" : "w-64",
-          isMobile && !isSidebarCollapsed && "w-full max-w-[250px] z-30"
+          isCollapsed ? "w-16" : "w-64",
+          isMobile && !isCollapsed && "w-full max-w-[250px] z-30"
         )}
       >
         <div className="flex items-center p-4 border-b border-gray-100">
           <div className="bg-primary rounded-full w-8 h-8 flex items-center justify-center text-white">
             <span className="text-sm font-semibold">JD</span>
           </div>
-          {!isSidebarCollapsed && <span className="ml-3 font-medium">John Doe</span>}
+          {!isCollapsed && <span className="ml-3 font-medium">John Doe</span>}
           <button
             onClick={toggleSidebar}
             className="ml-auto text-gray-400 hover:text-primary"
           >
-            {isSidebarCollapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
+            {isCollapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
           </button>
         </div>
 
@@ -89,32 +86,27 @@ export default function Sidebar({
             <SidebarItem
               icon={<Home className="h-5 w-5" />}
               label="Home"
-              isCollapsed={isSidebarCollapsed}
             />
             <SidebarItem
               icon={<FileText className="h-5 w-5" />}
               label="All Notes"
               isActive
-              isCollapsed={isSidebarCollapsed}
             />
             <SidebarItem
               icon={<Folder className="h-5 w-5" />}
               label="Folders"
-              isCollapsed={isSidebarCollapsed}
             />
             <SidebarItem
               icon={<Tag className="h-5 w-5" />}
               label="Tags"
-              isCollapsed={isSidebarCollapsed}
             />
             <SidebarItem
               icon={<Trash2 className="h-5 w-5" />}
               label="Trash"
-              isCollapsed={isSidebarCollapsed}
             />
           </ul>
 
-          {!isSidebarCollapsed && (
+          {/* {!isCollapsed && (
             <div className="border-t border-gray-100 mt-4 pt-4">
               <h3 className="text-xs uppercase text-gray-500 font-semibold px-6 mb-2">
                 Tags
@@ -133,7 +125,7 @@ export default function Sidebar({
                 ))}
               </ul>
             </div>
-          )}
+          )} */}
         </nav>
 
         <div className="p-4 border-t border-gray-100">
@@ -141,11 +133,11 @@ export default function Sidebar({
             href="#"
             className={cn(
               "flex items-center text-gray-700 hover:text-primary",
-              isSidebarCollapsed && "justify-center"
+              isCollapsed && "justify-center"
             )}
           >
             <Settings className="h-5 w-5" />
-            {!isSidebarCollapsed && <span className="ml-3">Settings</span>}
+            {!isCollapsed && <span className="ml-3">Settings</span>}
           </a>
         </div>
       </div>

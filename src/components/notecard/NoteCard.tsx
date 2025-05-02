@@ -1,4 +1,5 @@
-import { Note } from "@/data/mockData";
+
+import { Note } from "@/types/note";
 import { formatDistanceToNow } from "date-fns";
 import { MoreHorizontal } from "lucide-react";
 

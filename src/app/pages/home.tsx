@@ -1,13 +1,4 @@
 import { useState, useEffect } from "react";
-import {
-  Note,
-  Folder,
-  Tag,
-  ChatMessage,
-  mockNotes,
-  mockFolders,
-  mockTags,
-} from "@/data/mockData";
 import { Search, X, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -17,30 +8,37 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import NoteCard from "@/components/notecard/NoteCard";
 import FolderCard from "@/components/foldercard/FolderCard";
 import ChatPanel from "@/components/chat/ChatPanel";
+import { useSidebar } from "@/providers/sidebar";
+import { ChatMessage } from "@/types/chatMessage";
+import { Folder } from "@/types/folder";
+import { Note } from "@/types/note";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { setSearchQuery } from "@/redux/slice/folder-note";
 
-//todo create sidebar context
-//todo create chat agent context
+//done create sidebar context
+//done create application reducer context
 //todo modularize this page
+//todo create chat agent context
 
 
 export default function Home() {
-  const isMobile = useIsMobile();
-  
   // Local state initialization
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(isMobile);
-  const [isChatCollapsed, setIsChatCollapsed] = useState(true);
+  const dispatch = useDispatch<AppDispatch>();
+  const isMobile = useIsMobile();
+  const {isCollapsed, toggleSidebar} = useSidebar();
+  const {folders, notes, searchQuery} = useSelector((state: RootState) => state.folderNotes);
   
+  
+  const [isChatCollapsed, setIsChatCollapsed] = useState(true);
+
   // Update sidebar and chat panel when screen size changes
   useEffect(() => {
     if (isMobile) {
-      setIsSidebarCollapsed(true);
       setIsChatCollapsed(true);
     }
   }, [isMobile]);
-  const [notes] = useState<Note[]>(mockNotes);
-  const [folders] = useState<Folder[]>(mockFolders);
-  const [tags] = useState<Tag[]>(mockTags);
-  const [searchQuery, setSearchQuery] = useState("");
+  
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: "1",
@@ -50,18 +48,18 @@ export default function Home() {
     },
   ]);
 
-  // Functions
-  const toggleSidebar = () => {
-    setIsSidebarCollapsed(!isSidebarCollapsed);
+  const clearSearchQuery = () => {
+    dispatch(setSearchQuery(""));
   };
+
+  const handleChangeQuery = (query: string) => { 
+    dispatch(setSearchQuery(query));
+  }
 
   const toggleChat = () => {
     setIsChatCollapsed(!isChatCollapsed);
   };
 
-  const clearSearchQuery = () => {
-    setSearchQuery("");
-  };
 
   const addChatMessage = (content: string, isUser: boolean) => {
     const newMessage = {
@@ -99,24 +97,14 @@ export default function Home() {
   };
 
   const handleCreateNote = () => {
-    // This would normally open a modal or navigate to a create note page
-    // For now, we'll just show an alert
     alert("Create new note functionality would go here");
   };
 
   // Create a context value to pass to components
   const appContextValue = {
-    isSidebarCollapsed,
     isChatCollapsed,
-    notes,
-    folders,
-    tags,
     chatMessages,
-    searchQuery,
-    toggleSidebar,
     toggleChat,
-    setSearchQuery,
-    clearSearchQuery,
     addChatMessage,
   };
 
@@ -127,22 +115,19 @@ export default function Home() {
       {/* Sidebar with mobile responsive behavior */}
       <div className={cn(
         "fixed md:relative z-20",
-        isSidebarCollapsed && "translate-x-[-100%] md:translate-x-0 md:w-16",
-        !isSidebarCollapsed && "translate-x-0 w-64",
+        isCollapsed && "translate-x-[-100%] md:translate-x-0 md:w-16",
+        !isCollapsed && "translate-x-0 w-64",
         "transition-all duration-300"
       )}>
-        <Sidebar
-          isSidebarCollapsed={isSidebarCollapsed}
-          toggleSidebar={toggleSidebar}
-          tags={tags}
-        />
+        <Sidebar/>
       </div>
+      
       {/* todo this section will have its own component */}
       <main
         className={cn(
           "flex-1 overflow-y-auto transition-all duration-300 relative",
-          !isSidebarCollapsed && "md:ml-8",
-          isSidebarCollapsed && "md:ml-8",
+          !isCollapsed && "md:ml-8",
+          isCollapsed && "md:ml-8",
         )}
       >
         <div className="p-6">
@@ -153,7 +138,7 @@ export default function Home() {
               <Input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleChangeQuery(e.target.value)}
                 placeholder="Search notes..."
                 className="py-3 px-3 rounded-lg flex-1 border-none focus:outline-none focus:ring-0 h-12"
               />
@@ -225,7 +210,7 @@ export default function Home() {
               onClick={toggleSidebar}
               className="bg-primary text-white rounded-full p-3 shadow-lg"
             >
-              {isSidebarCollapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
+              {isCollapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
             </button>
           </div>
           

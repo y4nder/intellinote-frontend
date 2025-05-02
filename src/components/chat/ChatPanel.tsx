@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ChatMessage } from "@/data/mockData";
+
 import { cn } from "@/lib/utils";
 import { Send, ChevronLeft, ChevronRight, Bot, ChevronDown } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from "@/hooks/use-is-mobile";
+import { ChatMessage } from "@/types/chatMessage";
 
 interface ChatPanelProps {
   isChatCollapsed: boolean;
