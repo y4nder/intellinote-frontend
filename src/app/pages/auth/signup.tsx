@@ -29,7 +29,7 @@ const Signup = () => {
         </div>
         
         <div className="flex flex-col my-auto">  
-          <h1 className="text-primary-foreground text-2xl md:text-3xl font-extrabold">Create an Account</h1>
+          <h1 className="text-primary-hard text-2xl md:text-3xl font-extrabold">Create an Account</h1>
           <p className="text-gray-600 text-sm mb-4 md:mb-6">You can sign in or join with us if you're new to IntelliNote</p>
 
           <form className="space-y-3 md:space-y-4" onSubmit={handleSignup}>
@@ -69,7 +69,7 @@ const Signup = () => {
             </button>
           </form>
           <p className="text-center mt-4 md:mt-6">
-            Already have an account?{" "} <NavLink className="text-primary-foreground underline font-bold" to={"/auth/login"}>Login</NavLink>
+            Already have an account?{" "} <NavLink className="text-primary-hard underline font-bold" to={"/auth/login"}>Login</NavLink>
           </p>
         </div>
       </div>

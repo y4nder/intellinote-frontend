@@ -7,16 +7,12 @@ import {
   Folder, 
   Tag, 
   Trash2, 
-  Settings, 
-  ChevronLeft, 
-  ChevronRight 
+  Settings,
+  SidebarCloseIcon,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { useSidebar } from "@/providers/sidebar";
 
-// interface SidebarProps {
-//   tags?: TagType[];
-// }
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -68,17 +64,18 @@ export default function Sidebar() {
           isMobile && !isCollapsed && "w-full max-w-[250px] z-30"
         )}
       >
-        <div className="flex items-center p-4 border-b border-gray-100">
-          <div className="bg-primary rounded-full w-8 h-8 flex items-center justify-center text-white">
-            <span className="text-sm font-semibold">JD</span>
+        <div className="flex items-center p-4 border-b border-gray-100 justify-between">
+          <div className="flex gap-2 items-center">
+            <div className="bg-primary rounded-full w-8 p-2 flex items-center justify-center text-white">
+              <span className="text-sm font-semibold">JD</span>
+            </div>
+            {!isCollapsed && <span className="ml-3 font-medium">John Doe</span>}
           </div>
-          {!isCollapsed && <span className="ml-3 font-medium">John Doe</span>}
-          <button
-            onClick={toggleSidebar}
-            className="ml-auto text-gray-400 hover:text-primary"
-          >
-            {isCollapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
-          </button>
+          {!isCollapsed && (
+            <div className="rounded-full p-2 hover:bg-primary-container hover:text-on-primary-container"  onClick={toggleSidebar}>
+              <SidebarCloseIcon className="h-4 w-4 text-secondary"/>
+            </div>
+          )}
         </div>
 
         <nav className="flex-1 overflow-y-auto py-4">
@@ -105,27 +102,6 @@ export default function Sidebar() {
               label="Trash"
             />
           </ul>
-
-          {/* {!isCollapsed && (
-            <div className="border-t border-gray-100 mt-4 pt-4">
-              <h3 className="text-xs uppercase text-gray-500 font-semibold px-6 mb-2">
-                Tags
-              </h3>
-              <ul>
-                {tags.map((tag) => (
-                  <li key={tag.id} className="px-4 py-1">
-                    <a
-                      href="#"
-                      className="flex items-center text-gray-700 sidebar-hover rounded-lg p-2 transition-colors"
-                    >
-                      <span className={`w-3 h-3 rounded-full bg-${tag.color}-500 mr-3`}></span>
-                      <span>{tag.name}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )} */}
         </nav>
 
         <div className="p-4 border-t border-gray-100">

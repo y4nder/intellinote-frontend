@@ -1,10 +1,11 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "@/app/pages/home";
+import MainLayout from "@/components/layouts/main-layout";
 import { useMemo } from "react";
 import Login from "./pages/auth/login";
 import AuthRoot from "./pages/auth/root";
 import Signup from "./pages/auth/signup";
 import AppRoot from "./pages/root";
+import Home from "./pages/home";
 // import AuthGuard from "@/components/auth/auth-guard";
 
 
@@ -32,8 +33,13 @@ const createAppRouter = () =>
                 <AppRoot />,
             children: [
                 {
-                    index: true,
-                    element: <Home />
+                    element: <MainLayout />,
+                    children : [
+                        {
+                            index: true,
+                            element: <Home/>
+                        }
+                    ]
                 }
             ]
         }

@@ -10,8 +10,9 @@ interface NoteCardProps {
 export default function NoteCard({ note }: NoteCardProps) {
   const { title, content, tags, createdAt } = note;
 
-  const getTimeAgo = (date: Date) => {
-    return formatDistanceToNow(date, { addSuffix: false });
+  const getTimeAgo = (date: string) => {
+    const dateObj = new Date(date);
+    return formatDistanceToNow(dateObj, { addSuffix: false });
   };
 
   const formattedTimeAgo = getTimeAgo(createdAt);

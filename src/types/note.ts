@@ -5,5 +5,5 @@ export interface Note {
     title: string;
     content: string;
     tags: Tag[];
-    createdAt: Date;
+    createdAt: string;
 }

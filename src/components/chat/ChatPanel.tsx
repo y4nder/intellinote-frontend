@@ -7,23 +7,25 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { ChatMessage } from "@/types/chatMessage";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { addChatMessage, setChatCollapsed, toggleChat } from "@/redux/slice/chat-agent";
+import { mockResponses } from "@/data/mockData";
 
-interface ChatPanelProps {
-  isChatCollapsed: boolean;
-  toggleChat: () => void;
-  chatMessages: ChatMessage[];
-  addChatMessage: (message: string, isUser: boolean) => void;
-}
+// interface ChatPanelProps {
+//   isChatCollapsed: boolean;
+//   toggleChat: () => void;
+//   chatMessages: ChatMessage[];
+//   addChatMessage: (message: string, isUser: boolean) => void;
+// }
 
-export default function ChatPanel({
-  isChatCollapsed,
-  toggleChat,
-  chatMessages,
-  addChatMessage,
-}: ChatPanelProps) {
+export default function ChatPanel() {
   const isMobile = useIsMobile();
   const [newChatMessage, setNewChatMessage] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
+  const {isCollapsed, chatMessages} = useSelector((state: RootState) => state.chatAgent);
+  const dispatch = useDispatch<AppDispatch>();
+  
 
   //scroll button
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -41,6 +43,12 @@ export default function ChatPanel({
     el.addEventListener("scroll", handleScroll);
     return () => el.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (isMobile) {
+      dispatch(setChatCollapsed(true))
+    }
+  }, [isMobile, dispatch]);
   
   const handleScroll = () => {
     const el = scrollAreaRef.current;
@@ -53,10 +61,32 @@ export default function ChatPanel({
 
   const handleSendMessage = () => {
     if (newChatMessage.trim()) {
-      addChatMessage(newChatMessage, true);
+      handleAddMessage(newChatMessage, true);
       setNewChatMessage("");
     }
   };
+
+  const handleAddMessage = (message: string, isUser: boolean) => {
+    const newMessage: ChatMessage = {
+      id: new Date().toISOString() + "_" + Math.random().toString(),
+      content: message,
+      isUser,
+      timestamp: new Date().toISOString(),
+    };
+    dispatch(addChatMessage(newMessage));
+
+    // todo replace with actual api call
+    setTimeout(() => {
+        const botMessage: ChatMessage = {
+            id: new Date().toISOString() + "_" + Math.random().toString(),
+            content: mockResponses[
+                Math.floor(Math.random() * mockResponses.length)],
+            isUser: false,
+            timestamp: new Date().toISOString(),
+        };
+        dispatch(addChatMessage(botMessage));
+    }, 1000);
+  }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -65,11 +95,15 @@ export default function ChatPanel({
     }
   };
 
-  if (isChatCollapsed) {
+  const handleToggleChat = () => {
+    dispatch(toggleChat());
+  }
+
+  if (isCollapsed) {
     return (
       <div className="fixed right-0 top-24 z-50">
         <button
-          onClick={toggleChat}
+          onClick={handleToggleChat}
           className="bg-secondary text-white rounded-l-full p-3 shadow-lg"
         >
           <ChevronLeft className="h-5 w-5" />
@@ -81,10 +115,10 @@ export default function ChatPanel({
   return (
     <div className="h-screen">
       {/* Overlay when chat is open on mobile */}
-      {isMobile && !isChatCollapsed && (
+      {isMobile && !isCollapsed && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-20"
-          onClick={toggleChat}
+          onClick={handleToggleChat}
         ></div>
       )}
       
@@ -97,7 +131,7 @@ export default function ChatPanel({
             <span className="ml-3 font-medium">Note Assistant</span>
           </div>
           <button
-            onClick={toggleChat}
+            onClick={handleToggleChat}
             className="text-gray-400 hover:text-secondary"
           >
             <ChevronRight className="h-5 w-5" />
