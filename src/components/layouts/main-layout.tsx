@@ -1,12 +1,9 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useIsMobile } from "@/hooks/use-is-mobile";
 import Sidebar from "@/components/sidebar/Sidebar";
 import ChatPanel from "@/components/chat/ChatPanel";
 import { useSidebar } from "@/providers/sidebar";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
-import { toggleChat } from "@/redux/slice/chat-agent";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 import { Outlet } from "react-router-dom";
 
 //done create sidebar context
@@ -15,14 +12,9 @@ import { Outlet } from "react-router-dom";
 //done modularize this page
 
 export default function MainLayout() {
-  const dispatch = useDispatch<AppDispatch>();
-  const isMobile = useIsMobile();
-  const {isCollapsed, toggleSidebar} = useSidebar();
+  const {isCollapsed} = useSidebar();
   const {isCollapsed: isChatCollapsed} = useSelector((state: RootState) => state.chatAgent);
 
-  const handleToggleChat = () => {
-    dispatch(toggleChat());
-  }
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
@@ -42,37 +34,14 @@ export default function MainLayout() {
 
       {/* Chat panel with mobile responsive behavior */}
       <div className={cn(
-        "fixed md:relative z-10",
+        "md:relative z-10",
         isChatCollapsed ? 
           "translate-x-[100%] md:translate-x-[100%] md:w-0 w-0" : 
-          "translate-x-0 right-0 w-full md:w-80",
+          "fixed translate-x-0 right-0 w-full md:w-[350px]",
           "transition-all duration-300 h-full"
       )}>
         <ChatPanel/>
       </div>
-      
-      {/* Mobile toggle buttons */}
-      {isMobile && (
-        <>
-          <div className="fixed bottom-4 left-4 z-30">
-            <button
-              onClick={toggleSidebar}
-              className="bg-primary text-white rounded-full p-3 shadow-lg"
-            >
-              {isCollapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
-            </button>
-          </div>
-          
-          <div className="fixed bottom-4 right-4 z-30">
-            <button
-              onClick={handleToggleChat}
-              className="bg-secondary text-white rounded-full p-3 shadow-lg"
-            >
-              {isChatCollapsed ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
-            </button>
-          </div>
-        </>
-      )}
     </div>
   );
 }

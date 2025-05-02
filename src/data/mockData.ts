@@ -1,15 +1,17 @@
 import { Folder } from "@/types/folder";
 import { Note } from "@/types/note";
-import { Tag } from "@/types/tag";
 
   
-export const mockTags: Tag[] = [
-  { id: '1', name: 'Important', color: 'red' },
-  { id: '2', name: 'Work', color: 'blue' },
-  { id: '3', name: 'Personal', color: 'yellow' },
-  { id: '4', name: 'Ideas', color: 'green' },
-  { id: '5', name: 'Reading', color: 'purple' }
-];
+// export const mockTags = [
+//   { id: '1', name: 'Important', color: 'red' },
+//   { id: '2', name: 'Work', color: 'blue' },
+//   { id: '3', name: 'Personal', color: 'yellow' },
+//   { id: '4', name: 'Ideas', color: 'green' },
+//   { id: '5', name: 'Reading', color: 'purple' }
+// ];
+
+  
+export const mockTags = ['Important', 'Work', 'Personal', 'Ideas', 'Reading'];
   
 export const mockNotes: Note[] = [
   {

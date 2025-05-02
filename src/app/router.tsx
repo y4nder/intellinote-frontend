@@ -5,7 +5,10 @@ import Login from "./pages/auth/login";
 import AuthRoot from "./pages/auth/root";
 import Signup from "./pages/auth/signup";
 import AppRoot from "./pages/root";
-import Home from "./pages/home";
+import HomeLayout from "./pages/home";
+import Home from "./pages/home/home";
+import AllNotes from "./pages/home/all-notes";
+import Folders from "./pages/home/folders";
 // import AuthGuard from "@/components/auth/auth-guard";
 
 
@@ -36,8 +39,21 @@ const createAppRouter = () =>
                     element: <MainLayout />,
                     children : [
                         {
-                            index: true,
-                            element: <Home/>
+                            element: <HomeLayout/>,
+                            children : [
+                                {
+                                    index: true,
+                                    element: <Home/>
+                                },
+                                {
+                                    path: "all-notes",
+                                    element: <AllNotes/>
+                                },
+                                {
+                                    path: "folders",
+                                    element: <Folders/>
+                                }
+                            ]
                         }
                     ]
                 }

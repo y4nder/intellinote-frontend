@@ -3,42 +3,42 @@ import { cn } from "@/lib/utils";
 
 import { 
   Home, 
-  FileText, 
   Folder, 
-  Tag, 
-  Trash2, 
   Settings,
   SidebarCloseIcon,
+  Triangle,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { useSidebar } from "@/providers/sidebar";
+import { NavLink } from "react-router-dom";
 
 
 interface SidebarItemProps {
   icon: React.ReactNode;
   label: string;
-  isActive?: boolean;
+  to: string;
 }
 
-function SidebarItem({ icon, label, isActive }: SidebarItemProps) {
-
-  const {isCollapsed} = useSidebar();
+export function SidebarItem({ icon, label, to }: SidebarItemProps) {
+  const { isCollapsed } = useSidebar();
 
   return (
     <li className="px-4 py-2">
-      <a
-        href="#"
-        className={cn(
-          "flex items-center rounded-lg p-2 transition-colors",
-          isActive
-            ? "text-primary bg-primary/10"
-            : "text-gray-700 sidebar-hover",
-          isCollapsed && "justify-center"
-        )}
+      <NavLink
+        to={to}
+        className={({ isActive }) =>
+          cn(
+            "flex text-sm font-semibold items-center rounded-lg p-2 transition-colors",
+            isActive
+              ? "text-primary bg-primary/10"
+              : "text-gray-700 hover:bg-primary/10",
+            isCollapsed && "justify-center"
+          )
+        }
       >
         {icon}
         {!isCollapsed && <span className="ml-3">{label}</span>}
-      </a>
+      </NavLink>
     </li>
   );
 }
@@ -53,13 +53,13 @@ export default function Sidebar() {
       {/* Overlay for mobile when sidebar is open */}
       {isMobile && !isCollapsed && (
         <div 
-          className="fixed inset-0 bg-opacity-50 z-20"
+          className=" inset-0 bg-opacity-50 z-99"
         ></div>
       )}
       
       <div
         className={cn(
-          "bg-white shadow-lg h-screen flex flex-col transition-all duration-300 ease-in-out border-r border-gray-100",
+          "bg-gradient-to-b from-[#F8F5FF] to-[#F6F8F9] shadow-lg h-screen flex flex-col transition-all duration-300 ease-in-out border-r border-gray-100",
           isCollapsed ? "w-16" : "w-64",
           isMobile && !isCollapsed && "w-full max-w-[250px] z-30"
         )}
@@ -81,25 +81,17 @@ export default function Sidebar() {
         <nav className="flex-1 overflow-y-auto py-4">
           <ul>
             <SidebarItem
-              icon={<Home className="h-5 w-5" />}
-              label="Home"
+              icon={<Home className="h-5 w-5"/>}
+              label="Home" to={"/"}            
             />
             <SidebarItem
-              icon={<FileText className="h-5 w-5" />}
+              icon={<Triangle className="h-5 w-5" />}
               label="All Notes"
-              isActive
+              to={"/all-notes"}            
             />
             <SidebarItem
               icon={<Folder className="h-5 w-5" />}
-              label="Folders"
-            />
-            <SidebarItem
-              icon={<Tag className="h-5 w-5" />}
-              label="Tags"
-            />
-            <SidebarItem
-              icon={<Trash2 className="h-5 w-5" />}
-              label="Trash"
+              label="Folders" to={"/folders"}            
             />
           </ul>
         </nav>
@@ -108,7 +100,7 @@ export default function Sidebar() {
           <a
             href="#"
             className={cn(
-              "flex items-center text-gray-700 hover:text-primary",
+              "flex items-center text-sm font-semibold hover:text-primary",
               isCollapsed && "justify-center"
             )}
           >

@@ -1,9 +1,9 @@
-import { Tag } from "./tag";
+// import { Keyword } from "./keyword";
 
 export interface Note {
     id: string;
     title: string;
     content: string;
-    tags: Tag[];
+    tags: string[];
     createdAt: string;
 }

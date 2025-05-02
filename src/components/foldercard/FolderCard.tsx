@@ -1,18 +1,25 @@
-import { Folder } from "@/data/mockData";
-import { FolderIcon } from "lucide-react";
+import { cn, getGradientClassesFromString } from "@/lib/utils";
+import { Folder } from "@/types/folder";
 
 interface FolderCardProps {
   folder: Folder;
 }
 
 export default function FolderCard({ folder }: FolderCardProps) {
-  const { name, noteCount, color } = folder;
+  const { name, noteCount } = folder;
+  const gradientClass = getGradientClassesFromString(folder.name);
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer group">
+    <div className="bg-white p-4 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group active:scale-95">
       <div className="flex items-center mb-3">
-        <div className={`w-10 h-10 rounded-lg bg-${color}-500/20 flex items-center justify-center text-${color}-500`}>
-          <FolderIcon className="h-5 w-5" />
+        <div className="w-12 h-fit max-w-12 rounded-lg flex items-center justify-center">
+          <div
+            className={cn(
+              "mask-[url('/folderIcon.png')] mask-no-repeat mask-center mask-contain",
+              "w-full max-w-[103px] aspect-[103/75]",
+              gradientClass.base, gradientClass.hover
+            )}
+          />
         </div>
         <div className="ml-3">
           <h3 className="font-medium text-gray-800 group-hover:text-primary transition-colors">

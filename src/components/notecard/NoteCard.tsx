@@ -2,6 +2,7 @@
 import { Note } from "@/types/note";
 import { formatDistanceToNow } from "date-fns";
 import { MoreHorizontal } from "lucide-react";
+import { GradientBadge } from "../ui/gradient-badge";
 
 interface NoteCardProps {
   note: Note;
@@ -33,29 +34,29 @@ export default function NoteCard({ note }: NoteCardProps) {
     : formattedTimeAgo + " ago";
 
   return (
-    <div className="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer group">
-      <div className="mb-3 flex justify-between items-start">
-        <h3 className="font-medium text-gray-800 group-hover:text-primary transition-colors">
-          {title}
-        </h3>
-        <div className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
-          <MoreHorizontal className="h-5 w-5" />
+    <div className="bg-white rounded-3xl md:max-w-sm lg:max-w-sm shadow-sm hover:shadow-md transition-all  cursor-pointer group active:scale-95">
+      <div className="bg-primary-fixed h-[40px] rounded-t-3xl"/>
+      <div className="p-5 flex flex-col justify-between">
+        <div className="mb-3 flex justify-between items-start">
+          <h3 className="font-medium text-on-primary-container group-hover:text-primary transition-colors">
+            {title}
+          </h3>
+          <div className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
+            <MoreHorizontal className="h-5 w-5" />
+          </div>
         </div>
-      </div>
-      <p className="text-gray-600 text-sm mb-4 line-clamp-3">{content}</p>
-      <div className="flex items-center justify-between">
-        <div className="flex flex-wrap gap-2">
-          {tags.map((tag) => (
-            <span
-              key={tag.id}
-              className={`px-2 py-1 tag-${tag.color} text-xs rounded-md`}
-            >
-              {tag.name}
-            </span>
-          ))}
+        <p className="text-on-surface-variant/80 text-xs mb-4 line-clamp-4">{content}</p>
+        <div className="flex items-center justify-between">
+          <div className="flex flex-wrap gap-2">
+            {tags.map((tag, index) => (
+              <GradientBadge key={index} label={tag}/>
+            ))}
+          </div>
+          <span className="text-gray-400 text-xs">{displayTime}</span>
         </div>
-        <span className="text-gray-400 text-xs">{displayTime}</span>
       </div>
     </div>
   );
 }
+
+      
