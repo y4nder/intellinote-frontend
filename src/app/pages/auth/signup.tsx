@@ -1,9 +1,19 @@
 import { TypingAnimation } from "@/components/magicui/typing-animation"
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
 import { ModeToggle } from "@/components/ui/mode-toggle"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 
 const Signup = () => {
+  const navigate = useNavigate();
+
+
+  const handleSignup = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Signup form submitted");
+    // Add your signup logic here
+    navigate("/auth/login");
+  }  
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen overflow-hidden">
       {/* Left Side - Sign Up Form */}
@@ -19,10 +29,10 @@ const Signup = () => {
         </div>
         
         <div className="flex flex-col my-auto">  
-          <h1 className="text-primary-foreground text-2xl md:text-3xl font-extrabold">Create an Account</h1>
+          <h1 className="text-primary-hard text-2xl md:text-3xl font-extrabold">Create an Account</h1>
           <p className="text-gray-600 text-sm mb-4 md:mb-6">You can sign in or join with us if you're new to IntelliNote</p>
 
-          <form className="space-y-3 md:space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-3 md:space-y-4" onSubmit={handleSignup}>
             <div>
               <input
                 type="text"
@@ -59,7 +69,7 @@ const Signup = () => {
             </button>
           </form>
           <p className="text-center mt-4 md:mt-6">
-            Already have an account?{" "} <NavLink className="text-primary-foreground underline font-bold" to={"/auth/login"}>Login</NavLink>
+            Already have an account?{" "} <NavLink className="text-primary-hard underline font-bold" to={"/auth/login"}>Login</NavLink>
           </p>
         </div>
       </div>
@@ -70,7 +80,7 @@ const Signup = () => {
         gradientBackgroundEnd="rgb(53, 60, 255)"
         className="w-full">
           <div className="absolute z-50 inset-0 pointer-events-none w-full h-fit flex flex-col overflow-hidden">
-            <div className="text-white mb-4 md:mb-8 p-4 md:p-14">
+            <div className="text-white mb-4 md:mb-8 p-4 md:p-14 h-[250px]">
               <TypingAnimation className="max-w-lg text-2xl md:text-3xl font-bold" as={"div"} duration={20} startOnView={true}>
                   Write notes intelligently using
               </TypingAnimation>

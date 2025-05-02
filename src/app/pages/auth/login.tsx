@@ -2,9 +2,32 @@
 import { TypingAnimation } from "@/components/magicui/typing-animation"
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
 import { ModeToggle } from "@/components/ui/mode-toggle"
-import { NavLink } from "react-router-dom"
+import { useIsMobile } from "@/hooks/use-is-mobile"
+import { useEffect, useRef } from "react"
+import { NavLink, useNavigate } from "react-router-dom"
 
 const Login = () => {
+  const isMobile = useIsMobile();
+  const navigate = useNavigate();
+
+  const mobileScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isMobile && mobileScrollRef.current) {
+      // Timeout ensures DOM is rendered before scrolling
+      setTimeout(() => {
+        mobileScrollRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 1000);
+    }
+  }, [isMobile]);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Login form submitted");
+    navigate("/");
+  }
+
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen overflow-hidden">
       
@@ -15,7 +38,7 @@ const Login = () => {
         >
           <div className="absolute bottom-0 left-0 z-50 w-full md:w-2/3 p-4 md:p-14 pointer-events-none">
             <div className="text-white">
-              <TypingAnimation className="max-w-lg text-2xl md:text-3xl font-bold" as="div" duration={20} startOnView={true}>
+              <TypingAnimation className="max-w-lg text-2xl md:text-3xl font-bold" as="div" duration={20}>
                 Write notes intelligently using
               </TypingAnimation>
               <TypingAnimation className="text-primary-foreground font-medium text-2xl">
@@ -32,7 +55,7 @@ const Login = () => {
       
 
 
-      <div className="w-full md:w-1/3 p-8 md:p-14 flex flex-col">
+      <div className="w-full md:w-1/3 p-8 md:p-14 flex flex-col" ref={mobileScrollRef}>
         <div className="flex items-center mb-8 md:mb-16 justify-between">
           <div className="flex gap-1 items-center">
             <div className="w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center mr-2">
@@ -44,10 +67,10 @@ const Login = () => {
         </div>
         
         <div className="flex flex-col my-auto">  
-          <h1 className="text-primary-foreground text-2xl md:text-3xl font-extrabold">Login</h1>
+          <h1 className="text-primary-hard text-2xl md:text-3xl font-extrabold">Login</h1>
           <p className="text-gray-600 text-sm mb-4 md:mb-6">You can sign in or join with us if you're new to IntelliNote</p>
 
-          <form className="space-y-3 md:space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-3 md:space-y-4" onSubmit={handleLogin}>
             <div>
               <input
                 type="email"
@@ -70,7 +93,7 @@ const Login = () => {
             </button>
           </form>
           <p className="text-center mt-4 md:mt-6">
-            Don't have an account?{" "} <NavLink className="text-primary-foreground underline font-bold" to={"/auth/signup"}>Create an account</NavLink>
+            Don't have an account?{" "} <NavLink className="text-primary-hard underline font-bold" to={"/auth/signup"}>Create an account</NavLink>
           </p>
         </div>
       </div>

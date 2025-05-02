@@ -1,10 +1,14 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "@/app/pages/home";
+import MainLayout from "@/components/layouts/main-layout";
 import { useMemo } from "react";
 import Login from "./pages/auth/login";
 import AuthRoot from "./pages/auth/root";
 import Signup from "./pages/auth/signup";
 import AppRoot from "./pages/root";
+import HomeLayout from "./pages/home";
+import Home from "./pages/home/home";
+import AllNotes from "./pages/home/all-notes";
+import Folders from "./pages/home/folders";
 // import AuthGuard from "@/components/auth/auth-guard";
 
 
@@ -32,8 +36,26 @@ const createAppRouter = () =>
                 <AppRoot />,
             children: [
                 {
-                    index: true,
-                    element: <Home />
+                    element: <MainLayout />,
+                    children : [
+                        {
+                            element: <HomeLayout/>,
+                            children : [
+                                {
+                                    index: true,
+                                    element: <Home/>
+                                },
+                                {
+                                    path: "all-notes",
+                                    element: <AllNotes/>
+                                },
+                                {
+                                    path: "folders",
+                                    element: <Folders/>
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         }
