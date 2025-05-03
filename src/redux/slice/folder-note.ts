@@ -1,4 +1,6 @@
-import { mockFolders, mockNotes } from "@/data/mockData";
+import { mockFolders
+    // , mockGetUserResponse 
+} from "@/data/mockData";
 import { Folder } from "@/types/folder";
 import { Note } from "@/types/note";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -12,10 +14,10 @@ interface FolderNoteState {
 }
 
 const initialState: FolderNoteState = {
-    notes: mockNotes,
-    selectedNote: mockNotes[0],
+    notes: [],
+    selectedNote: null,
     folders: mockFolders,
-    selectedFolder: mockFolders[0],
+    selectedFolder: null,
     searchQuery: ""
 };
 
@@ -37,10 +39,15 @@ const folderNoteSlice = createSlice({
         },
         setSearchQuery: (state, action: PayloadAction<string>) => {
             state.searchQuery = action.payload;
+        },
+        setNoteContent: (state, action: PayloadAction<Note>) => {
+            const note = state.notes.find(f => f.id === action.payload.id);
+            if(!note) return;
+            note!.content = action.payload.content;
         }
     }
 })
 
-export const { setNotes, setFolders, setSelectedNote, setSelectedFolder, setSearchQuery } = folderNoteSlice.actions;
+export const { setNotes, setFolders, setSelectedNote, setSelectedFolder, setSearchQuery, setNoteContent } = folderNoteSlice.actions;
 
 export default folderNoteSlice.reducer;

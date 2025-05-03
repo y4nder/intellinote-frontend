@@ -37,8 +37,8 @@ export default function MainLayout() {
         "md:relative z-10",
         isChatCollapsed ? 
           "translate-x-[100%] md:translate-x-[100%] md:w-0 w-0" : 
-          "fixed translate-x-0 right-0 w-full md:w-[350px]",
-          "transition-all duration-300 h-full"
+          "fixed translate-x-[0%] right-0 w-full md:w-[350px]",
+          " transition-all  duration-300 h-full"
       )}>
         <ChatPanel/>
       </div>

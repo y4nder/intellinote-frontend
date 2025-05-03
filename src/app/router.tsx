@@ -42,7 +42,7 @@ const createAppRouter = () =>
                             children : [
                                 {
                                     index: true,
-                                    element: <Home/>
+                                    element: <Home/>    
                                 },
                                 {
                                     path: "all-notes",

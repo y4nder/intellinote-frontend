@@ -44,12 +44,18 @@ export function getGradientClassesFromString(input: string): {
   };
 }
 
-// utils/breadcrumb.ts
 export function extractTitleFromSlug(slug: string): string {
-  const match = slug.match(/^(.*?)-\d+$/);
-  const title = match ? match[1] : slug;
-  return title
+  // Match everything before the last UUID pattern
+  const guidRegex = /-[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+  const titlePart = slug.replace(guidRegex, "");
+
+  return titlePart
     .split("-")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
+}
+
+export function extractIdFromSlug(slug: string): string | null {
+  const match = slug.match(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/);
+  return match ? match[0] : null;
 }

@@ -121,7 +121,7 @@ export default function ChatPanel() {
 
   if (isCollapsed) {
     return (
-      <div className={cn("chatPanelButton fixed right-4  z-30 p-2 bg-white rounded-full shadow-sm group hover:scale-105 transition-all duration-300", 
+      <div className={cn("chatPanelButton translate-x-[0%] right-4 fixed z-90 p-2 bg-white rounded-full shadow-sm group hover:scale-105 transition-all duration-300", 
         isMobile? "bottom-20" : "bottom-4"
       )}>
         <div
@@ -135,11 +135,11 @@ export default function ChatPanel() {
   }
 
   return (
-    <div className="h-full">
+    <div className="h-full z-30">
       {/* Overlay when chat is open on mobile */}
       {isMobile && !isCollapsed && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-20"
+          className="fixed inset-0 bg-opacity-50 z-90"
           onClick={handleToggleChat}
         ></div>
       )}

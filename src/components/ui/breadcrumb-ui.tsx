@@ -40,7 +40,7 @@ import {
                     </BreadcrumbPage>
                   ) : (
                     <BreadcrumbLink asChild>
-                      <Link to={to} className="text-muted-foreground hover:text-primary">
+                      <Link to={to} className="text-muted-foreground hover:text-primary truncate">
                         {extractTitleFromSlug(value)}
                       </Link>
                     </BreadcrumbLink>

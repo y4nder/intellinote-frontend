@@ -124,7 +124,60 @@
   "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
   "Helvetica Neue", sans-serif;
   --bn-border-radius: 3px;
+
 }
+
+.bn-container {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 4px;
+}
+
+.bn-formatting-toolbar {
+  width: 100%;
+  position: sticky;
+  top: 55px; /* adjust this to match your top bar height */
+  background: white; /* or use a backdrop if needed */
+  z-index: 2;
+  margin-inline: auto; 
+}
+
+.bn-mantine .bn-formatting-toolbar {
+  flex-wrap: wrap !important;
+  gap:2px;
+  padding:2px;
+  width: fit-content;
+  overflow-x: auto;
+  max-width: 100vw !important;
+  box-shadow: none !important;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.item {
+  border-radius: 0.5rem;
+  flex: 1;
+  overflow: hidden;
+}
+
+.item.bordered {
+  border: 1px solid gray;
+}
+
+.item pre {
+  border-radius: 0.5rem;
+  height: 100%;
+  overflow: auto;
+  padding-block: 1rem;
+  padding-inline: 54px;
+  width: 100%;
+  white-space: pre-wrap;
+}
+
 
 @layer base {
   body {
