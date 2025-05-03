@@ -11,7 +11,7 @@ export default function AllNotes() {
             <h2 className="text-3xl font-bold mb-4 text-primary-hard">
                 All Notes
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 xl:grid-cols-4">
                 {notes.map((note: Note) => (
                     <NoteCard key={note.id} note={note} />
                 ))}

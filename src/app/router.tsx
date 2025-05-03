@@ -9,6 +9,7 @@ import HomeLayout from "./pages/home";
 import Home from "./pages/home/home";
 import AllNotes from "./pages/home/all-notes";
 import Folders from "./pages/home/folders";
+import NoteEditor from "./pages/note";
 // import AuthGuard from "@/components/auth/auth-guard";
 
 
@@ -16,8 +17,7 @@ const createAppRouter = () =>
     createBrowserRouter([
         {
             path: "/auth",
-            element:
-                    <AuthRoot />,
+            element: <AuthRoot />,
             children: [
                 {
                     index: true,
@@ -32,18 +32,17 @@ const createAppRouter = () =>
         },
         {
             path: "/",
-            element:
-                <AppRoot />,
+            element: <AppRoot />,
             children: [
                 {
                     element: <MainLayout />,
                     children : [
                         {
-                            element: <HomeLayout/>,
+                            element: <HomeLayout/>, // with top bar
                             children : [
                                 {
                                     index: true,
-                                    element: <Home/>
+                                    element: <Home/>    
                                 },
                                 {
                                     path: "all-notes",
@@ -54,6 +53,10 @@ const createAppRouter = () =>
                                     element: <Folders/>
                                 }
                             ]
+                        },
+                        {
+                            path: "/:noteId",
+                            element: <NoteEditor/>
                         }
                     ]
                 }

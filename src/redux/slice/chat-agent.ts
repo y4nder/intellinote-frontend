@@ -50,8 +50,6 @@ const chatAgentSlice = createSlice({
         setLoading: (state, action: PayloadAction<boolean>) => {
             if (action.payload === false) {
                 state.loadingState = { isThinking: false, type: undefined };
-            
-                // Remove last message if it was a loading message
                 const lastMessage = state.chatMessages[state.chatMessages.length - 1];
                 if (lastMessage?.type === "loading") {
                     state.chatMessages.pop();
