@@ -1,5 +1,5 @@
-import React from "react";
-import { cn } from "@/lib/utils";
+import React, { useEffect } from "react";
+import { cn, gradientsCombos } from "@/lib/utils";
 
 import { 
   Home, 
@@ -11,6 +11,12 @@ import {
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { useSidebar } from "@/providers/sidebar";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { Button } from "../ui/button";
+import { toast } from "react-toastify";
+// import CoolNotification from "../notification/notification-component-new";
+import PillNotification from "../notification/pill-notification";
 
 
 interface SidebarItemProps {
@@ -45,8 +51,27 @@ export function SidebarItem({ icon, label, to }: SidebarItemProps) {
 
 export default function Sidebar() {
   const {isCollapsed, toggleSidebar} = useSidebar();
+  const {user} = useSelector((state: RootState) => state.auth);
 
+  useEffect(() => {
+    console.log("user: ", user);
+  }, [user])
+  
+  
   const isMobile = useIsMobile();
+  
+  const notify = () => {
+    toast(PillNotification, {
+      className: 'p-0 w-[30px] border flex items-center gap-3 rounded-full bg-red-500 px-4 py-2 shadow-md border border-zinc-200 text-sm',
+      data: {
+        message: 'Message Archived',
+        milliSeconds: 234
+      },
+      autoClose: 3000,
+      closeButton:false,
+      position: 'bottom-center',
+    });
+  }
 
   return (
     <div className="relative h-full">
@@ -60,16 +85,16 @@ export default function Sidebar() {
       <div
         className={cn(
           "bg-gradient-to-b from-[#F8F5FF] to-[#F6F8F9] shadow-lg h-screen flex flex-col transition-all duration-300 ease-in-out border-r border-gray-100",
-          isCollapsed ? "w-16" : "w-64",
+          isCollapsed ? "w-16" : "w-48",
           isMobile && !isCollapsed && "w-full max-w-[250px] z-30"
         )}
       >
         <div className="flex items-center p-4 border-b border-gray-100 justify-between">
           <div className="flex gap-2 items-center">
-            <div className="bg-primary rounded-full w-8 p-2 flex items-center justify-center text-white">
-              <span className="text-sm font-semibold">JD</span>
+            <div className={cn("rounded-full w-8 h-8 p-2 flex items-center justify-center text-white", `bg-gradient-to-r ${gradientsCombos[2]}`)}>
+              <span className="text-sm font-semibold">{user?.userName[0].toUpperCase()}</span>
             </div>
-            {!isCollapsed && <span className="ml-3 font-medium">John Doe</span>}
+            {!isCollapsed && <span className="ml-3 font-medium truncate w-20">{user?.email}</span>}
           </div>
           {!isCollapsed && (
             <div className="rounded-full p-2 hover:bg-primary-container hover:text-on-primary-container"  onClick={toggleSidebar}>
@@ -107,6 +132,7 @@ export default function Sidebar() {
             <Settings className="h-5 w-5" />
             {!isCollapsed && <span className="ml-3">Settings</span>}
           </a>
+          <Button onClick={notify}>Notify !</Button>
         </div>
       </div>
     </div>

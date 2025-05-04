@@ -1,14 +1,31 @@
-import { io, Socket } from "socket.io-client";
+import * as signalR from "@microsoft/signalr";
 
-const URL = "https://1cz2hd3b-3000.asse.devtunnels.ms";
 
-// Get user from localStorage
-const user = JSON.parse(localStorage.getItem("user") || "{}");
-const userId = user?.id;
 
-export const socket: Socket = io(URL, {
-  autoConnect: false,
-  query: {
-    userId,
-  },
-});
+export const connection = new signalR.HubConnectionBuilder()
+  .withUrl("https://localhost:7050/note-hub")
+  .configureLogging(signalR.LogLevel.Information)
+  .withAutomaticReconnect()
+  .build();
+
+export const startConnection = async () => {
+    if (connection.state === signalR.HubConnectionState.Disconnected) {
+      try {
+        await connection.start();
+        console.log("SignalR connected");
+      } catch (err) {
+        console.error("SignalR connection failed", err);
+      }
+    }
+};
+
+
+
+
+
+
+
+
+
+
+

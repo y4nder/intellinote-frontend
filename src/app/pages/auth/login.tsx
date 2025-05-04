@@ -2,35 +2,50 @@
 import { TypingAnimation } from "@/components/magicui/typing-animation"
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
 import { ModeToggle } from "@/components/ui/mode-toggle"
+import { PageLoadingProgress } from "@/components/ui/page-loading-progress"
 import { useIsMobile } from "@/hooks/use-is-mobile"
+import { useSignIn } from "@/service/auth/login"
 import { useEffect, useRef } from "react"
 import { NavLink, useNavigate } from "react-router-dom"
 
 const Login = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const {mutate, isPending} = useSignIn();
 
   const mobileScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isMobile && mobileScrollRef.current) {
-      // Timeout ensures DOM is rendered before scrolling
       setTimeout(() => {
         mobileScrollRef.current?.scrollIntoView({ behavior: "smooth" });
       }, 1000);
     }
   }, [isMobile]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Login form submitted");
-    navigate("/");
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    mutate({
+      email : email!.toString(),
+      password: password!.toString(),
+      useCookie: true
+    }, {
+      onSuccess : () => {
+        navigate("/")
+      }
+    })
   }
 
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen overflow-hidden">
-      
+        <PageLoadingProgress loading={isPending} />
         <BackgroundGradientAnimation 
           gradientBackgroundStart="rgb(191, 194, 255)"
           gradientBackgroundEnd="rgb(53, 60, 255)"
@@ -74,13 +89,17 @@ const Login = () => {
             <div>
               <input
                 type="email"
+                name="email"
                 placeholder="Email"
+                defaultValue="user@example.com"
                 className="w-full p-2 md:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#7c84ff]"
               />
             </div>
             <div>
               <input
                 type="password"
+                name="password"
+                defaultValue="User123#"
                 placeholder="Create Password"
                 className="w-full p-2 md:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#7c84ff]"
               />

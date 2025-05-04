@@ -136,15 +136,7 @@ export default function ChatPanel() {
 
   return (
     <div className="h-full z-30">
-      {/* Overlay when chat is open on mobile */}
-      {isMobile && !isCollapsed && (
-        <div 
-          className="fixed inset-0 bg-opacity-50 z-90"
-          onClick={handleToggleChat}
-        ></div>
-      )}
-      
-      <div className="bg-white shadow-lg h-full flex flex-col transition-all duration-300 ease-in-out border-l border-gray-100 w-full md:w-full z-30 relative">
+      <div className="bg-white h-full flex flex-col transition-all duration-300 ease-in-out border-l border-gray-100 w-full md:w-full z-30 relative">
         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
           <div className="flex items-center">
             <div

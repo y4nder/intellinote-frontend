@@ -1,10 +1,10 @@
-import { Entity } from ".";
-
-
-export type User = Entity<{
+export type User = {
+    id: string;
+    createdAt?: Date;
+    updatedAt?: Date;
     email?: string;
     userName: string;
     roles?: string[]
-}>
+}
 
 
