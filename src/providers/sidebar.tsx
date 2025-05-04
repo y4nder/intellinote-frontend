@@ -10,11 +10,15 @@ const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export const SidebarProvider = ({ children }: { children: ReactNode }) => {
     const isMobile = useIsMobile();
-    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(true);
     const toggleSidebar = () => setIsCollapsed(prev => !prev);
 
     useEffect(() => {
-        setIsCollapsed(isMobile);
+      setIsCollapsed((prev) => {
+        if(prev === true) {
+          return prev;
+        } else return !prev
+      });
     }, [isMobile])
 
     return (

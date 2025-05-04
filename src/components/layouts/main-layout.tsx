@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Outlet } from "react-router-dom";
 
+
 //done create sidebar context
 //done create application reducer context
 //done create chat agent context
@@ -22,7 +23,7 @@ export default function MainLayout() {
       <div className={cn(
         "fixed md:relative z-20",
         isCollapsed && "translate-x-[-100%] md:translate-x-0 md:w-16",
-        !isCollapsed && "translate-x-0 w-64",
+        !isCollapsed && "translate-x-0 w-48",
         "transition-all duration-300"
       )}>
         <Sidebar/>

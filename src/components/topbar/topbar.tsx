@@ -3,17 +3,38 @@ import { Button } from "../ui/button";
 import { useSearchDialog } from "@/providers/searchDialog";
 import { useSidebar } from "@/providers/sidebar";
 import { useIsMobile } from "@/hooks/use-is-mobile";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addNote, setSelectedNote } from "@/redux/slice/folder-note";
+import { useCreateNote } from "@/service/notes/create-note";
+
 
 export default function TopBar() {
     const { toggleSearchDialog } = useSearchDialog();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const isMobile = useIsMobile();
+    const { mutate } = useCreateNote();
+    
 
     const handleCreateNote = () => {
-        alert("Create new note functionality would go here");
+        mutate({
+            title: "",
+            content: ""
+        }, {
+            onSuccess : (note) => {
+                dispatch(setSelectedNote(note));
+                dispatch(addNote(note))
+                const titleSlug = note.title.toLowerCase().replace(/\s+/g, "-");
+                navigate(`/${titleSlug}-${note.id}`);
+                
+            }
+        })
     };
 
     const { isCollapsed,  toggleSidebar } = useSidebar();
-
+    
+    
     return (
         <>
             <div className="sticky top-0 z-0 bg-card flex items-center justify-between mb-8 px-4 py-2  backdrop-blur-md">
@@ -41,6 +62,7 @@ export default function TopBar() {
                                 <PlusCircle/>
                                 <span className="">Create</span>
                             </Button>
+                            
                         </div>
                         <div className="flex"/>
                     </>
@@ -54,12 +76,14 @@ export default function TopBar() {
                                     Search <span className="hidden xl:inline-block">Notes</span>
                                 </span>
                         </button>
+                        
                         <Button
                             onClick={handleCreateNote}
                             className="rounded-3xl ml-4 bg-primary-container hover:bg-primary/90 hover:text-white text-on-surface-variant px-4 h-12"
                         >   
                             <PlusCircle/>
                         </Button>
+                        
                     </div>
                 )
             }

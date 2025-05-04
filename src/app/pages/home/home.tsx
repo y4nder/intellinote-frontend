@@ -3,24 +3,38 @@ import NoteCard from "@/components/notecard/NoteCard";
 import { RootState } from "@/redux/store";
 import { Folder } from "@/types/folder";
 import { Note } from "@/types/note";
-import { useDispatch, useSelector } from "react-redux";
+import {useSelector } from "react-redux";
 import NoteGridSkeleton from "./skeletons/note-grid-skeleton";
-import { useGetUserNotes } from "@/service/notes/get-user-notes";
-import { setNotes } from "@/redux/slice/folder-note";
-import { useEffect } from "react";
+import { motion } from "framer-motion";
+
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      staggerChildren: 0.02,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.1,
+      ease: "easeOut",
+    },
+  },
+};
 
 
 export default function Home() {
-    const {folders, notes} = useSelector((state: RootState) => state.folderNotes);
-    const {data, isLoading} =  useGetUserNotes();
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        if(data) {
-            console.log("data arrived");
-            dispatch(setNotes(data.notes));
-        }
-    }, [data, dispatch])
+    const {folders, notes, isQuerying} = useSelector((state: RootState) => state.folderNotes);
 
     return (
         <>
@@ -28,16 +42,23 @@ export default function Home() {
                 <h2 className="text-3xl font-bold mb-4 text-primary-hard">
                     Recent Notes
                 </h2>
-                {notes.length === 0 || isLoading? (
+                
+                {notes.length === 0 || isQuerying? (
                     <NoteGridSkeleton/>
                 ): (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 xl:grid-cols-4">
-                    {notes.map((note: Note) => (
-                    <NoteCard key={note.id} note={note} />
-                    ))}
-                </div>
-                )
-                }
+                    <motion.div
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 xl:grid-cols-4"
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                        >
+                        {notes.map((note: Note) => (
+                            <motion.div key={note.id} variants={itemVariants}>
+                            <NoteCard note={note} />
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                )}
                 
             </div>
 

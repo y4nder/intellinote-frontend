@@ -3,6 +3,23 @@ import { GetUserNoteResponse, GetUserNotesResponse } from "@/types/note";
   
   
 export const mockTags = ['Important', 'Work', 'Personal', 'Ideas', 'Reading'];
+
+export const mockedCreatedNote = {
+    "id": "1a96c95d-cadc-4d96-b955-4d3a40778b4a",
+    "title": "Untitled Note",
+    "content": "[{\"type\":\"paragraph\"}]",
+    "summary": null,
+    "createdAt": "2025-05-04T05:50:12.0316593Z",
+    "updatedAt": null,
+    "author": {
+      "id": "57feec55-a21e-4e88-8ef7-062cbe83cb57",
+      "userName": "user@example.com"
+    },
+    "folder": null,
+    "keywords": [],
+    "topics": []
+}
+
   
 export const mockGetUserResponse: GetUserNotesResponse = {
   "notes": [
@@ -5458,6 +5475,11 @@ export const sampleBlockNote = [
 
 const staticUserNotes = [
   {
+    note: {
+      ...mockedCreatedNote
+    }
+  },
+  {
     "note": {
       "id": "df8aace4-c495-4219-9039-db6486cbdeea",
       "title": "Project Brainstorm Ideas",
@@ -5879,3 +5901,4 @@ export const mockApiCallNote = (id: string) : GetUserNoteResponse | undefined =>
   const res = staticUserNotes.find((f) => f.note.id === id);
   return res
 }
+

@@ -13,7 +13,7 @@ import {
   } from "@/components/ui/form/form"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { LoginSchema, loginSchema } from "@/service/auth/login"
+import { SignInSchema, loginSchema } from "@/service/auth/login"
 import { BorderBeam } from "../magicui/border-beam"
 
 
@@ -22,7 +22,7 @@ export function LoginForm({
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
 
-const form = useForm<LoginSchema>({
+const form = useForm<SignInSchema>({
   resolver: zodResolver(loginSchema),
   defaultValues: {
       email: "juan@gmail.com",
@@ -30,7 +30,7 @@ const form = useForm<LoginSchema>({
   }
 })
 
-const onSubmit = (value: LoginSchema) => {
+const onSubmit = (value: SignInSchema) => {
   console.log(value)
 }
 

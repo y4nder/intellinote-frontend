@@ -1,0 +1,14 @@
+// import { io, Socket } from "socket.io-client";
+
+// const URL = "https://1cz2hd3b-3000.asse.devtunnels.ms";
+
+
+// const user = JSON.parse(localStorage.getItem("user") || "{}");
+// const userId = user?.id;
+
+// export const socket: Socket = io(URL, {
+//   autoConnect: false,
+//   query: {
+//     userId,
+//   },
+// });

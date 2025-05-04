@@ -1,12 +1,14 @@
 import { clsx, type ClassValue } from "clsx"
+import { cssTransition } from "react-toastify";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export const NEW_NOTE_KEY = "Untitled-Note";
 
-const gradients = [
+export const gradientsCombos = [
   "from-purple-600 to-blue-500",
   "from-cyan-500 to-blue-500",
   "from-green-400 to-blue-600",
@@ -35,12 +37,12 @@ export function getGradientClassesFromString(input: string): {
     hash = input.charCodeAt(i) + ((hash << 5) - hash);
   }
 
-  const index = Math.abs(hash) % gradients.length;
-  const nextIndex = (index + 1) % gradients.length;
+  const index = Math.abs(hash) % gradientsCombos.length;
+  const nextIndex = (index + 1) % gradientsCombos.length;
 
   return {
-    base: `bg-gradient-to-br ${gradients[index]}`,
-    hover: `hover:bg-gradient-to-br hover:${gradients[nextIndex]}`,
+    base: `bg-gradient-to-br ${gradientsCombos[index]}`,
+    hover: `hover:bg-gradient-to-br hover:${gradientsCombos[nextIndex]}`,
   };
 }
 
@@ -59,3 +61,17 @@ export function extractIdFromSlug(slug: string): string | null {
   const match = slug.match(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/);
   return match ? match[0] : null;
 }
+
+export const getDefaultBlock = () => {
+  const block = [
+    {
+      "type": "paragraph",
+    }
+  ] 
+  return JSON.stringify(block);
+}
+
+export const SlideDownBlur = cssTransition({
+  enter: "slide-in-blurred-bottom",
+  exit: "slide-out-blurred-bottom"
+});

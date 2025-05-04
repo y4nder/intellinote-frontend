@@ -1,5 +1,6 @@
 // import { Keyword } from "./keyword";
 
+import { PartialBlock } from "@blocknote/core";
 import { Folder } from "./folder";
 import { User } from "./user";
 
@@ -9,9 +10,9 @@ export interface Note {
     content?: string | null;
     summary?: string | null;
     createdAt: string;
-    updatedAt: string;
+    updatedAt: string | null;
     author?: User;
-    folder?: Folder;
+    folder?: Folder | null;
     keywords: string[];
     topics: string[];
 }
@@ -24,3 +25,18 @@ export interface GetUserNotesResponse {
 export interface GetUserNoteResponse {
     note?: Note
 }
+
+export interface GetUserNoteResponseParsed {
+    note? : Note,
+    content : PartialBlock[]
+}
+
+export interface UpdateNoteResponse {
+    note?: Note
+}
+
+export interface UpdateNoteResponseParsed {
+    note? : Note,
+    content : PartialBlock[]
+}
+
