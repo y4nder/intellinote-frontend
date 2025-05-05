@@ -4,7 +4,6 @@ import { queryClient } from "@/lib/react-query"
 import { PropsWithChildren } from "react"
 import { Provider } from "react-redux";
 import { store } from "@/redux/store";
-import { Toaster } from "sonner";
 import { SidebarProvider } from "@/providers/sidebar";
 import { SearchDialogProvider } from "@/providers/searchDialog";
 // import AuthProvider from "@/providers/auth";
@@ -19,7 +18,6 @@ const MainAppProvider = ({ children }: PropsWithChildren) => {
               <ThemeProvider>
                 {/* <AuthProvider>{children}</AuthProvider> */}
                 {children}
-                <Toaster/>
               </ThemeProvider>
             </SidebarProvider>
           </SearchDialogProvider>

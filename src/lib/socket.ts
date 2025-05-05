@@ -1,7 +1,5 @@
 import * as signalR from "@microsoft/signalr";
 
-
-
 export const connection = new signalR.HubConnectionBuilder()
   .withUrl("https://localhost:7050/note-hub")
   .configureLogging(signalR.LogLevel.Information)

@@ -10,6 +10,8 @@ import Home from "./pages/home/home";
 import AllNotes from "./pages/home/all-notes";
 import Folders from "./pages/home/folders";
 import NoteEditor from "./pages/note";
+import { ToastContainer } from "react-toastify";
+import { SlideDownBlur } from "@/lib/utils";
 // import AuthGuard from "@/components/auth/auth-guard";
 
 
@@ -32,7 +34,12 @@ const createAppRouter = () =>
         },
         {
             path: "/",
-            element: <AppRoot />,
+            element: <>
+                <ToastContainer 
+                    transition={SlideDownBlur}
+                />
+                <AppRoot />
+            </>,
             children: [
                 {
                     element: <MainLayout />,

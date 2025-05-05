@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addNote, setSelectedNote } from "@/redux/slice/folder-note";
 import { useCreateNote } from "@/service/notes/create-note";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 export default function TopBar() {
@@ -15,6 +16,7 @@ export default function TopBar() {
     const navigate = useNavigate();
     const isMobile = useIsMobile();
     const { mutate } = useCreateNote();
+    const queryClient = useQueryClient();
     
 
     const handleCreateNote = () => {
@@ -24,7 +26,8 @@ export default function TopBar() {
         }, {
             onSuccess : (note) => {
                 dispatch(setSelectedNote(note));
-                dispatch(addNote(note))
+                dispatch(addNote(note));
+                queryClient.invalidateQueries({queryKey: ["user-notes", note.id]});
                 const titleSlug = note.title.toLowerCase().replace(/\s+/g, "-");
                 navigate(`/${titleSlug}-${note.id}`);
                 

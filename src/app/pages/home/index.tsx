@@ -1,7 +1,7 @@
 import TopBar from "@/components/topbar/topbar";
 import { BreadcrumbUi } from "@/components/ui/breadcrumb-ui";
 import { PageLoadingProgress } from "@/components/ui/page-loading-progress";
-import { setIsQuerying, setNotes } from "@/redux/slice/folder-note";
+import { setIsQuerying, setNotes, setSelectedNote } from "@/redux/slice/folder-note";
 import { useGetUserNotes } from "@/service/notes/get-user-notes";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -13,6 +13,7 @@ export default function HomeLayout() {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(setSelectedNote(null));
         dispatch(setIsQuerying(isLoading));
         if(data) {
             console.log("data arrived");

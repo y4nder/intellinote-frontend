@@ -1,3 +1,4 @@
+import { SummarizerMessage } from "@/hooks/sockets";
 import { Folder } from "@/types/folder";
 import { GetUserNoteResponse, GetUserNotesResponse } from "@/types/note";
   
@@ -5902,3 +5903,33 @@ export const mockApiCallNote = (id: string) : GetUserNoteResponse | undefined =>
   return res
 }
 
+export const sampleSocketGeneratedResponse : SummarizerMessage = {
+  id:"1a96c95d-cadc-4d96-b955-4d3a40778b4a",
+  name: "Toxicology Notes",
+  response: {
+    keywords: [
+      'project ideas',
+      'viability',
+      'dashboard customizable',
+      'environmental',
+      'preliminary market',
+      'learning rank',
+      'deadlines user',
+      'usage travel',
+      'domain',
+      'monitor reduce'
+    ],
+    summary: 'The text outlines several potential project ideas for exploration. These include an AI-powered task prioritization system, an interactive data visualization dashboard, a community knowledge-sharing platform, a personalized learning recommendation engine, and an environmental impact tracking tool. Market viability research is needed for each idea before the next meeting.',
+    topics: [
+      'Project ideas for exploration:',
+      'AI-powered task prioritization system',
+      'Interactive data visualization dashboard',
+      'Community knowledge-sharing platform',
+      'Personalized learning recommendation engine',
+      'Environmental impact tracking tool',
+      'Market viability research for each idea'
+    ]
+  },
+  dateTime: '2025-05-04T13:44:04.0261181Z',
+  milleSeconds: 6707
+}
