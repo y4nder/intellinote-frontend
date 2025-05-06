@@ -37,11 +37,7 @@ const getUserNote = async (noteId: string): Promise<GetUserNoteResponseParsed> =
 export const useGetUserNote = (noteId: string) => {
     return useQuery<GetUserNoteResponseParsed>({
         queryKey: ["user-notes", noteId],
-        queryFn: () => getUserNote(noteId),      
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        staleTime: 1000 * 60 * 5, // optional: 5 minutes
+        queryFn: () => getUserNote(noteId)
     });
 };
   

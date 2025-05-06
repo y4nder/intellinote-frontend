@@ -15,9 +15,11 @@ import { PageLoadingProgress } from "@/components/ui/page-loading-progress";
 import NoteHeader from "./note-header";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useUpdateNote } from "@/service/notes/update-note";
-import { useNotifyEmbeddingDoneSocket, useSummarizerSocket } from "@/hooks/sockets";
+import { useNotifyEmbeddingDoneSocket, useSummarizerSocket} from "@/hooks/sockets";
 import { toast } from "react-toastify";
 import PillNotification from "@/components/notification/pill-notification";
+// import { sampleSocketGeneratedRespons as sampleSocketGeneratedResponse } from "@/data/mockData";
+
 
 
 export default function NoteEditor() {
@@ -30,13 +32,13 @@ export default function NoteEditor() {
     const [initialContent, setInitialContent] = useState<PartialBlock[] | undefined | "loading">("loading");
     const [blocks, setBlocks] = useState<Block[] | undefined>(undefined);
     const {mutate} = useUpdateNote();
-    
+
     useNotifyEmbeddingDoneSocket((notification) => {
       toast(PillNotification, {
           className: 'p-0 w-[30px] border flex items-center gap-3 rounded-full bg-red-500 px-4 py-2 shadow-md border border-zinc-200 text-sm',
           data: {
             message: notification.message,
-            milliSeconds: 234
+            milliSeconds: notification.milleSeconds
           },
           autoClose: 3000,
           closeButton:false,
@@ -45,7 +47,16 @@ export default function NoteEditor() {
     })
 
     useSummarizerSocket((notification) => {
-      console.log("notif", notification);
+      toast(PillNotification, {
+          className: 'p-0 w-[30px] border flex items-center gap-3 rounded-full bg-red-500 px-4 py-2 shadow-md border border-zinc-200 text-sm',
+          data: {
+            message: `${notification.name} was summarized`,
+            milliSeconds: notification.milleSeconds
+          },
+          autoClose: 3000,
+          closeButton:false,
+          position: 'bottom-center',
+      });
     })
 
     // debug parameter id
@@ -109,7 +120,6 @@ export default function NoteEditor() {
         {/* Main Content */}
         <div className="py-6 md:px-12 lg:px-24 w-full max-w-4xl mx-auto flex-1 flex flex-col">
           <NoteHeader/>
-
           {/* Editor */}
           {(!isLoading && initialContent !== "loading" && editor) && (
             <motion.div

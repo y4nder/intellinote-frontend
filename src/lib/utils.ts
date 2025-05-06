@@ -75,3 +75,7 @@ export const SlideDownBlur = cssTransition({
   enter: "slide-in-blurred-bottom",
   exit: "slide-out-blurred-bottom"
 });
+
+export const buildSlug = (name: string) => {
+  return name.toLowerCase().replace(/\s+/g, "-");
+}

@@ -4,11 +4,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import NoteHeaderSkeleton from "./skeletons/note-header-skeleton";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { setIsSaving } from "@/redux/slice/folder-note";
+import { setIsSaving, setSummarized } from "@/redux/slice/folder-note";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useUpdateNote } from "@/service/notes/update-note";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Loader2, PenIcon, NotebookIcon, BotMessageSquareIcon } from "lucide-react";
+import NoteSummaryLoading from "../home/skeletons/note-generating-loader";
+import { useSummarizerSocket, 
+    // useSummarizerSocketMocked 
+} from "@/hooks/sockets";
+import { useSummarizeNote } from "@/service/notes/summarize-note";
+// import { sampleSocketGeneratedResponse } from "@/data/mockData";
 
 const TOPIC_DISPLAY_LIMIT = 4;
 
@@ -22,6 +30,27 @@ export default function NoteHeader() {
     const id = extractIdFromSlug(noteId!);
     const hasMounted = useRef(false);
     const {mutate} = useUpdateNote();
+    const {mutate: summarize} = useSummarizeNote();
+
+    // action states
+    const [isSummarizing, setIsSummarizing] = useState(false);
+
+    const handleSummarize = () => {
+        setIsSummarizing(true);
+        summarize(id!)
+    }
+
+    // listen for mock sockets
+    useSummarizerSocket((notification) => {
+        console.log("notif", notification);
+        const {response , id: notifId} = notification;
+        console.log("ids", notifId, selectedNote!.id);
+        if(notifId === selectedNote!.id){
+            dispatch(setSummarized(response));
+            setIsSummarizing(false);
+        }
+    })
+
     
     // todo delegate action callback if id exists
     const handleSave = useCallback((latestNoteTitle: string | undefined) => {
@@ -85,12 +114,12 @@ export default function NoteHeader() {
             </motion.div>
         )}
 
-        {selectedNote?.summary && (
+        {(selectedNote?.summary && !isSummarizing) && (
             <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="flex flex-col gap-3 mt-3 bg-gradient-to-b from-white to-[#ECE4FF] py-4 px-4 rounded-3xl text-gray-900"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="flex flex-col gap-3 mt-3 bg-gradient-to-b from-white to-[#ECE4FF] py-4 px-4 rounded-3xl text-gray-900"
             >
             <div className="flex flex-wrap gap-2">
                 {selectedNote.keywords.map((topic, index) => (
@@ -140,7 +169,35 @@ export default function NoteHeader() {
             </div>
             </motion.div>
         )}
-
+        {isSummarizing && (
+            <NoteSummaryLoading type={"Summarizing"}/>
+        )}
+        <div className="mt-4 flex gap-2 justify-items-center text-white pl-6 pb-4">
+            <Button 
+              className="text-xs rounded-2xl bg-primary-hard/50 hover:bg-primary-hard/80"
+              disabled={isSummarizing}
+              onClick={handleSummarize}
+            >
+              {isSummarizing ? 
+                <>
+                  <Loader2 className="animate-spin"/>
+                  Summarizing
+                </> : 
+                <>
+                  <PenIcon/>  
+                  Summarize
+                </>
+              }
+            </Button>
+            <Button className="text-xs rounded-2xl bg-red-400 hover:bg-red-600 font-bold">
+              <NotebookIcon/>
+              Create Study Set
+            </Button>
+            <Button className="text-xs rounded-2xl">
+              <BotMessageSquareIcon/>
+              Ask
+            </Button>
+          </div>
         </div>
     )
 }

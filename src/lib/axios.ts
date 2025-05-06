@@ -1,20 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Axios from "axios";
+import { GetAuthKey, StoreKey } from "./local-stores";
+import { SignInResponse } from "@/service/auth/login";
+
+const baseURL = "https://localhost:7050";
+// const baseURL=  "https://wd0xffs1-7050.asse.devtunnels.ms",
 
 export const api = Axios.create({
-    baseURL: "https://localhost:7050",
-    withCredentials: true
+  baseURL,
+  withCredentials: true
 })
 
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
-    // Get token from localStorage (or sessionStorage)
-    const token = localStorage.getItem("authToken");
-    
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    const authCredentials = GetAuthKey();
+
+    if(authCredentials) {
+      config.headers.Authorization = `${authCredentials.token_type} ${authCredentials.access_token}`;
+    }  
 
     return config;
   },
@@ -61,12 +65,23 @@ api.interceptors.response.use(
 
       try {
         // Call your refresh endpoint
-        await Axios.post(
-          "https://localhost:7050/api/auth/signin/refresh?useCookie=true",
-          {},
-          { withCredentials: true }
-        );
+        const authCredentials = GetAuthKey();
+        if(!authCredentials) return;
 
+        // const { token_type, access_token } = authCredentials;
+        // console.log("refreshing with", access_token);
+        const response = await Axios.post<SignInResponse>(
+        `${baseURL}/api/auth/signin/refresh`,
+          {},
+          {
+            // headers: {
+            //   Authorization: `${token_type} ${access_token}`,
+            //   'Content-Type': 'application/json',
+            // },
+            withCredentials: true
+          }
+        );
+        StoreKey(response.data);
         processQueue(null);
 
         // Retry original request after successful refresh

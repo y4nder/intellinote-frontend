@@ -1,10 +1,11 @@
-import { mockFolders } from "@/data/mockData";
+import { GeneratedResponse } from "@/hooks/sockets";
 import { Folder } from "@/types/folder";
 import { Note } from "@/types/note";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
 interface FolderNoteState {
+    recentNotes: Note[],
     notes: Note[];
     folders: Folder[];
     selectedNote: Note | null;
@@ -15,9 +16,10 @@ interface FolderNoteState {
 }
 
 const initialState: FolderNoteState = {
+    recentNotes: [],
     notes: [],
     selectedNote: null,
-    folders: mockFolders,
+    folders: [],
     selectedFolder: null,
     searchQuery: "",
     isQuerying: false,
@@ -33,6 +35,9 @@ const folderNoteSlice = createSlice({
         },
         setNotes: (state, action: PayloadAction<Note[]>) => {
             state.notes = action.payload;
+            state.recentNotes = [...action.payload]
+                .sort((a, b) => new Date(b.updatedAt!).getTime() - new Date(a.updatedAt!).getTime())
+                .slice(0, 10);
         },
         setFolders: (state, action: PayloadAction<Folder[]>) => {
             state.folders = action.payload;
@@ -56,10 +61,28 @@ const folderNoteSlice = createSlice({
         },
         setIsSaving : (state, action: PayloadAction<boolean>) => {
             state.isSaving = action.payload;
+        },
+        setSummarized : (state, action: PayloadAction<GeneratedResponse> ) => {
+            if(state.selectedNote){
+                state.selectedNote.summary = action.payload.summary;
+                state.selectedNote.keywords = action.payload.keywords;
+                state.selectedNote.topics = action.payload.topics;
+            }
         }
     }
 })
 
-export const { setNotes, setFolders, setSelectedNote, setSelectedFolder, setSearchQuery, setNoteContent, setIsQuerying, setIsSaving, addNote} = folderNoteSlice.actions;
+export const { 
+    setNotes, 
+    setFolders, 
+    setSelectedNote, 
+    setSelectedFolder, 
+    setSearchQuery, 
+    setNoteContent, 
+    setIsQuerying, 
+    setIsSaving, 
+    addNote,
+    setSummarized
+} = folderNoteSlice.actions;
 
 export default folderNoteSlice.reducer;

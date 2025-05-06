@@ -1,7 +1,7 @@
 // import { mockGetUserResponse } from "@/data/mockData";
 import { api } from "@/lib/axios";
 import { GetUserNotesResponse } from "@/types/note";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 // const getUserNotesMock = (): Promise<GetUserNotesResponse> => {
 //     return new Promise((resolve) => {
@@ -34,5 +34,19 @@ export const useGetUserNotes = (params: GetUserNotesParams = { skip: 0, take: 10
   return useQuery<GetUserNotesResponse>({
     queryKey: ["user-notes", params],
     queryFn: () => getUserNotes(params),
+  });
+};
+
+export const useInfiniteGetUserNotes = (params: Omit<GetUserNotesParams, "skip">) => {
+  return useInfiniteQuery({
+    queryKey: ["user-notes", params.term], 
+    queryFn: async ({ pageParam = 0 }) => {
+      return await getUserNotes({ ...params, skip: pageParam, take: params.take || 10 });
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      const totalLoaded = allPages.reduce((sum, page) => sum + page.notes.length, 0);
+      return totalLoaded < lastPage.totalCount ? totalLoaded : undefined;
+    },
+    initialPageParam: 0,
   });
 };

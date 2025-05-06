@@ -18,7 +18,7 @@ export default function MainLayout() {
 
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="flex h-screen overflow-hidden bg-white">
       {/* Sidebar with mobile responsive behavior */}
       <div className={cn(
         "fixed md:relative z-20",

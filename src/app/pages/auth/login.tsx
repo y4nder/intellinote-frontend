@@ -1,17 +1,23 @@
 
 import { TypingAnimation } from "@/components/magicui/typing-animation"
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
+import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/ui/mode-toggle"
 import { PageLoadingProgress } from "@/components/ui/page-loading-progress"
 import { useIsMobile } from "@/hooks/use-is-mobile"
+import { loginUser } from "@/redux/slice/auth"
+
 import { useSignIn } from "@/service/auth/login"
 import { useEffect, useRef } from "react"
+import { useDispatch } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
 
 const Login = () => {
+  const dispatch = useDispatch();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const {mutate, isPending} = useSignIn();
+
 
   const mobileScrollRef = useRef<HTMLDivElement>(null);
 
@@ -27,17 +33,23 @@ const Login = () => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
-
+    
     const email = formData.get("email");
     const password = formData.get("password");
+    
 
     mutate({
       email : email!.toString(),
       password: password!.toString(),
-      useCookie: true
+      useCookie: false
     }, {
-      onSuccess : () => {
-        navigate("/")
+      onSuccess : (data) => {
+        dispatch(loginUser(data));
+        navigate("/");
+      },
+      onError : (e) => {
+        alert(JSON.stringify(e, null, 2));
+        console.log(JSON.stringify(e, null, 2));
       }
     })
   }
@@ -104,12 +116,12 @@ const Login = () => {
                 className="w-full p-2 md:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#7c84ff]"
               />
             </div>
-            <button
+            <Button
               type="submit"
               className="w-full bg-[#11144b] text-white py-2 md:py-3 rounded-md hover:bg-[#0500ff] transition duration-300"
             >
               Login
-            </button>
+            </Button>
           </form>
           <p className="text-center mt-4 md:mt-6">
             Don't have an account?{" "} <NavLink className="text-primary-hard underline font-bold" to={"/auth/signup"}>Create an account</NavLink>
