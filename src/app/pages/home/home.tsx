@@ -3,9 +3,13 @@ import NoteCard from "@/components/notecard/NoteCard";
 import { RootState } from "@/redux/store";
 import { Folder } from "@/types/folder";
 import { Note } from "@/types/note";
-import {useSelector } from "react-redux";
+import {useDispatch, useSelector } from "react-redux";
 import NoteGridSkeleton from "./skeletons/note-grid-skeleton";
 import { motion } from "framer-motion";
+import { useGetUserNotes } from "@/service/notes/get-user-notes";
+import { useEffect } from "react";
+import { setIsQuerying, setNotes, setSelectedNote } from "@/redux/slice/folder-note";
+
 
 // Animation variants
 const containerVariants = {
@@ -34,8 +38,22 @@ const itemVariants = {
 
 
 export default function Home() {
-    const {folders, notes, isQuerying} = useSelector((state: RootState) => state.folderNotes);
+    const {folders, recentNotes: notes, isQuerying} = useSelector((state: RootState) => state.folderNotes);
+    const {data, isLoading} =  useGetUserNotes();
 
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(setSelectedNote(null));
+        dispatch(setIsQuerying(isLoading));
+        if(data) {
+            console.log("notes arrived");
+            dispatch(setNotes(data.notes));
+            dispatch(setIsQuerying(isLoading));
+        }
+    }, [data, dispatch, isLoading])
+
+    
     return (
         <>
             <div className="mb-8">
@@ -51,7 +69,7 @@ export default function Home() {
                         variants={containerVariants}
                         initial="hidden"
                         animate="visible"
-                        >
+                    >
                         {notes.map((note: Note) => (
                             <motion.div key={note.id} variants={itemVariants}>
                             <NoteCard note={note} />
@@ -67,12 +85,20 @@ export default function Home() {
                 <h2 className="text-xl font-semibold mb-4 text-primary-hard ">
                     Recent Folders
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <motion.div
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 xl:grid-cols-4"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
                     {folders.map((folder: Folder) => (
-                        <FolderCard key={folder.id} folder={folder} />
+                        <motion.div key={folder.id} variants={itemVariants}>
+                            <FolderCard folder={folder} />
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </>
     )
 }
+

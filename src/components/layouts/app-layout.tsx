@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react"
 import { SearchDialog } from "../ui/search-dialog"
-import { useStandardNotificationSocket} from "@/hooks/sockets"
+import { useNotificationSocket, useStandardNotificationSocket} from "@/hooks/sockets"
 import CoolNotification from "../notification/cool-notification";
 import { toast } from "react-toastify";
 import { RootState } from "@/redux/store";
@@ -27,6 +27,21 @@ const AppLayout = ({ children }: PropsWithChildren) => {
     } else {
       console.log("skipped global notif")
     }
+  })
+
+  useNotificationSocket((notification) => {
+    console.log("initialized socket", notification);
+    toast(      
+      <CoolNotification 
+        title={""} 
+        content={notification.message} 
+        name={""} 
+        id={""}
+      />,{
+      autoClose: 2000,
+      position: 'bottom-left'
+    })
+    
   })
 
   return (

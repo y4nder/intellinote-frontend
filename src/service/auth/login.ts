@@ -18,12 +18,16 @@ export type SignInResponse = {
     refresh_token?: string | null;
 }
 
+// const getToken = async (data: SignInSchema) : Promise<SignInResponse> => {
+//     const response = await api.post<SignInResponse>(`/api/auth/token`, data);
+//     return response.data;
+// }
 
 const signIn = async (data: SignInSchema) : Promise<SignInResponse> => {
     const response = await api.post<SignInResponse>(`/api/auth/signin?useCookie=${data.useCookie}`, data);
     return response.data;
+    
 }
-
 
 export const useSignIn = () => useMutation({
     mutationFn: signIn

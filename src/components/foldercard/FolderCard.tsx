@@ -1,16 +1,29 @@
 import { cn, getGradientClassesFromString } from "@/lib/utils";
+import { setSelectedFolder } from "@/redux/slice/folder-note";
 import { Folder } from "@/types/folder";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 interface FolderCardProps {
   folder: Folder;
 }
 
 export default function FolderCard({ folder }: FolderCardProps) {
-  const { name, noteCount } = folder;
+  const { name, noteCount, id } = folder;
   const gradientClass = getGradientClassesFromString(folder.name);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleNavigation = () => {
+    dispatch(setSelectedFolder(folder));
+    const folderId = `${name.toLowerCase().replace(/\s+/g, "-")}-${id}`;
+    navigate(`/Folder/${folderId}`);
+  }
 
   return (
-    <div className="bg-white p-4 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group active:scale-95">
+    <div className="bg-white p-4 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group active:scale-95"
+      onClick={handleNavigation}
+    >
       <div className="flex items-center mb-3">
         <div className="w-12 h-fit max-w-12 rounded-lg flex items-center justify-center">
           <div

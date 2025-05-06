@@ -5,14 +5,19 @@ import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/ui/mode-toggle"
 import { PageLoadingProgress } from "@/components/ui/page-loading-progress"
 import { useIsMobile } from "@/hooks/use-is-mobile"
+import { loginUser } from "@/redux/slice/auth"
+
 import { useSignIn } from "@/service/auth/login"
 import { useEffect, useRef } from "react"
+import { useDispatch } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
 
 const Login = () => {
+  const dispatch = useDispatch();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const {mutate, isPending} = useSignIn();
+
 
   const mobileScrollRef = useRef<HTMLDivElement>(null);
 
@@ -36,10 +41,11 @@ const Login = () => {
     mutate({
       email : email!.toString(),
       password: password!.toString(),
-      useCookie: true
+      useCookie: false
     }, {
-      onSuccess : () => {
-        navigate("/")
+      onSuccess : (data) => {
+        dispatch(loginUser(data));
+        navigate("/");
       },
       onError : (e) => {
         alert(JSON.stringify(e, null, 2));

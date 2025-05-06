@@ -12,7 +12,7 @@ const AuthRoot = () => {
 
   useEffect(() => {
     if (data) {
-      console.log("has data, navigating to dashboard");
+      console.log("has data, navigating to dashboard", data);
       navigate("/");
     } else if (error) {
       console.error("no data or error, stay on login");

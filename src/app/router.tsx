@@ -12,6 +12,7 @@ import Folders from "./pages/home/folders";
 import NoteEditor from "./pages/note";
 import { ToastContainer } from "react-toastify";
 import { SlideDownBlur } from "@/lib/utils";
+import Folder from "./pages/folder";
 // import AuthGuard from "@/components/auth/auth-guard";
 
 
@@ -34,41 +35,49 @@ const createAppRouter = () =>
         },
         {
             path: "/",
-            element: <>
-                <ToastContainer 
-                    transition={SlideDownBlur}
-                />
+            element: (
+              <>
+                <ToastContainer transition={SlideDownBlur} />
                 <AppRoot />
-            </>,
+              </>
+            ),
             children: [
-                {
-                    element: <MainLayout />,
-                    children : [
-                        {
-                            element: <HomeLayout/>, // with top bar
-                            children : [
-                                {
-                                    index: true,
-                                    element: <Home/>    
-                                },
-                                {
-                                    path: "all-notes",
-                                    element: <AllNotes/>
-                                },
-                                {
-                                    path: "folders",
-                                    element: <Folders/>
-                                }
-                            ]
-                        },
-                        {
-                            path: "/:noteId",
-                            element: <NoteEditor/>
-                        }
-                    ]
-                }
-            ]
-        }
+              {
+                element: <MainLayout />,
+                children: [
+                  {
+                    element: <HomeLayout />, // with top bar
+                    children: [
+                      {
+                        index: true,
+                        element: <Home />,
+                      },
+                      {
+                        path: "folder/:folderId/note/:noteId", // 💡 Clear and safe
+                        element: <NoteEditor />,
+                      },
+                      {
+                        path: "folder/:folderId", // 💡 Now only handles folders
+                        element: <Folder />,
+                      },
+                      {
+                        path: "all-notes",
+                        element: <AllNotes />,
+                      },
+                      {
+                        path: "folders",
+                        element: <Folders />,
+                      },  
+                    ],
+                  },
+                  {
+                    path: "note/:noteId", // 💡 Top-level note access, distinct from folders
+                    element: <NoteEditor />,
+                  },
+                ],
+              },
+            ],
+          }          
     ])
 
 

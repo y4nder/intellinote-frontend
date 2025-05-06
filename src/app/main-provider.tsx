@@ -6,12 +6,14 @@ import { Provider } from "react-redux";
 import { store } from "@/redux/store";
 import { SidebarProvider } from "@/providers/sidebar";
 import { SearchDialogProvider } from "@/providers/searchDialog";
+import { WebSocketProvider } from "@/providers/socketProvider";
 // import AuthProvider from "@/providers/auth";
 
 
 const MainAppProvider = ({ children }: PropsWithChildren) => {
   return (
     <QueryClientProvider client={queryClient}>
+      <WebSocketProvider>
         <Provider store={store}>
           <SearchDialogProvider>
             <SidebarProvider>
@@ -22,6 +24,7 @@ const MainAppProvider = ({ children }: PropsWithChildren) => {
             </SidebarProvider>
           </SearchDialogProvider>
         </Provider>
+      </WebSocketProvider>
     </QueryClientProvider>
   )
 }

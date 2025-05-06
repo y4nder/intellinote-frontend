@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { setSelectedNote } from "@/redux/slice/folder-note";
+// import { buildSlug } from "@/lib/utils";
 
 interface NoteCardProps {
   note: Note;
@@ -43,8 +44,8 @@ export default function NoteCard({ note }: NoteCardProps) {
 
   const handleNavigation = () => {
     dispatch(setSelectedNote(note));
-    const titleSlug = note.title.toLowerCase().replace(/\s+/g, "-");
-    navigate(`/${titleSlug}-${note.id}`);
+    const noteId = `${note.title.toLowerCase().replace(/\s+/g, "-")}-${note.id}`;
+    navigate(`/Note/${noteId}`);
   };
 
   // Keywords logic

@@ -28,8 +28,8 @@ export default function TopBar() {
                 dispatch(setSelectedNote(note));
                 dispatch(addNote(note));
                 queryClient.invalidateQueries({queryKey: ["user-notes", note.id]});
-                const titleSlug = note.title.toLowerCase().replace(/\s+/g, "-");
-                navigate(`/${titleSlug}-${note.id}`);
+                const noteId = `${note.title.toLowerCase().replace(/\s+/g, "-")}-${note.id}`;
+                navigate(`/Note/${noteId}`);
                 
             }
         })

@@ -92,7 +92,7 @@ export default function Sidebar() {
         <div className="flex items-center p-4 border-b border-gray-100 justify-between">
           <div className="flex gap-2 items-center">
             <div className={cn("rounded-full w-8 h-8 p-2 flex items-center justify-center text-white", `bg-gradient-to-r ${gradientsCombos[2]}`)}>
-              <span className="text-sm font-semibold">{user?.userName[0].toUpperCase()}</span>
+              <span className="text-sm font-semibold">{user?.userName[0].toUpperCase() ?? "!!"}</span>
             </div>
             {!isCollapsed && <span className="ml-3 font-medium truncate w-20">{user?.email}</span>}
           </div>
