@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 
 export interface NotificationStandard {
+    type: "Note" | "Folder";
     title: string;
     message: string;
     id: string;
@@ -84,4 +85,21 @@ export const useSummarizerSocketMocked = (onNotification: (notification: Summari
         connection.off("ManualDevNotify", onNotification);
     };
     }, [onNotification]);
+};
+
+export interface FolderUpdateDoneMessage {
+  id: string;
+  message: string;
+  folderDescription: string;
+  dateTime: string;
+  milleSeconds: number;
+}
+
+export const useFolderUpdateDoneSocket = (onNotification: (notification: FolderUpdateDoneMessage) => void) => {
+  const message = "NotifyFolderUpdateDone";
+  const { on, off } = useWebSocket();
+  useEffect(() => {
+    on(message, onNotification);
+    return () => off(message, onNotification);
+  }, [on, off, onNotification]);
 };

@@ -48,6 +48,17 @@ const folderNoteSlice = createSlice({
         setSelectedFolder: (state, action: PayloadAction<Folder | null>) => {
             state.selectedFolder = action.payload;
         },
+        setSelectedFolderTitle : (state, action: PayloadAction<string>) => {
+            state.selectedFolder!.name = action.payload
+        },
+        setSelectedFolderDescription : (state, action: PayloadAction<string>) => {
+            state.selectedFolder!.description = action.payload
+        },
+        addNotesToFolder: (state, action: PayloadAction<Note[]>) => {
+            if (state.selectedFolder && Array.isArray(state.selectedFolder.notes)) {
+                state.selectedFolder.notes.push(...action.payload);
+            }
+        },
         setSearchQuery: (state, action: PayloadAction<string>) => {
             state.searchQuery = action.payload;
         },
@@ -82,7 +93,10 @@ export const {
     setIsQuerying, 
     setIsSaving, 
     addNote,
-    setSummarized
+    setSummarized,
+    setSelectedFolderTitle,
+    setSelectedFolderDescription,
+    addNotesToFolder
 } = folderNoteSlice.actions;
 
 export default folderNoteSlice.reducer;

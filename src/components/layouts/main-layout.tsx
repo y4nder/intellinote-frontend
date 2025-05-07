@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Outlet } from "react-router-dom";
 
-
 //done create sidebar context
 //done create application reducer context
 //done create chat agent context
@@ -15,7 +14,6 @@ import { Outlet } from "react-router-dom";
 export default function MainLayout() {
   const {isCollapsed} = useSidebar();
   const {isCollapsed: isChatCollapsed} = useSelector((state: RootState) => state.chatAgent);
-
 
   return (
     <div className="flex h-screen overflow-hidden bg-white">

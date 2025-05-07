@@ -1,39 +1,17 @@
-import { PlusCircle, Search, SidebarOpenIcon } from "lucide-react";
-import { Button } from "../ui/button";
+import { Search, SidebarOpenIcon } from "lucide-react";
 import { useSearchDialog } from "@/providers/searchDialog";
 import { useSidebar } from "@/providers/sidebar";
 import { useIsMobile } from "@/hooks/use-is-mobile";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addNote, setSelectedNote } from "@/redux/slice/folder-note";
-import { useCreateNote } from "@/service/notes/create-note";
-import { useQueryClient } from "@tanstack/react-query";
+import TopBarAddNew from "./topbar-add-new";
 
 
 export default function TopBar() {
     const { toggleSearchDialog } = useSearchDialog();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const isMobile = useIsMobile();
-    const { mutate } = useCreateNote();
-    const queryClient = useQueryClient();
     
-
-    const handleCreateNote = () => {
-        mutate({
-            title: "",
-            content: ""
-        }, {
-            onSuccess : (note) => {
-                dispatch(setSelectedNote(note));
-                dispatch(addNote(note));
-                queryClient.invalidateQueries({queryKey: ["user-notes", note.id]});
-                const noteId = `${note.title.toLowerCase().replace(/\s+/g, "-")}-${note.id}`;
-                navigate(`/Note/${noteId}`);
-                
-            }
-        })
-    };
+    const isMobile = useIsMobile();
+    
+    
+    
 
     const { isCollapsed,  toggleSidebar } = useSidebar();
     
@@ -58,14 +36,14 @@ export default function TopBar() {
                                     Search <span className="hidden xl:inline-block">Notes</span>
                                 </span>
                             </button>
-                            <Button
+                            {/* <Button
                                 onClick={handleCreateNote}
                                 className="rounded-3xl ml-4 bg-primary-container hover:bg-primary/90 hover:text-white text-on-surface-variant px-4 h-12"
                             >
                                 <PlusCircle/>
                                 <span className="">Create</span>
-                            </Button>
-                            
+                            </Button> */}
+                            <TopBarAddNew/>
                         </div>
                         <div className="flex"/>
                     </>
@@ -79,13 +57,13 @@ export default function TopBar() {
                                     Search <span className="hidden xl:inline-block">Notes</span>
                                 </span>
                         </button>
-                        
-                        <Button
+                        <TopBarAddNew/>
+                        {/* <Button
                             onClick={handleCreateNote}
                             className="rounded-3xl ml-4 bg-primary-container hover:bg-primary/90 hover:text-white text-on-surface-variant px-4 h-12"
                         >   
                             <PlusCircle/>
-                        </Button>
+                        </Button> */}
                         
                     </div>
                 )

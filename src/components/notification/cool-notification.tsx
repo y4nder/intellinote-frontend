@@ -3,18 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { ToastContentProps } from "react-toastify";
 
 type CustomNotificationProps = Partial<ToastContentProps> & {
+    type: "Note" | "Folder",
     title: string;
     content: string;
     name: string;
     id: string
 };
 
-export default function CoolNotification({ closeToast, title, content, name, id }: CustomNotificationProps) {
+export default function CoolNotification({ closeToast, title, content, name, id, type }: CustomNotificationProps) {
   const navigate = useNavigate();
 
   const handleNavigation = () => {
     const titleSlug = name.toLowerCase().replace(/\s+/g, "-");
-    navigate(`/${titleSlug}-${id}`);
+    navigate(`/${type}/${titleSlug}-${id}`);
     if(closeToast){
       closeToast()
     }

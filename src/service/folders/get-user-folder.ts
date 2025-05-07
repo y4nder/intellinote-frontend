@@ -6,7 +6,7 @@ export interface GetUseFolderResponse {
     folder: Folder
 }
 
-const getUserFolder = async (folderId: string): Promise<Folder> => {
+export const getUserFolder = async (folderId: string): Promise<Folder> => {
     const response = await api.get<GetUseFolderResponse>(`/api/folders/${folderId}`);
     return response.data.folder;
 }
