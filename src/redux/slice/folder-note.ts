@@ -3,7 +3,6 @@ import { Folder } from "@/types/folder";
 import { Note } from "@/types/note";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-
 interface FolderNoteState {
     recentNotes: Note[],
     notes: Note[];
@@ -100,6 +99,42 @@ const folderNoteSlice = createSlice({
             if (state.selectedFolder?.id === folderId) {
               state.selectedFolder.notes = state.selectedFolder.notes.filter(note => note.id !== noteId);
             }
+        },
+        addNoteToFolder: (
+            state,
+            action: PayloadAction<{ note: Note; folder: Folder }>
+          ) => {
+            const { note, folder } = action.payload;
+          
+            // Update the folder of the note in state.notes
+            const noteInNotes = state.notes.find((n) => n.id === note.id);
+            if (noteInNotes) {
+              noteInNotes.folder = folder;
+            }
+          
+            // Update the folder of the note in state.recentNotes
+            const noteInRecent = state.recentNotes.find((n) => n.id === note.id);
+            if (noteInRecent) {
+              noteInRecent.folder = folder;
+            }
+          
+            // Add the note to the folder's notes array in state.folders
+            const folderInState = state.folders.find((f) => f.id === folder.id);
+            if (folderInState) {
+              // Prevent duplicates
+              const alreadyExists = folderInState.notes.some((n) => n.id === note.id);
+              if (!alreadyExists) {
+                folderInState.notes = [note, ... folderInState.notes];
+              }
+            }
+
+            if(state.selectedNote && state.selectedNote?.id === note.id) {
+                state.selectedNote.folder = folder;
+            }
+
+            if(state.selectedFolder && state.selectedFolder.id === folder.id){
+                state.selectedFolder.notes = [note, ...state.selectedFolder.notes]
+            }
           },
           
         setSelectedNote: (state, action: PayloadAction<Note | null>) => {
@@ -158,7 +193,8 @@ export const {
     setSelectedFolderDescription,
     addNotesToFolder,
     removeNote,
-    removeNoteFromFolder
+    removeNoteFromFolder,
+    addNoteToFolder
 } = folderNoteSlice.actions;
 
 export default folderNoteSlice.reducer;

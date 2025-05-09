@@ -6,17 +6,22 @@ import ConfirmDeleteModal from "../modals/confirm-delete-note";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { removeNote, removeNoteFromFolder } from "@/redux/slice/folder-note";
+import { addNoteToFolder, removeNote, removeNoteFromFolder } from "@/redux/slice/folder-note";
 import RemoveFromFolderModal from "../modals/remove-from-folder";
+import AddToFolderModal from "@/components/modals/folder-add-note-item";
+import { Folder } from "@/types/folder";
+import { useUpdateFolderAction } from "@/service/folders/add-notes-to-folder";
 
 type NoteCarDropDownProps = {
-    note: Note
+    note: Note  
 }
 
 type ModalTypes = "add to folder" | "remove from folder" | "delete note" | null;
 
 export default function NoteCardDropDown({note} : NoteCarDropDownProps) {
     const dispatch = useDispatch();
+    const { mutate: updateFolder } = useUpdateFolderAction();
+
     const handleClick = (e: React.MouseEvent) => {
         e.stopPropagation(); 
     };
@@ -33,16 +38,40 @@ export default function NoteCardDropDown({note} : NoteCarDropDownProps) {
     }
 
 
-
-    
     const handleConfirmDelete = () => {
         dispatch(removeNote(note));
         setIsModalOpen(false);
+        //todo add persistence
     }
 
     const handleConfirmRemoveFromFolder = () => {
-        dispatch(removeNoteFromFolder(note));
-        setIsModalOpen(false);
+        if(note.folder === null) return;
+        updateFolder({
+            folderId: note.folder!.id,
+            noteIds: [note.id],
+            actionType: "delete"
+        }, {
+            onSuccess : (data) => {
+                dispatch(removeNoteFromFolder(data.notes[0]));
+                setIsModalOpen(false);
+            }
+        })
+    }
+
+    const handleConfirmAddToFolder = (folder: Folder) => {
+        updateFolder({
+            folderId: folder.id,
+            noteIds: [note.id],
+            actionType: "add"
+        }, {
+            onSuccess : (data) => {
+                dispatch(addNoteToFolder({
+                    note: data.notes[0],
+                    folder: folder
+                }));
+                setIsModalOpen(false);
+            }
+        });
     }
 
 
@@ -57,10 +86,14 @@ export default function NoteCardDropDown({note} : NoteCarDropDownProps) {
                 <DropdownMenuContent className="w-fit px-2" onClick={handleClick}>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup className="flex flex-col">
-                        <DropdownMenuItem disabled={note.folder !== null}>
-                            <PlusIcon/>
-                            Add to Folder
-                        </DropdownMenuItem>
+                        <DialogTrigger>
+                            <DropdownMenuItem disabled={note.folder !== null}
+                                onClick={() => handleChangeModalType("add to folder")}
+                            >
+                                <PlusIcon/>
+                                Add to Folder
+                            </DropdownMenuItem>
+                        </DialogTrigger>
                         <DialogTrigger>
                             <DropdownMenuItem disabled={note.folder === null}
                                 onClick={() => handleChangeModalType("remove from folder")}
@@ -92,6 +125,13 @@ export default function NoteCardDropDown({note} : NoteCarDropDownProps) {
                 <RemoveFromFolderModal
                     note={note}    
                     onConfirm={handleConfirmRemoveFromFolder}
+                    onCancel={handleCancel}
+                />
+            )}
+            {modalType === "add to folder" && (
+                <AddToFolderModal
+                    note={note}
+                    onConfirm={handleConfirmAddToFolder}
                     onCancel={handleCancel}
                 />
             )}

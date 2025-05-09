@@ -14,6 +14,8 @@ import { Loader2, PenIcon, NotebookIcon, BotMessageSquareIcon, FolderIcon } from
 import NoteSummaryLoading from "../home/skeletons/note-generating-loader";
 import { useSummarizerSocket} from "@/hooks/sockets";
 import { useSummarizeNote } from "@/service/notes/summarize-note";
+import NoteHeaderUpdateFolderButton from "./note-header-update-folder-button";
+import NoteHeaderAutoAssignButton from "./note-header-auto-assign-button";
 
 const TOPIC_DISPLAY_LIMIT = 4;
 
@@ -114,13 +116,18 @@ export default function NoteHeader() {
                     rows={1}
                     id="note-title-textarea"
                 />
-                {selectedNote?.folder && (
+                {selectedNote?.folder ? (
                   <div className="flex gap-1 items-center"
                     onClick={handleNavigateFolder}>
                     <FolderIcon width={18}/>
                     <p className=" cursor-pointer">
                       {selectedNote.folder.name}
                     </p>
+                  </div>
+                ): (
+                  <div className="flex items-center gap-2 mt-2">
+                    <NoteHeaderUpdateFolderButton/>
+                    <NoteHeaderAutoAssignButton/>
                   </div>
                 )}
             </motion.div>

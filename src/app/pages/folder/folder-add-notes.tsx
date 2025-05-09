@@ -15,10 +15,10 @@ import type { Note } from "@/types/note"
 import { Plus, NotebookIcon, ArrowUpDown, Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import NoteItem from "./folder-add-note-item"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useUpdateFolderAction } from "@/service/folders/add-notes-to-folder"
 import { useQueryClient } from "@tanstack/react-query"
+import NoteItem from "./folder-add-note-item"
 
 export default function AddNotesDialog() {
   const { selectedFolder, notes } = useSelector((state: RootState) => state.folderNotes);

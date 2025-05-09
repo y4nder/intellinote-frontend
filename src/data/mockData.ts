@@ -1,6 +1,7 @@
 import { SummarizerMessage } from "@/hooks/sockets";
-import { Folder } from "@/types/folder";
-import { GetUserNoteResponse, GetUserNotesResponse } from "@/types/note";
+import { AssignNoteFolderResponse } from "@/service/notes/auto-assign-note";
+// import { Folder } from "@/types/folder";
+// import { GetUserNotesResponse } from "@/types/note";
   
   
 export const mockTags = ['Important', 'Work', 'Personal', 'Ideas', 'Reading'];
@@ -22,368 +23,368 @@ export const mockedCreatedNote = {
 }
 
   
-export const mockGetUserResponse: GetUserNotesResponse = {
-  "notes": [
-    {
-      "id": "df8aace4-c495-4219-9039-db6486cbdeea",
-      "title": "Project Brainstorm Ideas",
-      "createdAt": "2025-04-20T02:55:59.969059Z",
-      "updatedAt": "2025-05-01T02:28:08.841344Z",
-      "summary": "The text outlines key project ideas to explore, including an AI-powered task prioritization system, interactive data visualization dashboard, community knowledge sharing platform, personalized learning recommendation engine, and environmental impact tracking tool. It emphasizes the need to research the market viability of each concept before the next meeting.",
-      "folder": {
-        "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
-        "name": "Core Computer Science Concepts & Project Ideas"
-      },
-      "keywords": [
-        "project ideas",
-        "environmental impact",
-        "need research",
-        "prioritization",
-        "visualization dashboard",
-        "sharing platform",
-        "engine",
-        "tracking",
-        "market",
-        "key"
-      ],
-      "topics": [
-        "Project ideas for exploration:",
-        "AI-powered task prioritization system",
-        "Interactive data visualization dashboard",
-        "Community knowledge sharing platform",
-        "Personalized learning recommendation engine",
-        "Environmental impact tracking tool",
-        "Focus areas:",
-        "Market research for each concept",
-        "Prioritization of ideas for the next meeting",
-        "Key topics:",
-        "Project ideas",
-        "Environmental impact",
-        "Need for research",
-        "Prioritization",
-        "Visualization dashboard",
-        "Sharing platform",
-        "Engine",
-        "Tracking",
-        "Market viability",
-        "Key concepts"
-      ]
-    },
-    {
-      "id": "e4f91f54-7aaa-410c-9d41-e4ea622d0917",
-      "title": "Dynamic Programming Techniques",
-      "createdAt": "2025-04-20T02:59:02.869936Z",
-      "updatedAt": "2025-05-01T02:28:08.841344Z",
-      "summary": "The text discusses dynamic programming techniques, including key principles such as breaking down problems into overlapping subproblems and storing solutions with memoization. There are two approaches to dynamic programming: top-down with memoization and bottom-up iterative building. It mentions classic problems that can be solved using dynamic programming, such as the Fibonacci sequence and knapsack problem. Implementation tips include carefully identifying state variables and defining recurrence relations. The time and space complexity of dynamic programming solutions is typically O(n) or O(n*m), and space complexity can often be optimized for 2D problems.",
-      "folder": {
-        "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
-        "name": "Core Computer Science Concepts & Project Ideas"
-      },
-      "keywords": [
-        "dynamic programming",
-        "complexity optimized",
-        "solutions subproblems",
-        "tips include",
-        "fibonacci sequence",
-        "knapsack problem",
-        "building table",
-        "principles break",
-        "usually time",
-        "identify state"
-      ],
-      "topics": [
-        "Dynamic programming techniques",
-        "Key principles for dynamic programming",
-        "Two approaches: top-down with memoization and bottom-up iterative building",
-        "Classic problems: Fibonacci sequence and knapsack problem",
-        "Implementation tips for dynamic programming",
-        "Time and space complexity of dynamic programming solutions",
-        "Optimizing space complexity for 2D problems"
-      ]
-    },
-    {
-      "id": "e4d28684-1db3-463e-aa72-0001f7ef61a3",
-      "title": "Introduction to Artificial Intelligence",
-      "createdAt": "2025-04-30T02:41:01.252367Z",
-      "updatedAt": "2025-05-01T03:54:43.090691Z",
-      "summary": "Artificial intelligence (AI) is a field of computer science that focuses on developing machines capable of performing tasks that usually require human intelligence. There are two main categories of AI: narrow AI, which is designed for specific tasks like voice assistants or facial recognition, and general AI, which is a more advanced form designed for broader applications.",
-      "folder": {
-        "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
-        "name": "Core Computer Science Concepts & Project Ideas"
-      },
-      "keywords": [
-        "ai refers",
-        "deep learning",
-        "categories narrow",
-        "like voice",
-        "branch computer",
-        "datasets enable",
-        "potential ethical",
-        "vehicles",
-        "financial forecasting",
-        "continues progress"
-      ],
-      "topics": [
-        "Deep Learning in AI",
-        "Branches of Computer Science",
-        "Datasets in AI",
-        "Potential Ethical Issues in AI",
-        "AI in Vehicles",
-        "AI in Financial Forecasting",
-        "Progress in AI Research"
-      ]
-    },
-    {
-      "id": "7d0c915e-f460-4e10-94da-a1d7ab350fda",
-      "title": "Binary Search Trees",
-      "createdAt": "2025-04-20T02:59:02.869936Z",
-      "updatedAt": "2025-05-01T03:54:43.090692Z",
-      "summary": "Binary search trees are a foundational data structure where each node can have at most two children: a left child and a right child. The left subtree of a node contains only nodes with keys less than the node's key, while the right subtree contains only nodes with keys greater than the node's key. Both the left and right subtrees are also binary search trees. The time complexity for searching in a binary search tree is efficient.",
-      "folder": {
-        "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
-        "name": "Core Computer Science Concepts & Project Ideas"
-      },
-      "keywords": [
-        "binary search",
-        "trees foundational",
-        "node key",
-        "subtree contains",
-        "bsts time",
-        "right child",
-        "average worst",
-        "delete log",
-        "considerations balance",
-        "red black"
-      ],
-      "topics": [
-        "Binary search in trees",
-        "Node key and subtree",
-        "Time complexity of BSTs",
-        "Deletion considerations",
-        "Balancing BSTs",
-        "Red-black trees"
-      ]
-    },
-    {
-      "id": "ead722cc-6869-49c7-a242-36f20a49fa38",
-      "title": "Deterministic and Non-Deterministic Automata",
-      "createdAt": "2025-04-30T02:06:21.413199Z",
-      "updatedAt": "2025-05-01T03:54:43.090692Z",
-      "summary": "A deterministic finite automaton (DFA) is a type of automaton with only one transition for each state and input symbol, ensuring that a specific input string will always lead to the same result. In contrast, a non-deterministic finite automaton (NFA) allows for multiple possible transitions from a state with the same input symbol, leading to different potential states.",
-      "folder": {
-        "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
-        "name": "Core Computer Science Concepts & Project Ideas"
-      },
-      "keywords": [
-        "finite automaton",
-        "difference deterministic",
-        "dfa known",
-        "compiler",
-        "different potential",
-        "state",
-        "contrast non",
-        "lead",
-        "key",
-        "string way"
-      ],
-      "topics": [
-        "Finite automaton vs non-deterministic finite automaton",
-        "Difference between deterministic and non-deterministic DFAs",
-        "DFAs known in compiler design",
-        "State transitions in DFAs",
-        "Contrast between deterministic and non-deterministic automata",
-        "Potential states in NFAs",
-        "How key differences in DFAs can lead to different outcomes",
-        "Analyzing string processing in DFAs"
-      ]
-    },
-    {
-      "id": "b98b1878-9da7-49e4-96dc-65d870233419",
-      "title": "Efficient Searching Algorithms",
-      "createdAt": "2025-04-20T03:01:39.784182Z",
-      "updatedAt": "2025-05-01T02:28:08.841344Z",
-      "summary": "The text outlines various efficient searching algorithms such as binary search, exponential search, ternary search, fibonacci search, hash-based searching, self-balancing tree data structures, and jump block search. It emphasizes that the time complexity of a search algorithm is influenced by factors such as data size, data distribution, array size, and the number of iterations.",
-      "folder": {
-        "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
-        "name": "Core Computer Science Concepts & Project Ideas"
-      },
-      "keywords": [
-        "searching algorithms",
-        "use binary",
-        "overflow implemented",
-        "array size",
-        "data time",
-        "log worse",
-        "high arr",
-        "uses fibonacci",
-        "advantage works",
-        "effectively magnetic"
-      ],
-      "topics": [
-        "Efficient searching algorithms",
-        "Binary search",
-        "Exponential search",
-        "Ternary search",
-        "Fibonacci search",
-        "Hash-based searching",
-        "Self-balancing tree data structures",
-        "Jump block search",
-        "Influence of data size on time complexity",
-        "Effect of data distribution on time complexity",
-        "Impact of array size on search algorithms",
-        "Number of iterations in search algorithms"
-      ]
-    },
-    {
-      "id": "358d4ca5-6276-4e7e-8595-f013768ce7fa",
-      "title": "Hash Tables and Collision Resolution",
-      "createdAt": "2025-04-20T02:59:02.869936Z",
-      "updatedAt": "2025-05-01T02:28:08.841345Z",
-      "summary": "The text discusses hash tables and collision resolution techniques. Hash tables are a key-value storage structure with an average access time of O(1) that uses a hash function to map keys to array indices. The hash function should distribute keys uniformly. Collision resolution techniques include chaining, where each bucket contains a linked list of entries, and open addressing methods like linear probing and double hashing. Linear probing checks the next slot sequentially, while double hashing uses a second hash function for an offset.",
-      "folder": {
-        "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
-        "name": "Core Computer Science Concepts & Project Ideas"
-      },
-      "keywords": [
-        "hash tables",
-        "collision resolution",
-        "indexing duplicate",
-        "addressing methods",
-        "storage average",
-        "chaining bucket",
-        "slots quadratic",
-        "time uses",
-        "delete worst",
-        "insert"
-      ],
-      "topics": [
-        "Hash tables and collision resolution techniques",
-        "Indexing duplicate in hash tables",
-        "Addressing methods for hash tables",
-        "Storage average in hash tables",
-        "Chaining bucket in hash tables",
-        "Slots quadratic in hash tables",
-        "Time uses in hash tables",
-        "Worst-case scenario for delete operation in hash tables",
-        "Insert operation in hash tables"
-      ]
-    },
-    {
-      "id": "52ad0b1f-f106-4ec1-92ed-5b2e37db1343",
-      "title": "Introduction to Automata Theory",
-      "createdAt": "2025-04-30T02:01:49.720296Z",
-      "updatedAt": "2025-05-01T03:54:43.090693Z",
-      "summary": "Automata theory is a key field in theoretical computer science that explores abstract computational models called automata and the languages they can recognize. This theory helps in understanding how machines compute functions and solve problems, and is essential for designing compilers, interpreters, and other computational systems.",
-      "folder": {
-        "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
-        "name": "Core Computer Science Concepts & Project Ideas"
-      },
-      "keywords": [
-        "theory automata",
-        "software systems",
-        "theoretical limits",
-        "validate correctness",
-        "free languages",
-        "problems playing",
-        "like pushdown",
-        "foundational area",
-        "students professionals",
-        "key"
-      ],
-      "topics": [
-        "Automata Theory and its Significance in Computer Science",
-        "Exploring Software Systems through Automata Theory",
-        "Understanding Theoretical Limits in Automata Theory",
-        "Validating Correctness in Software Systems using Automata",
-        "Free Languages and their Role in Automata Theory",
-        "Analyzing Problems in Playing with Automata",
-        "Comparing Automata Models like Pushdown Automata",
-        "Exploring Automata Theory as a Foundational Area in Computer Science",
-        "Benefits of Studying Automata Theory for Students and Professionals"
-      ]
-    },
-    {
-      "id": "86e1eff3-60a4-4a21-92ec-9fd48191023c",
-      "title": "Understanding Common Data Structures in Computer Science",
-      "createdAt": "2025-04-29T21:55:32.978355Z",
-      "updatedAt": "2025-05-01T02:28:08.841344Z",
-      "summary": "The text discusses different data structures such as arrays, linked lists, stacks, queues, hash tables, trees, and graphs. Arrays are fixed-size collections of elements with constant time access, making them efficient for frequent reading. Linked lists consist of nodes pointing to the next element.",
-      "folder": {
-        "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
-        "name": "Core Computer Science Concepts & Project Ideas"
-      },
-      "keywords": [
-        "data structures",
-        "include arrays",
-        "reading linked",
-        "allowing dynamic",
-        "different types",
-        "queues hash",
-        "follows lifo",
-        "frequent",
-        "deletion",
-        "enable developers"
-      ],
-      "topics": [
-        "Overview of data structures",
-        "Arrays: fixed-size collections with constant time access",
-        "Linked lists: nodes pointing to the next element",
-        "Stacks: follow LIFO (Last In, First Out) principle",
-        "Queues: FIFO (First In, First Out) ordering",
-        "Hash tables: enabling dynamic insertion and deletion",
-        "Trees and graphs for organizing different types of data",
-        "Importance of data structures in enabling developers"
-      ]
-    },
-    {
-      "id": "e566187c-ab68-4378-8199-54bcf84afd65",
-      "title": "Graph Traversal Algorithms",
-      "createdAt": "2025-04-20T02:59:02.869936Z",
-      "updatedAt": "2025-05-01T02:28:08.841345Z",
-      "summary": "The text discusses two key graph traversal algorithms: breadth-first search (BFS) and depth-first search (DFS). BFS uses a queue data structure to visit all neighbors before moving to the next level, with a time complexity of O(V + E) where V is vertices and E is edges. It is useful for finding the shortest path in unweighted graphs. On the other hand, DFS uses a stack and explores as far as possible along each branch, with a time complexity of O(V + E). It has applications in topological sorting and cycle detection.",
-      "folder": {
-        "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
-        "name": "Core Computer Science Concepts & Project Ideas"
-      },
-      "keywords": [
-        "graph traversal",
-        "optimizes path",
-        "dfs bfs",
-        "visits neighbors",
-        "heuristics",
-        "binary heap",
-        "detection dijkstra",
-        "uses priority",
-        "time",
-        "negative weights"
-      ],
-      "topics": [
-        "Graph Traversal Algorithms",
-        "Optimizing Path with DFS and BFS",
-        "Visiting Neighbors in Graphs",
-        "Heuristics in Graph Traversal",
-        "Binary Heap for Priority Queue",
-        "Dijkstra's Algorithm for Path Detection",
-        "Using Priority in Graph Algorithms",
-        "Handling Negative Weights in Paths"
-      ]
-    }
-  ],
-  "totalCount": 10
-}
+// export const mockGetUserResponse: GetUserNotesResponse = {
+//   "notes": [
+//     {
+//       "id": "df8aace4-c495-4219-9039-db6486cbdeea",
+//       "title": "Project Brainstorm Ideas",
+//       "createdAt": "2025-04-20T02:55:59.969059Z",
+//       "updatedAt": "2025-05-01T02:28:08.841344Z",
+//       "summary": "The text outlines key project ideas to explore, including an AI-powered task prioritization system, interactive data visualization dashboard, community knowledge sharing platform, personalized learning recommendation engine, and environmental impact tracking tool. It emphasizes the need to research the market viability of each concept before the next meeting.",
+//       "folder": {
+//         "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
+//         "name": "Core Computer Science Concepts & Project Ideas"
+//       },
+//       "keywords": [
+//         "project ideas",
+//         "environmental impact",
+//         "need research",
+//         "prioritization",
+//         "visualization dashboard",
+//         "sharing platform",
+//         "engine",
+//         "tracking",
+//         "market",
+//         "key"
+//       ],
+//       "topics": [
+//         "Project ideas for exploration:",
+//         "AI-powered task prioritization system",
+//         "Interactive data visualization dashboard",
+//         "Community knowledge sharing platform",
+//         "Personalized learning recommendation engine",
+//         "Environmental impact tracking tool",
+//         "Focus areas:",
+//         "Market research for each concept",
+//         "Prioritization of ideas for the next meeting",
+//         "Key topics:",
+//         "Project ideas",
+//         "Environmental impact",
+//         "Need for research",
+//         "Prioritization",
+//         "Visualization dashboard",
+//         "Sharing platform",
+//         "Engine",
+//         "Tracking",
+//         "Market viability",
+//         "Key concepts"
+//       ]
+//     },
+//     {
+//       "id": "e4f91f54-7aaa-410c-9d41-e4ea622d0917",
+//       "title": "Dynamic Programming Techniques",
+//       "createdAt": "2025-04-20T02:59:02.869936Z",
+//       "updatedAt": "2025-05-01T02:28:08.841344Z",
+//       "summary": "The text discusses dynamic programming techniques, including key principles such as breaking down problems into overlapping subproblems and storing solutions with memoization. There are two approaches to dynamic programming: top-down with memoization and bottom-up iterative building. It mentions classic problems that can be solved using dynamic programming, such as the Fibonacci sequence and knapsack problem. Implementation tips include carefully identifying state variables and defining recurrence relations. The time and space complexity of dynamic programming solutions is typically O(n) or O(n*m), and space complexity can often be optimized for 2D problems.",
+//       "folder": {
+//         "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
+//         "name": "Core Computer Science Concepts & Project Ideas"
+//       },
+//       "keywords": [
+//         "dynamic programming",
+//         "complexity optimized",
+//         "solutions subproblems",
+//         "tips include",
+//         "fibonacci sequence",
+//         "knapsack problem",
+//         "building table",
+//         "principles break",
+//         "usually time",
+//         "identify state"
+//       ],
+//       "topics": [
+//         "Dynamic programming techniques",
+//         "Key principles for dynamic programming",
+//         "Two approaches: top-down with memoization and bottom-up iterative building",
+//         "Classic problems: Fibonacci sequence and knapsack problem",
+//         "Implementation tips for dynamic programming",
+//         "Time and space complexity of dynamic programming solutions",
+//         "Optimizing space complexity for 2D problems"
+//       ]
+//     },
+//     {
+//       "id": "e4d28684-1db3-463e-aa72-0001f7ef61a3",
+//       "title": "Introduction to Artificial Intelligence",
+//       "createdAt": "2025-04-30T02:41:01.252367Z",
+//       "updatedAt": "2025-05-01T03:54:43.090691Z",
+//       "summary": "Artificial intelligence (AI) is a field of computer science that focuses on developing machines capable of performing tasks that usually require human intelligence. There are two main categories of AI: narrow AI, which is designed for specific tasks like voice assistants or facial recognition, and general AI, which is a more advanced form designed for broader applications.",
+//       "folder": {
+//         "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
+//         "name": "Core Computer Science Concepts & Project Ideas"
+//       },
+//       "keywords": [
+//         "ai refers",
+//         "deep learning",
+//         "categories narrow",
+//         "like voice",
+//         "branch computer",
+//         "datasets enable",
+//         "potential ethical",
+//         "vehicles",
+//         "financial forecasting",
+//         "continues progress"
+//       ],
+//       "topics": [
+//         "Deep Learning in AI",
+//         "Branches of Computer Science",
+//         "Datasets in AI",
+//         "Potential Ethical Issues in AI",
+//         "AI in Vehicles",
+//         "AI in Financial Forecasting",
+//         "Progress in AI Research"
+//       ]
+//     },
+//     {
+//       "id": "7d0c915e-f460-4e10-94da-a1d7ab350fda",
+//       "title": "Binary Search Trees",
+//       "createdAt": "2025-04-20T02:59:02.869936Z",
+//       "updatedAt": "2025-05-01T03:54:43.090692Z",
+//       "summary": "Binary search trees are a foundational data structure where each node can have at most two children: a left child and a right child. The left subtree of a node contains only nodes with keys less than the node's key, while the right subtree contains only nodes with keys greater than the node's key. Both the left and right subtrees are also binary search trees. The time complexity for searching in a binary search tree is efficient.",
+//       "folder": {
+//         "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
+//         "name": "Core Computer Science Concepts & Project Ideas"
+//       },
+//       "keywords": [
+//         "binary search",
+//         "trees foundational",
+//         "node key",
+//         "subtree contains",
+//         "bsts time",
+//         "right child",
+//         "average worst",
+//         "delete log",
+//         "considerations balance",
+//         "red black"
+//       ],
+//       "topics": [
+//         "Binary search in trees",
+//         "Node key and subtree",
+//         "Time complexity of BSTs",
+//         "Deletion considerations",
+//         "Balancing BSTs",
+//         "Red-black trees"
+//       ]
+//     },
+//     {
+//       "id": "ead722cc-6869-49c7-a242-36f20a49fa38",
+//       "title": "Deterministic and Non-Deterministic Automata",
+//       "createdAt": "2025-04-30T02:06:21.413199Z",
+//       "updatedAt": "2025-05-01T03:54:43.090692Z",
+//       "summary": "A deterministic finite automaton (DFA) is a type of automaton with only one transition for each state and input symbol, ensuring that a specific input string will always lead to the same result. In contrast, a non-deterministic finite automaton (NFA) allows for multiple possible transitions from a state with the same input symbol, leading to different potential states.",
+//       "folder": {
+//         "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
+//         "name": "Core Computer Science Concepts & Project Ideas"
+//       },
+//       "keywords": [
+//         "finite automaton",
+//         "difference deterministic",
+//         "dfa known",
+//         "compiler",
+//         "different potential",
+//         "state",
+//         "contrast non",
+//         "lead",
+//         "key",
+//         "string way"
+//       ],
+//       "topics": [
+//         "Finite automaton vs non-deterministic finite automaton",
+//         "Difference between deterministic and non-deterministic DFAs",
+//         "DFAs known in compiler design",
+//         "State transitions in DFAs",
+//         "Contrast between deterministic and non-deterministic automata",
+//         "Potential states in NFAs",
+//         "How key differences in DFAs can lead to different outcomes",
+//         "Analyzing string processing in DFAs"
+//       ]
+//     },
+//     {
+//       "id": "b98b1878-9da7-49e4-96dc-65d870233419",
+//       "title": "Efficient Searching Algorithms",
+//       "createdAt": "2025-04-20T03:01:39.784182Z",
+//       "updatedAt": "2025-05-01T02:28:08.841344Z",
+//       "summary": "The text outlines various efficient searching algorithms such as binary search, exponential search, ternary search, fibonacci search, hash-based searching, self-balancing tree data structures, and jump block search. It emphasizes that the time complexity of a search algorithm is influenced by factors such as data size, data distribution, array size, and the number of iterations.",
+//       "folder": {
+//         "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
+//         "name": "Core Computer Science Concepts & Project Ideas"
+//       },
+//       "keywords": [
+//         "searching algorithms",
+//         "use binary",
+//         "overflow implemented",
+//         "array size",
+//         "data time",
+//         "log worse",
+//         "high arr",
+//         "uses fibonacci",
+//         "advantage works",
+//         "effectively magnetic"
+//       ],
+//       "topics": [
+//         "Efficient searching algorithms",
+//         "Binary search",
+//         "Exponential search",
+//         "Ternary search",
+//         "Fibonacci search",
+//         "Hash-based searching",
+//         "Self-balancing tree data structures",
+//         "Jump block search",
+//         "Influence of data size on time complexity",
+//         "Effect of data distribution on time complexity",
+//         "Impact of array size on search algorithms",
+//         "Number of iterations in search algorithms"
+//       ]
+//     },
+//     {
+//       "id": "358d4ca5-6276-4e7e-8595-f013768ce7fa",
+//       "title": "Hash Tables and Collision Resolution",
+//       "createdAt": "2025-04-20T02:59:02.869936Z",
+//       "updatedAt": "2025-05-01T02:28:08.841345Z",
+//       "summary": "The text discusses hash tables and collision resolution techniques. Hash tables are a key-value storage structure with an average access time of O(1) that uses a hash function to map keys to array indices. The hash function should distribute keys uniformly. Collision resolution techniques include chaining, where each bucket contains a linked list of entries, and open addressing methods like linear probing and double hashing. Linear probing checks the next slot sequentially, while double hashing uses a second hash function for an offset.",
+//       "folder": {
+//         "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
+//         "name": "Core Computer Science Concepts & Project Ideas"
+//       },
+//       "keywords": [
+//         "hash tables",
+//         "collision resolution",
+//         "indexing duplicate",
+//         "addressing methods",
+//         "storage average",
+//         "chaining bucket",
+//         "slots quadratic",
+//         "time uses",
+//         "delete worst",
+//         "insert"
+//       ],
+//       "topics": [
+//         "Hash tables and collision resolution techniques",
+//         "Indexing duplicate in hash tables",
+//         "Addressing methods for hash tables",
+//         "Storage average in hash tables",
+//         "Chaining bucket in hash tables",
+//         "Slots quadratic in hash tables",
+//         "Time uses in hash tables",
+//         "Worst-case scenario for delete operation in hash tables",
+//         "Insert operation in hash tables"
+//       ]
+//     },
+//     {
+//       "id": "52ad0b1f-f106-4ec1-92ed-5b2e37db1343",
+//       "title": "Introduction to Automata Theory",
+//       "createdAt": "2025-04-30T02:01:49.720296Z",
+//       "updatedAt": "2025-05-01T03:54:43.090693Z",
+//       "summary": "Automata theory is a key field in theoretical computer science that explores abstract computational models called automata and the languages they can recognize. This theory helps in understanding how machines compute functions and solve problems, and is essential for designing compilers, interpreters, and other computational systems.",
+//       "folder": {
+//         "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
+//         "name": "Core Computer Science Concepts & Project Ideas"
+//       },
+//       "keywords": [
+//         "theory automata",
+//         "software systems",
+//         "theoretical limits",
+//         "validate correctness",
+//         "free languages",
+//         "problems playing",
+//         "like pushdown",
+//         "foundational area",
+//         "students professionals",
+//         "key"
+//       ],
+//       "topics": [
+//         "Automata Theory and its Significance in Computer Science",
+//         "Exploring Software Systems through Automata Theory",
+//         "Understanding Theoretical Limits in Automata Theory",
+//         "Validating Correctness in Software Systems using Automata",
+//         "Free Languages and their Role in Automata Theory",
+//         "Analyzing Problems in Playing with Automata",
+//         "Comparing Automata Models like Pushdown Automata",
+//         "Exploring Automata Theory as a Foundational Area in Computer Science",
+//         "Benefits of Studying Automata Theory for Students and Professionals"
+//       ]
+//     },
+//     {
+//       "id": "86e1eff3-60a4-4a21-92ec-9fd48191023c",
+//       "title": "Understanding Common Data Structures in Computer Science",
+//       "createdAt": "2025-04-29T21:55:32.978355Z",
+//       "updatedAt": "2025-05-01T02:28:08.841344Z",
+//       "summary": "The text discusses different data structures such as arrays, linked lists, stacks, queues, hash tables, trees, and graphs. Arrays are fixed-size collections of elements with constant time access, making them efficient for frequent reading. Linked lists consist of nodes pointing to the next element.",
+//       "folder": {
+//         "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
+//         "name": "Core Computer Science Concepts & Project Ideas"
+//       },
+//       "keywords": [
+//         "data structures",
+//         "include arrays",
+//         "reading linked",
+//         "allowing dynamic",
+//         "different types",
+//         "queues hash",
+//         "follows lifo",
+//         "frequent",
+//         "deletion",
+//         "enable developers"
+//       ],
+//       "topics": [
+//         "Overview of data structures",
+//         "Arrays: fixed-size collections with constant time access",
+//         "Linked lists: nodes pointing to the next element",
+//         "Stacks: follow LIFO (Last In, First Out) principle",
+//         "Queues: FIFO (First In, First Out) ordering",
+//         "Hash tables: enabling dynamic insertion and deletion",
+//         "Trees and graphs for organizing different types of data",
+//         "Importance of data structures in enabling developers"
+//       ]
+//     },
+//     {
+//       "id": "e566187c-ab68-4378-8199-54bcf84afd65",
+//       "title": "Graph Traversal Algorithms",
+//       "createdAt": "2025-04-20T02:59:02.869936Z",
+//       "updatedAt": "2025-05-01T02:28:08.841345Z",
+//       "summary": "The text discusses two key graph traversal algorithms: breadth-first search (BFS) and depth-first search (DFS). BFS uses a queue data structure to visit all neighbors before moving to the next level, with a time complexity of O(V + E) where V is vertices and E is edges. It is useful for finding the shortest path in unweighted graphs. On the other hand, DFS uses a stack and explores as far as possible along each branch, with a time complexity of O(V + E). It has applications in topological sorting and cycle detection.",
+//       "folder": {
+//         "id": "fbf26236-bc3a-4f11-8359-daef2798b967",
+//         "name": "Core Computer Science Concepts & Project Ideas"
+//       },
+//       "keywords": [
+//         "graph traversal",
+//         "optimizes path",
+//         "dfs bfs",
+//         "visits neighbors",
+//         "heuristics",
+//         "binary heap",
+//         "detection dijkstra",
+//         "uses priority",
+//         "time",
+//         "negative weights"
+//       ],
+//       "topics": [
+//         "Graph Traversal Algorithms",
+//         "Optimizing Path with DFS and BFS",
+//         "Visiting Neighbors in Graphs",
+//         "Heuristics in Graph Traversal",
+//         "Binary Heap for Priority Queue",
+//         "Dijkstra's Algorithm for Path Detection",
+//         "Using Priority in Graph Algorithms",
+//         "Handling Negative Weights in Paths"
+//       ]
+//     }
+//   ],
+//   "totalCount": 10
+// }
 
-export const mockFolders: Folder[] = [
-  { id: '1', name: 'Work', noteCount: 8 },
-  { id: '2', name: 'Projects',  noteCount: 12 },
-  { id: '3', name: 'Personal',  noteCount: 5 },
-  { id: '4', name: 'Ideas',  noteCount: 3 },
-  { id: '5', name: 'Travel',  noteCount: 7 },
-  { id: '6', name: 'Finance',  noteCount: 4 },
-  { id: '7', name: 'Learning',  noteCount: 9 },
-  { id: '8', name: 'Health',  noteCount: 2 },
-  { id: '9', name: 'Shopping', noteCount: 6 },
-  { id: '10', name: 'Misc', noteCount: 1 },
-];
+// export const mockFolders: Folder[] = [
+//   { id: '1', name: 'Work', noteCount: 8 },
+//   { id: '2', name: 'Projects',  noteCount: 12 },
+//   { id: '3', name: 'Personal',  noteCount: 5 },
+//   { id: '4', name: 'Ideas',  noteCount: 3 },
+//   { id: '5', name: 'Travel',  noteCount: 7 },
+//   { id: '6', name: 'Finance',  noteCount: 4 },
+//   { id: '7', name: 'Learning',  noteCount: 9 },
+//   { id: '8', name: 'Health',  noteCount: 2 },
+//   { id: '9', name: 'Shopping', noteCount: 6 },
+//   { id: '10', name: 'Misc', noteCount: 1 },
+// ];
 
 export const mockResponses = [
   "I can help you organize your notes better! Would you like some suggestions?",
@@ -5897,11 +5898,11 @@ const staticUserNotes = [
 ]
 
 
-export const mockApiCallNote = (id: string) : GetUserNoteResponse | undefined => {
-  console.log("logging from mock api call");
-  const res = staticUserNotes.find((f) => f.note.id === id);
-  return res
-}
+// export const mockApiCallNote = (id: string) : GetUserNoteResponse | undefined => {
+//   console.log("logging from mock api call");
+//   const res = staticUserNotes.find((f) => f.note.id === id);
+//   return res
+// }
 
 export const sampleSocketGeneratedResponse : SummarizerMessage = {
   id:"1a96c95d-cadc-4d96-b955-4d3a40778b4a",
@@ -5932,4 +5933,19 @@ export const sampleSocketGeneratedResponse : SummarizerMessage = {
   },
   dateTime: '2025-05-04T13:44:04.0261181Z',
   milleSeconds: 6707
+}
+
+export const mockScores : AssignNoteFolderResponse = {
+  "scores": [
+    {
+      "folderId": "284d7f45-5fb5-4564-b68b-b7fe8fe14952",
+      "folderName": "Computer Science Notes",
+      "score": 0.651205587387085
+    },
+    {
+      "folderId": "276959e3-0aed-4980-bfc2-ff571361e92c",
+      "folderName": "Medical Technology Notes",
+      "score": 0.6366117417812348
+    }
+  ]
 }

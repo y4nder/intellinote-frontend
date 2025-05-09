@@ -94,7 +94,6 @@ export default function NoteEditor() {
     // creating the editor
     const editor = useMemo(() => {
       if(initialContent === "loading"){
-        console.log("still loading editor");
         return undefined;
       }
       console.log("loaded editor");
