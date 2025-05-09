@@ -33,6 +33,31 @@ const folderNoteSlice = createSlice({
         addNote: (state, action: PayloadAction<Note>) => {
             state.notes = [action.payload, ...state.notes];
         },
+        removeNote: (state, action: PayloadAction<Note>) => {
+            const noteIdToRemove = action.payload.id;
+        
+            // Remove from main notes list
+            state.notes = state.notes.filter(note => note.id !== noteIdToRemove);
+        
+            // Remove from recentNotes if exists
+            if (state.recentNotes?.some(note => note.id === noteIdToRemove)) {
+                state.recentNotes = state.recentNotes.filter(note => note.id !== noteIdToRemove);
+            }
+        
+            // Remove from all folders
+            state.folders = state.folders.map(folder => ({
+                ...folder,
+                notes: folder.notes.filter(note => note.id !== noteIdToRemove),
+            }));
+
+            // Remove from selectedFolder if it’s set and contains the note
+            if (state.selectedFolder) {
+                state.selectedFolder = {
+                    ...state.selectedFolder,
+                    notes: state.selectedFolder.notes.filter(note => note.id !== noteIdToRemove),
+                };
+            }
+        },       
         setNotes: (state, action: PayloadAction<Note[]>) => {
             state.notes = action.payload;
             state.recentNotes = [...action.payload]
@@ -42,6 +67,41 @@ const folderNoteSlice = createSlice({
         setFolders: (state, action: PayloadAction<Folder[]>) => {
             state.folders = action.payload;
         },
+        removeNoteFromFolder: (state, action: PayloadAction<Note>) => {
+            const folderId = action.payload.folder?.id;
+            const noteId = action.payload.id;
+          
+            if (!folderId || !noteId) return;
+          
+            // Set the note's folder to null in state.notes
+            const mainNote = state.notes.find(note => note.id === noteId);
+            if (mainNote) {
+              mainNote.folder = null;
+            }
+          
+            // Set the note's folder to null in state.recent.notes
+            const recentNote = state.recentNotes.find(note => note.id === noteId);
+            if (recentNote) {
+              recentNote.folder = null;
+            }
+          
+            // Set the note's folder to null in state.selectedNote
+            if (state.selectedNote?.id === noteId) {
+              state.selectedNote.folder = null;
+            }
+          
+            // Remove the note from the folder in state.folders
+            const targetFolder = state.folders.find(folder => folder.id === folderId);
+            if (targetFolder) {
+              targetFolder.notes = targetFolder.notes.filter(note => note.id !== noteId);
+            }
+          
+            // If the selected folder matches, update it too
+            if (state.selectedFolder?.id === folderId) {
+              state.selectedFolder.notes = state.selectedFolder.notes.filter(note => note.id !== noteId);
+            }
+          },
+          
         setSelectedNote: (state, action: PayloadAction<Note | null>) => {
             state.selectedNote = action.payload;
         },
@@ -96,7 +156,9 @@ export const {
     setSummarized,
     setSelectedFolderTitle,
     setSelectedFolderDescription,
-    addNotesToFolder
+    addNotesToFolder,
+    removeNote,
+    removeNoteFromFolder
 } = folderNoteSlice.actions;
 
 export default folderNoteSlice.reducer;

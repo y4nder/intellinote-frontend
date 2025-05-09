@@ -7,6 +7,7 @@ import { AppDispatch } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { setSelectedNote } from "@/redux/slice/folder-note";
 // import { buildSlug } from "@/lib/utils";
+import NoteCardDropDown from './note-card-dropdown';
 
 interface NoteCardProps {
   note: Note;
@@ -63,9 +64,7 @@ export default function NoteCard({ note }: NoteCardProps) {
           <h3 className="font-medium text-on-primary-container group-hover:text-primary transition-colors">
             {title}
           </h3>
-          <div className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
-            <MoreHorizontal className="h-5 w-5" />
-          </div>
+          <NoteCardDropDown note={note}/>
         </div>
         {summary && (
           <p className="text-on-surface-variant/80  text-xs mb-4 line-clamp-3">{summary}</p>
