@@ -265,3 +265,13 @@
 .animate-grow-bar {
   animation: grow-bar 2s ease-in-out forwards;
 }
+
+@keyframes flashHighlight {
+  0% { background-color: yellow; }
+  100% { background-color: transparent; }
+}
+
+.block-highlight {
+  animation: flashHighlight 2s ease-out;
+  background-color: !!yellow
+}

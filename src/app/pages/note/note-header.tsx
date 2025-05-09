@@ -54,21 +54,22 @@ export default function NoteHeader() {
     
     // todo delegate action callback if id exists
     const handleSave = useCallback((latestNoteTitle: string | undefined) => {
-        if (!latestNoteTitle || (latestNoteTitle === selectedNote?.title)) return;
-        if(!id) return;
-        dispatch(setIsSaving(true));
-        console.log("saving title...");
-        mutate({
-            noteId: selectedNote!.id,
-            title: noteTitle
-          }, {
-            onSuccess: () => {
-              console.log("saved title...");
-            },
-            onSettled : () => {
-                dispatch(setIsSaving(false));
-            }
-          })
+      if (!latestNoteTitle || (latestNoteTitle === selectedNote?.title)) return;
+      if(!id) return;
+      console.log("saving");
+      dispatch(setIsSaving(true));
+      console.log("saving title...");
+      mutate({
+          noteId: selectedNote!.id,
+          title: noteTitle
+        }, {
+          onSuccess: () => {
+            console.log("saved title...");
+          },
+          onSettled : () => {
+              dispatch(setIsSaving(false));
+          }
+        })
     }, [dispatch, id, mutate, noteTitle, selectedNote]);
 
 
@@ -77,6 +78,9 @@ export default function NoteHeader() {
         if (selectedNote && !hasMounted.current) {
           setNoteTitle(selectedNote.title || "untitled");
           hasMounted.current = true;
+        }
+        if(selectedNote){
+          setNoteTitle(selectedNote!.title || "untitled");
         }
     }, [selectedNote]);
       

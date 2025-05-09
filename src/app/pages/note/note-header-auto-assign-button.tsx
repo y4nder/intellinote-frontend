@@ -20,7 +20,10 @@ export default function NoteHeaderAutoAssignButton() {
     const {mutate: addToFolderMutation} = useUpdateFolderAction();
     const [isOpen, setIsOpen] = useState(false);
 
-    const {data} = useGetUserFolders();
+    const {data} = useGetUserFolders({
+        skip: 0,
+        take: 100
+    });
 
     useEffect(() => {
         if(data){

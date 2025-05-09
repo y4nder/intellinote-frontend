@@ -13,7 +13,14 @@ import { Outlet } from "react-router-dom";
 
 
 export default function HomeLayout() {
-    const {data: folderData, isLoading: isFolderLoading} = useGetUserFolders();
+    //todo make pagination
+    const {data: folderData, isLoading: isFolderLoading} = useGetUserFolders({
+        skip: 0,
+        take: 100
+    });
+
+    
+
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(setIsQuerying(isFolderLoading));

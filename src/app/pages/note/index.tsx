@@ -3,7 +3,7 @@ import "@blocknote/core/fonts/inter.css";
 import { RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { BlockNoteView } from "@blocknote/mantine";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {   Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { motion } from "framer-motion";
 import { useGetUserNote } from "@/service/notes/get-user-note";
@@ -18,12 +18,13 @@ import { useUpdateNote } from "@/service/notes/update-note";
 import { useNotifyEmbeddingDoneSocket, useSummarizerSocket} from "@/hooks/sockets";
 import { toast } from "react-toastify";
 import PillNotification from "@/components/notification/pill-notification";
+import ScrollTooltip from "@/components/ui/scroll-tooltip";
 
 
 export default function NoteEditor() {
     const dispatch = useDispatch();
     const { selectedNote } = useSelector((state: RootState) => state.folderNotes);
-    const {noteId} = useParams();
+    const {noteId, blockId} = useParams();
     const id = extractIdFromSlug(noteId!);
     
     const {data, isLoading} =  useGetUserNote(id!);
@@ -61,9 +62,8 @@ export default function NoteEditor() {
     useAutoSave(blocks, useCallback((latestBlocks: Block[] | undefined) => {
       if (!latestBlocks) 
         return;
-
-      dispatch(setIsSaving(true));
       console.log("saving note...");
+      dispatch(setIsSaving(true));
 
       const textBlocks = JSON.stringify(latestBlocks);
       mutate({
@@ -81,6 +81,7 @@ export default function NoteEditor() {
     // fetching if id exists
     useEffect(() => {
       if(data && data.note) {
+        dispatch(setSelectedNote(data.note!));
         setInitialContent(data.content);
       }
 
@@ -100,6 +101,28 @@ export default function NoteEditor() {
       return BlockNoteEditor.create({initialContent});
     }, [initialContent])
 
+    const editorRef = useRef<HTMLDivElement | null>(null);
+
+    const blockToScrollToId = blockId; 
+    const [tooltipBlockEl, setTooltipBlockEl] = useState<HTMLElement | null>(null);
+
+    useLayoutEffect(() => {
+      if (blockToScrollToId && editorRef.current) {
+        const timeout = setTimeout(() => {
+          const block = editorRef.current?.querySelector(`[data-id="${blockToScrollToId}"]`) as HTMLElement | null;;
+
+          if (block) {
+            block.scrollIntoView({ behavior: "smooth", block: "center" });
+            setTooltipBlockEl(block);
+          }
+        }, 100);
+
+        return () => clearTimeout(timeout);
+      }
+    }, [editor, blockToScrollToId]);
+
+    
+
     
     return (
       <div className="min-h-screen w-full bg-white flex flex-col">
@@ -113,22 +136,30 @@ export default function NoteEditor() {
           {/* Editor */}
           {(!isLoading && initialContent !== "loading" && editor) && (
             <motion.div
+              ref={editorRef}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
               className="flex flex-col gap-10"
             >
-            <BlockNoteView
-              editor={editor!}
-              // formattingToolbar={false}
-              data-theming-css-variables-demo
-              onChange={() => {
-                setBlocks(editor!.document);
-              }}
-            >
-              {/* <FormattingToolbar /> */}
-            </BlockNoteView>
-          </motion.div>
+              <BlockNoteView
+                editor={editor!}
+                // formattingToolbar={false}
+                data-theming-css-variables-demo
+                onChange={() => {
+                  setBlocks(editor!.document);
+                }}
+              >
+                {/* <FormattingToolbar /> */}
+              </BlockNoteView>
+              {tooltipBlockEl && (
+              <ScrollTooltip
+                referenceEl={tooltipBlockEl}
+                onClose={() => setTooltipBlockEl(null)}
+                text="Jumped to Source"
+              />
+            )}
+            </motion.div>
           )}
         </div>
       </div>

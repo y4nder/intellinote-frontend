@@ -1,16 +1,20 @@
 import { Search, SidebarOpenIcon } from "lucide-react";
-import { useSearchDialog } from "@/providers/searchDialog";
+// import { useSearchDialog } from "@/providers/searchDialog";
 import { useSidebar } from "@/providers/sidebar";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import TopBarAddNew from "./topbar-add-new";
+import { useState } from "react";
+import { SearchModal } from "../search/search-modal";
+import { KeyboardShortcut } from "../search/keyboard-shortcut";
 
 
 export default function TopBar() {
-    const { toggleSearchDialog } = useSearchDialog();
+    // const { toggleSearchDialog } = useSearchDialog();
     
     const isMobile = useIsMobile();
     
-    
+    const [searchOpen, setSearchOpen] = useState(false)
+
     
 
     const { isCollapsed,  toggleSidebar } = useSidebar();
@@ -18,7 +22,8 @@ export default function TopBar() {
     
     return (
         <>
-            <div className="sticky top-0 z-0 bg-card flex items-center justify-between mb-8 px-4 py-2  backdrop-blur-md">
+            <KeyboardShortcut keys={["meta", "j"]} callback={() => setSearchOpen(true)} />
+            <div className="sticky top-0 z-0 flex items-center justify-between mb-8 px-4 py-2  backdrop-blur-md">
                 {isCollapsed ?
                     <div className="rounded-full p-2 hover:bg-primary-container hover:text-on-primary-container" onClick={toggleSidebar}>
                         <SidebarOpenIcon className="h-4 w-4 text-secondary" />                
@@ -28,7 +33,7 @@ export default function TopBar() {
                 {!isMobile ?  (
                     <>
                         <div className="flex justify-center">
-                            <button onClick={toggleSearchDialog}
+                            <button onClick={() => setSearchOpen(true)}
                                 className="flex items-center min-w-[400px] gap-2 rounded-3xl bg-white px-4 py-2 text-sm text-muted-foreground dark:border-white/20 dark:bg-brand h-12 hover:shadow-md transition-all duration-300 shadow-sm"
                             >
                                 <Search className="h-4 w-4 text-secondary" />
@@ -36,20 +41,13 @@ export default function TopBar() {
                                     Search <span className="hidden xl:inline-block">Notes</span>
                                 </span>
                             </button>
-                            {/* <Button
-                                onClick={handleCreateNote}
-                                className="rounded-3xl ml-4 bg-primary-container hover:bg-primary/90 hover:text-white text-on-surface-variant px-4 h-12"
-                            >
-                                <PlusCircle/>
-                                <span className="">Create</span>
-                            </Button> */}
                             <TopBarAddNew/>
                         </div>
                         <div className="flex"/>
                     </>
                 ) : (
                     <div className="flex flex-row">
-                        <button onClick={toggleSearchDialog}
+                        <button onClick={() => setSearchOpen(true)}
                                 className="flex items-center w-fit gap-2 rounded-3xl bg-white px-4 py-2 text-sm text-muted-foreground dark:border-white/20 dark:bg-brand h-12 hover:shadow-md transition-all duration-300 shadow-sm"
                             >
                                 <Search className="h-4 w-4 text-secondary" />
@@ -57,18 +55,13 @@ export default function TopBar() {
                                     Search <span className="hidden xl:inline-block">Notes</span>
                                 </span>
                         </button>
-                        <TopBarAddNew/>
-                        {/* <Button
-                            onClick={handleCreateNote}
-                            className="rounded-3xl ml-4 bg-primary-container hover:bg-primary/90 hover:text-white text-on-surface-variant px-4 h-12"
-                        >   
-                            <PlusCircle/>
-                        </Button> */}
-                        
+                        <TopBarAddNew/>                        
                     </div>
                 )
             }
             </div>
+            
+            <SearchModal open={searchOpen} onOpenChange={setSearchOpen} />
         </>
     )
 }

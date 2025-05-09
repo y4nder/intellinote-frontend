@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx"
+import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { cssTransition } from "react-toastify";
 import { twMerge } from "tailwind-merge"
 
@@ -79,3 +80,34 @@ export const SlideDownBlur = cssTransition({
 export const buildSlug = (name: string) => {
   return name.toLowerCase().replace(/\s+/g, "-");
 }
+
+
+const getTimeAgo = (date: string) => {
+  const dateObj = new Date(date);
+  return formatDistanceToNow(dateObj, { addSuffix: false });
+};
+
+export const getDisplayTime = (date: string) => {
+  const timeAgo = getTimeAgo(date);
+
+  const displayTime =
+    timeAgo === "less than a minute"
+      ? "just now"
+      : timeAgo === "about 1 hour"
+      ? "1h ago"
+      : timeAgo.includes("day")
+      ? timeAgo.replace(" days", "d").replace(" day", "d") + " ago"
+      : timeAgo.includes("month")
+      ? timeAgo.replace(" months", "mo").replace(" month", "mo") + " ago"
+      : timeAgo.includes("year")
+      ? timeAgo.replace(" years", "y").replace(" year", "y") + " ago"
+      : timeAgo.includes("hour")
+      ? timeAgo.replace(" hours", "h").replace(" hour", "h") + " ago"
+      : timeAgo.includes("minute")
+      ? timeAgo.replace(" minutes", "m").replace(" minute", "m") + " ago"
+      : timeAgo + " ago";
+
+    return displayTime
+}
+
+

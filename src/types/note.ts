@@ -15,6 +15,12 @@ export interface Note {
     folder?: Folder | null;
     keywords: string[];
     topics: string[];
+    snippet?: BlockSnippet | null;
+}
+
+export interface BlockSnippet {
+    id: string;
+    text: string;
 }
 
 export interface GetUserNotesResponse {

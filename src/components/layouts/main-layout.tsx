@@ -41,6 +41,7 @@ export default function MainLayout() {
       )}>
         <ChatPanel/>
       </div>
+      
     </div>
   );
 }
