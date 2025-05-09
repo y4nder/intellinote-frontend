@@ -1,18 +1,18 @@
 import { Note } from "@/types/note";
 import { formatDistanceToNow } from "date-fns";
-import { MoreHorizontal } from "lucide-react";
 import { GradientBadge } from "../ui/gradient-badge";
 import { useNavigate } from "react-router-dom";
-import { AppDispatch } from "@/redux/store";
-import { useDispatch } from "react-redux";
-import { setSelectedNote } from "@/redux/slice/folder-note";
-// import { buildSlug } from "@/lib/utils";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedFolder, setSelectedNote } from "@/redux/slice/folder-note";
+import NoteCardDropDown from './note-card-dropdown';
 
 interface NoteCardProps {
   note: Note;
 }
 
 export default function NoteCard({ note }: NoteCardProps) {
+  const {folders} = useSelector((state: RootState) => state.folderNotes);
   const { title, summary, createdAt, keywords } = note;
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -48,6 +48,14 @@ export default function NoteCard({ note }: NoteCardProps) {
     navigate(`/Note/${noteId}`);
   };
 
+  const handleFolderNavigation = () => {
+      if(!note.folder) return;
+      const folder = folders.find(f => f.id === note.folder?.id);
+      dispatch(setSelectedFolder(folder!));
+      const folderId = `${note.folder.name.toLowerCase().replace(/\s+/g, "-")}-${note.folder.id}`;
+      navigate(`/Folder/${folderId}`);
+  }
+
   // Keywords logic
   const displayedKeywords = keywords?.slice(0, 2) || [];
   const remainingCount = keywords && keywords.length > 2 ? keywords.length - 3 : 0;
@@ -60,12 +68,24 @@ export default function NoteCard({ note }: NoteCardProps) {
       <div className="bg-primary-fixed h-[40px] rounded-t-3xl" />
       <div className="p-5 flex flex-col justify-between">
         <div className="mb-3 flex justify-between items-start">
-          <h3 className="font-medium text-on-primary-container group-hover:text-primary transition-colors">
-            {title}
-          </h3>
-          <div className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
-            <MoreHorizontal className="h-5 w-5" />
+          <div className="space-y-1.5">
+            <h3 className="font-medium text-on-primary-container group-hover:text-primary transition-colors">
+              {title}
+            </h3>
+            {note.folder && (
+              <div 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleFolderNavigation();
+                }}
+                className="hover:underline">
+                <p className="text-xs">
+                  {note.folder?.name}
+                </p>
+              </div>
+            )}
           </div>
+          <NoteCardDropDown note={note}/>
         </div>
         {summary && (
           <p className="text-on-surface-variant/80  text-xs mb-4 line-clamp-3">{summary}</p>

@@ -56,6 +56,26 @@ export default function Home() {
     
     return (
         <>
+            {/* Recent Folders Section */}
+            <div className="mb-8">
+                <h2 className="text-3xl font-semibold mb-4 text-primary-hard ">
+                    Recent Folders
+                </h2>
+                <motion.div
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 xl:grid-cols-4"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
+                    {folders.map((folder: Folder) => (
+                        <motion.div key={folder.id} variants={itemVariants}>
+                            <FolderCard folder={folder} />
+                        </motion.div>
+                    ))}
+                </motion.div>
+            </div>
+
+            {/* Recent Notes Section */}
             <div className="mb-8">
                 <h2 className="text-3xl font-bold mb-4 text-primary-hard">
                     Recent Notes
@@ -80,24 +100,7 @@ export default function Home() {
                 
             </div>
 
-            {/* Recent Folders Section */}
-            <div className="mb-8">
-                <h2 className="text-xl font-semibold mb-4 text-primary-hard ">
-                    Recent Folders
-                </h2>
-                <motion.div
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 xl:grid-cols-4"
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
-                >
-                    {folders.map((folder: Folder) => (
-                        <motion.div key={folder.id} variants={itemVariants}>
-                            <FolderCard folder={folder} />
-                        </motion.div>
-                    ))}
-                </motion.div>
-            </div>
+
         </>
     )
 }

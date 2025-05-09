@@ -18,8 +18,6 @@ import { useUpdateNote } from "@/service/notes/update-note";
 import { useNotifyEmbeddingDoneSocket, useSummarizerSocket} from "@/hooks/sockets";
 import { toast } from "react-toastify";
 import PillNotification from "@/components/notification/pill-notification";
-// import { sampleSocketGeneratedRespons as sampleSocketGeneratedResponse } from "@/data/mockData";
-
 
 
 export default function NoteEditor() {
@@ -59,13 +57,6 @@ export default function NoteEditor() {
       });
     })
 
-    // debug parameter id
-    useEffect(() => {
-      console.log("id params: ", id);
-      // console.log("selected note: ", selectedNote);
-    }, [id, selectedNote])
-
-
     // auto saving hook
     useAutoSave(blocks, useCallback((latestBlocks: Block[] | undefined) => {
       if (!latestBlocks) 
@@ -103,7 +94,6 @@ export default function NoteEditor() {
     // creating the editor
     const editor = useMemo(() => {
       if(initialContent === "loading"){
-        console.log("still loading editor");
         return undefined;
       }
       console.log("loaded editor");

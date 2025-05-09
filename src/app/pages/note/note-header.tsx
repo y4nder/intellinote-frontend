@@ -7,16 +7,15 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { setIsSaving, setSummarized } from "@/redux/slice/folder-note";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useUpdateNote } from "@/service/notes/update-note";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Loader2, PenIcon, NotebookIcon, BotMessageSquareIcon } from "lucide-react";
+import { Loader2, PenIcon, NotebookIcon, BotMessageSquareIcon, FolderIcon } from "lucide-react";
 import NoteSummaryLoading from "../home/skeletons/note-generating-loader";
-import { useSummarizerSocket, 
-    // useSummarizerSocketMocked 
-} from "@/hooks/sockets";
+import { useSummarizerSocket} from "@/hooks/sockets";
 import { useSummarizeNote } from "@/service/notes/summarize-note";
-// import { sampleSocketGeneratedResponse } from "@/data/mockData";
+import NoteHeaderUpdateFolderButton from "./note-header-update-folder-button";
+import NoteHeaderAutoAssignButton from "./note-header-auto-assign-button";
 
 const TOPIC_DISPLAY_LIMIT = 4;
 
@@ -31,6 +30,7 @@ export default function NoteHeader() {
     const hasMounted = useRef(false);
     const {mutate} = useUpdateNote();
     const {mutate: summarize} = useSummarizeNote();
+    const navigate = useNavigate();
 
     // action states
     const [isSummarizing, setIsSummarizing] = useState(false);
@@ -90,7 +90,12 @@ export default function NoteHeader() {
           textarea.style.height = "auto";
           textarea.style.height = `${textarea.scrollHeight}px`;
         }
-      }, [noteTitle]);
+    }, [noteTitle]);
+
+    const handleNavigateFolder = async () => {
+      const folderId = `${selectedNote?.folder!.name.toLowerCase().replace(/\s+/g, "-")}-${selectedNote?.folder!.id}`;
+      navigate(`/Folder/${folderId}`);
+    }
     
     return (
     <div className="mb-6 px-4">
@@ -111,6 +116,20 @@ export default function NoteHeader() {
                     rows={1}
                     id="note-title-textarea"
                 />
+                {selectedNote?.folder ? (
+                  <div className="flex gap-1 items-center"
+                    onClick={handleNavigateFolder}>
+                    <FolderIcon width={18}/>
+                    <p className=" cursor-pointer">
+                      {selectedNote.folder.name}
+                    </p>
+                  </div>
+                ): (
+                  <div className="flex items-center gap-2 mt-2">
+                    <NoteHeaderUpdateFolderButton/>
+                    <NoteHeaderAutoAssignButton/>
+                  </div>
+                )}
             </motion.div>
         )}
 
