@@ -16,9 +16,7 @@ export default function ChatMessageContainer({ message }: ChatMessageProps) {
       {!isUser && (
         <Avatar className="w-fit h-fit mr-3">
           <AvatarFallback>
-          
-            <BotMessageSquare className="text-primary-hard group-hover:text-white "/>
-          
+            <BotMessageSquare className="text-primary-hard dark:text-on-surface group-hover:text-white "/>
           </AvatarFallback>
         </Avatar>
       )}
@@ -40,7 +38,7 @@ export default function ChatMessageContainer({ message }: ChatMessageProps) {
             </div>
           </div>
         ) : (
-          <p className="text-xs whitespace-pre-line break-words">
+          <p className="text-xs text-on-secondary-container whitespace-pre-line break-words">
             {message.content}
           </p>
         )}

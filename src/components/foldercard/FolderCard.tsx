@@ -21,7 +21,7 @@ export default function FolderCard({ folder }: FolderCardProps) {
   }
 
   return (
-    <div className="bg-white p-4 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group active:scale-95"
+    <div className="bg-background dark:bg-surface-container-low p-4 rounded-3xl shadow-sm hover:shadow-md cursor-pointer group active:scale-95"
       onClick={handleNavigation}
     >
       <div className="flex items-center mb-3">
@@ -35,7 +35,7 @@ export default function FolderCard({ folder }: FolderCardProps) {
           />
         </div>
         <div className="ml-3">
-          <h3 className="font-medium text-gray-800 group-hover:text-primary transition-colors">
+          <h3 className="font-medium text-gray-800 dark:text-primary group-hover:text-primary">
             {name}
           </h3>
           <p className="text-gray-500 text-xs">{noteCount} notes</p>

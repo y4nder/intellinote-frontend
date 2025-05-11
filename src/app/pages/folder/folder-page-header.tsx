@@ -11,13 +11,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import AddNotesDialog from "./folder-add-notes";
 import { useFolderUpdateDoneSocket } from "@/hooks/sockets";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 export default function FolderPageHeader() {
     const { selectedFolder } = useSelector((state: RootState) => state.folderNotes)
     const { folderId } = useParams();
     const dispatch = useDispatch();
-    
+    const queryClient = useQueryClient();
     const titleRef = useRef<HTMLTextAreaElement>(null);
     const descriptionRef = useRef<HTMLTextAreaElement>(null);
     const hasMountedTitle = useRef(false);
@@ -35,13 +36,20 @@ export default function FolderPageHeader() {
             setFolderTitle(selectedFolder.name);
             hasMountedTitle.current = true;
         }
+        if(selectedFolder){
+            setFolderTitle(selectedFolder.name);
+        }
     }, [selectedFolder]);
 
     useEffect(() => {
         if (selectedFolder && !hasMountedDescription.current) {
             if(selectedFolder.description)
-            setFolderDescription(selectedFolder.description);
+                setFolderDescription(selectedFolder.description);
             hasMountedDescription.current = true;
+        }
+        if(selectedFolder){
+            if(selectedFolder.description)
+                setFolderDescription(selectedFolder.description)
         }
     }, [selectedFolder]);
   
@@ -66,8 +74,8 @@ export default function FolderPageHeader() {
     const handleSaveTitle = useCallback((latestFolderName: string | undefined) => {
         if (!id || !selectedFolder) return;
         if(!latestFolderName || (latestFolderName === selectedFolder.name)) return;
-        dispatch(setIsSaving(true));
         console.log("saving title...");
+        dispatch(setIsSaving(true));
         updateFolderMutation({
             folderId: id!,
             name: folderTitle,
@@ -107,6 +115,7 @@ export default function FolderPageHeader() {
     useFolderUpdateDoneSocket((notification) => {
         console.log("received description:", notification.folderDescription);
         dispatch(setSelectedFolderDescription(notification.folderDescription));
+        queryClient.invalidateQueries({queryKey: ["user-folders", folderId]})
         setFolderDescription(notification.folderDescription);
     })
 
@@ -145,7 +154,7 @@ export default function FolderPageHeader() {
                             value={folderTitle}
                             onChange={(e) => setFolderTitle(e.target.value)}
                             placeholder={id? "" : "Untitled Note"}
-                            className="w-full resize-none text-4xl font-extrabold text-foreground bg-transparent outline-none border-none focus:ring-0 leading-tight"
+                            className="w-full resize-none text-4xl font-extrabold text-foreground dark:text-white bg-transparent outline-none border-none focus:ring-0 leading-tight"
                             rows={1}
                             id="folder-title-textarea"
                         />

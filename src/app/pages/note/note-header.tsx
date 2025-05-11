@@ -8,7 +8,7 @@ import { setIsSaving, setSummarized } from "@/redux/slice/folder-note";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useUpdateNote } from "@/service/notes/update-note";
 import { useNavigate, useParams } from "react-router-dom";
-import { extractIdFromSlug } from "@/lib/utils";
+import { cn, extractIdFromSlug } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Loader2, PenIcon, NotebookIcon, BotMessageSquareIcon, FolderIcon } from "lucide-react";
 import NoteSummaryLoading from "../home/skeletons/note-generating-loader";
@@ -16,6 +16,7 @@ import { useSummarizerSocket} from "@/hooks/sockets";
 import { useSummarizeNote } from "@/service/notes/summarize-note";
 import NoteHeaderUpdateFolderButton from "./note-header-update-folder-button";
 import NoteHeaderAutoAssignButton from "./note-header-auto-assign-button";
+import { queryClient } from "@/lib/react-query";
 
 const TOPIC_DISPLAY_LIMIT = 4;
 
@@ -36,8 +37,8 @@ export default function NoteHeader() {
     const [isSummarizing, setIsSummarizing] = useState(false);
 
     const handleSummarize = () => {
-        setIsSummarizing(true);
-        summarize(id!)
+      setIsSummarizing(true);
+      summarize(id!)
     }
 
     // listen for mock sockets
@@ -46,29 +47,32 @@ export default function NoteHeader() {
         const {response , id: notifId} = notification;
         console.log("ids", notifId, selectedNote!.id);
         if(notifId === selectedNote!.id){
-            dispatch(setSummarized(response));
-            setIsSummarizing(false);
+          dispatch(setSummarized(response));
+          setIsSummarizing(false);
+          queryClient.invalidateQueries({queryKey:["user-notes"]})
         }
     })
 
     
     // todo delegate action callback if id exists
     const handleSave = useCallback((latestNoteTitle: string | undefined) => {
-        if (!latestNoteTitle || (latestNoteTitle === selectedNote?.title)) return;
-        if(!id) return;
-        dispatch(setIsSaving(true));
-        console.log("saving title...");
-        mutate({
-            noteId: selectedNote!.id,
-            title: noteTitle
-          }, {
-            onSuccess: () => {
-              console.log("saved title...");
-            },
-            onSettled : () => {
-                dispatch(setIsSaving(false));
-            }
-          })
+      if (!latestNoteTitle || (latestNoteTitle === selectedNote?.title)) return;
+      if(!id) return;
+      console.log("saving");
+      dispatch(setIsSaving(true));
+      console.log("saving title...");
+      mutate({
+          noteId: selectedNote!.id,
+          title: noteTitle
+        }, {
+          onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["user-notes"]})
+            console.log("saved title...");
+          },
+          onSettled : () => {
+              dispatch(setIsSaving(false));
+          }
+        })
     }, [dispatch, id, mutate, noteTitle, selectedNote]);
 
 
@@ -77,6 +81,9 @@ export default function NoteHeader() {
         if (selectedNote && !hasMounted.current) {
           setNoteTitle(selectedNote.title || "untitled");
           hasMounted.current = true;
+        }
+        if(selectedNote){
+          setNoteTitle(selectedNote!.title || "untitled");
         }
     }, [selectedNote]);
       
@@ -112,12 +119,12 @@ export default function NoteHeader() {
                     value={noteTitle}
                     onChange={(e) => setNoteTitle(e.target.value)}
                     placeholder={id? "" : "Untitled Note"}
-                    className="w-full resize-none text-4xl font-extrabold text-foreground bg-transparent outline-none border-none focus:ring-0 leading-tight"
+                    className="w-full resize-none text-4xl font-extrabold text-foreground bg-transparent dark:text-white outline-none border-none focus:ring-0 leading-tight"
                     rows={1}
                     id="note-title-textarea"
                 />
                 {selectedNote?.folder ? (
-                  <div className="flex gap-1 items-center"
+                  <div className="flex gap-2 items-center my-1 text-secondary hover:underline"
                     onClick={handleNavigateFolder}>
                     <FolderIcon width={18}/>
                     <p className=" cursor-pointer">
@@ -134,12 +141,19 @@ export default function NoteHeader() {
         )}
 
         {(selectedNote?.summary && !isSummarizing) && (
-            <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-                className="flex flex-col gap-3 mt-3 bg-gradient-to-b from-white to-[#ECE4FF] py-4 px-4 rounded-3xl text-gray-900"
-            >
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className={cn(
+              "flex flex-col gap-3 mt-3 py-4 px-4 rounded-3xl text-secondary",
+              // Light mode gradient
+              "bg-gradient-to-b from-white to-[#ECE4FF]",
+              // Disable light gradient in dark mode, apply dark gradient
+              "dark:bg-gradient-to-b dark:from-[#1C1B1F] dark:to-[#2A2730] dark:text-gray-100"
+            )}
+          >
+
             <div className="flex flex-wrap gap-2">
                 {selectedNote.keywords.map((topic, index) => (
                 <GradientBadge key={index} label={topic} />
@@ -147,33 +161,33 @@ export default function NoteHeader() {
             </div>
 
             <div className="mt-4">
-                <h1 className="text-primary-hard text-2xl font-medium">Summary</h1>
-                <p className="text-sm">{selectedNote.summary}</p>
+                <h1 className="text-primary-hard dark:text-primary text-2xl font-medium">Summary</h1>
+                <p className="text-sm text-secondary">{selectedNote.summary}</p>
 
                 <motion.div
-                layout
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-                className="flex flex-wrap gap-2"
+                  layout
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-wrap gap-2 mt-4"
                 >
-                <AnimatePresence initial={false}>
-                    {(showAllTopics ? selectedNote.topics : selectedNote.topics.slice(0, TOPIC_DISPLAY_LIMIT)).map(
-                    (topic, index) => (
-                        <motion.span
-                        key={index}
-                        layout
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.1 * (index / 5.0) }}
-                        className="text-muted-foreground px-3 py-0.5 my-0.5 rounded-full text-xs font-medium shadow-sm hover:bg-accent hover:text-accent-foreground transition-colors"
-                        >
-                        {topic}
-                        </motion.span>
-                    )
-                    )}
-                </AnimatePresence>
+                  <AnimatePresence initial={false}>
+                      {(showAllTopics ? selectedNote.topics : selectedNote.topics.slice(0, TOPIC_DISPLAY_LIMIT)).map(
+                      (topic, index) => (
+                          <motion.span
+                            key={index}
+                            layout
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.1 * (index / 5.0) }}
+                            className="text-secondary dark:bg-surface-container-highest px-3 py-1 my-0.5 rounded-full text-xs font-medium shadow-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                          >
+                            {topic}
+                          </motion.span>
+                      )
+                      )}
+                  </AnimatePresence>
                 </motion.div>
 
                 {selectedNote.topics.length > TOPIC_DISPLAY_LIMIT && (

@@ -7,7 +7,6 @@ import { store } from "@/redux/store";
 import { SidebarProvider } from "@/providers/sidebar";
 import { SearchDialogProvider } from "@/providers/searchDialog";
 import { WebSocketProvider } from "@/providers/socketProvider";
-// import AuthProvider from "@/providers/auth";
 
 
 const MainAppProvider = ({ children }: PropsWithChildren) => {
@@ -17,8 +16,7 @@ const MainAppProvider = ({ children }: PropsWithChildren) => {
         <Provider store={store}>
           <SearchDialogProvider>
             <SidebarProvider>
-              <ThemeProvider>
-                {/* <AuthProvider>{children}</AuthProvider> */}
+              <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
                 {children}
               </ThemeProvider>
             </SidebarProvider>

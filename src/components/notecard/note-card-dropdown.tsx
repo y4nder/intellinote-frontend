@@ -11,6 +11,7 @@ import RemoveFromFolderModal from "../modals/remove-from-folder";
 import AddToFolderModal from "@/components/modals/folder-add-note-item";
 import { Folder } from "@/types/folder";
 import { useUpdateFolderAction } from "@/service/folders/add-notes-to-folder";
+import { useQueryClient } from "@tanstack/react-query";
 
 type NoteCarDropDownProps = {
     note: Note  
@@ -21,6 +22,7 @@ type ModalTypes = "add to folder" | "remove from folder" | "delete note" | null;
 export default function NoteCardDropDown({note} : NoteCarDropDownProps) {
     const dispatch = useDispatch();
     const { mutate: updateFolder } = useUpdateFolderAction();
+    const queryClient = useQueryClient();
 
     const handleClick = (e: React.MouseEvent) => {
         e.stopPropagation(); 
@@ -51,9 +53,12 @@ export default function NoteCardDropDown({note} : NoteCarDropDownProps) {
             noteIds: [note.id],
             actionType: "delete"
         }, {
-            onSuccess : (data) => {
-                dispatch(removeNoteFromFolder(data.notes[0]));
+            onSuccess : () => {
+                dispatch(removeNoteFromFolder(note));
                 setIsModalOpen(false);
+                queryClient.invalidateQueries({
+                    queryKey: ["user-notes"]
+                });
             }
         })
     }
@@ -64,12 +69,15 @@ export default function NoteCardDropDown({note} : NoteCarDropDownProps) {
             noteIds: [note.id],
             actionType: "add"
         }, {
-            onSuccess : (data) => {
+            onSuccess : () => {
                 dispatch(addNoteToFolder({
-                    note: data.notes[0],
+                    note: note,
                     folder: folder
                 }));
                 setIsModalOpen(false);
+                queryClient.invalidateQueries({
+                    queryKey: ["user-notes"]
+                });
             }
         });
     }
@@ -79,13 +87,13 @@ export default function NoteCardDropDown({note} : NoteCarDropDownProps) {
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <div className="text-gray-400 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="text-on-background p-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <MoreHorizontal className="h-5 w-5" />
                     </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-fit px-2" onClick={handleClick}>
                     <DropdownMenuSeparator />
-                    <DropdownMenuGroup className="flex flex-col">
+                    <DropdownMenuGroup className="flex flex-col text-on-background">
                         <DialogTrigger>
                             <DropdownMenuItem disabled={note.folder !== null}
                                 onClick={() => handleChangeModalType("add to folder")}

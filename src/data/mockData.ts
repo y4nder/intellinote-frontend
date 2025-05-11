@@ -5936,7 +5936,7 @@ export const sampleSocketGeneratedResponse : SummarizerMessage = {
 }
 
 export const mockScores : AssignNoteFolderResponse = {
-  "scores": [
+  "folder": [
     {
       "folderId": "284d7f45-5fb5-4564-b68b-b7fe8fe14952",
       "folderName": "Computer Science Notes",

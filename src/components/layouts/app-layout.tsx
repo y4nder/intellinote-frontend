@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react"
-import { SearchDialog } from "../ui/search-dialog"
+// import { SearchDialog } from "../ui/search-dialog"
 import { useNotificationSocket, useStandardNotificationSocket} from "@/hooks/sockets"
 import CoolNotification from "../notification/cool-notification";
 import { toast } from "react-toastify";
@@ -48,7 +48,7 @@ const AppLayout = ({ children }: PropsWithChildren) => {
   return (
     <div className="">
         <main>
-            <SearchDialog/>
+            {/* <SearchDialog/> */}
             {children}
         </main>
     </div>

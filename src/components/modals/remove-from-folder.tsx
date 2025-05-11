@@ -16,25 +16,25 @@ export default function RemoveFromFolderModal({note, onConfirm, onCancel} : Remo
     };
 
     return (
-        <DialogContent onClick={handleClick}>
+        <DialogContent onClick={handleClick} className="bg-surface">
             <DialogHeader>
-                <DialogTitle>Remove {note.title} from {note.folder?.name} ?</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className="text-on-surface">Remove {note.title} from {note.folder?.name} ?</DialogTitle>
+                <DialogDescription className="text-secondary">
                     Are you sure you want to remove this note from its folder?
                 </DialogDescription>
             </DialogHeader>
             <DialogFooter>
                 <Button 
-                    className="bg-surface-container text-gray-700 hover:bg-surface-dim"
+                    className="hover:bg-surface-container text-on-surface bg-surface-dim cursor-pointer"
                     onClick={onCancel}
                 >
                     Cancel
                 </Button>
                 <Button 
-                    className="bg-red-400 text-white px-4 hover:bg-red-500"
+                    className="bg-error dark:bg-error-container/20 text-on-error-container px-4 hover:bg-error-container cursor-pointer"
                     onClick={onConfirm}>
                     <Trash2Icon/>
-                    Delete
+                    Remove
                 </Button>
             </DialogFooter>
         </DialogContent>

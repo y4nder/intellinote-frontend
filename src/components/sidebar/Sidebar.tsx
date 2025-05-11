@@ -13,10 +13,10 @@ import { useSidebar } from "@/providers/sidebar";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { Button } from "../ui/button";
-import { toast } from "react-toastify";
+// import { Button } from "../ui/button";
+// import { toast } from "react-toastify";
+// import PillNotification from "../notification/pill-notification";
 // import CoolNotification from "../notification/notification-component-new";
-import PillNotification from "../notification/pill-notification";
 
 
 interface SidebarItemProps {
@@ -37,7 +37,7 @@ export function SidebarItem({ icon, label, to }: SidebarItemProps) {
             "flex text-sm font-semibold items-center rounded-lg p-2 transition-colors",
             isActive
               ? "text-primary bg-primary/10"
-              : "text-gray-700 hover:bg-primary/10",
+              : "text-on-primary-container hover:bg-primary/10",
             isCollapsed && "justify-center"
           )
         }
@@ -60,18 +60,18 @@ export default function Sidebar() {
   
   const isMobile = useIsMobile();
   
-  const notify = () => {
-    toast(PillNotification, {
-      className: 'p-0 w-[30px] border flex items-center gap-3 rounded-full bg-red-500 px-4 py-2 shadow-md border border-zinc-200 text-sm',
-      data: {
-        message: 'Message Archived',
-        milliSeconds: 234
-      },
-      autoClose: 3000,
-      closeButton:false,
-      position: 'bottom-center',
-    });
-  }
+  // const notify = () => {
+  //   toast(PillNotification, {
+  //     className: 'p-0 w-[30px] border flex items-center gap-3 rounded-full px-4 py-2 shadow-md border border-zinc-200 text-sm',
+  //     data: {
+  //       message: 'Message Archived',
+  //       milliSeconds: 234
+  //     },
+  //     autoClose: 3000,
+  //     closeButton:false,
+  //     position: 'bottom-center',
+  //   });
+  // }
 
   return (
     <div className="relative h-full">
@@ -84,17 +84,19 @@ export default function Sidebar() {
       
       <div
         className={cn(
-          "bg-gradient-to-b from-[#F8F5FF] to-[#F6F8F9] shadow-lg h-screen flex flex-col transition-all duration-300 ease-in-out border-r border-gray-100",
-          isCollapsed ? "w-16" : "w-48",
-          isMobile && !isCollapsed && "w-full max-w-[250px] z-30"
+          "h-screen flex flex-col transition-all duration-300 ease-in-out shadow-lg",
+          isCollapsed ? "w-16" : "w-52",
+          isMobile && !isCollapsed && "w-full max-w-[250px] z-30",
+          // light mode gradient
+          "bg-gradient-to-b from-[#F8F5FF] to-[#F6F8F9] dark:bg-surface dark:bg-none "
         )}
       >
-        <div className="flex items-center p-4 border-b border-gray-100 justify-between">
+        <div className="flex items-center p-4 justify-between">
           <div className="flex gap-2 items-center">
             <div className={cn("rounded-full w-8 h-8 p-2 flex items-center justify-center text-white", `bg-gradient-to-r ${gradientsCombos[2]}`)}>
               <span className="text-sm font-semibold">{user?.userName[0].toUpperCase() ?? "!!"}</span>
             </div>
-            {!isCollapsed && <span className="ml-3 font-medium truncate w-20">{user?.email}</span>}
+            {!isCollapsed && <span className="text-xs ml-3 text-primary font-medium truncate w-20">{user?.email}</span>}
           </div>
           {!isCollapsed && (
             <div className="rounded-full p-2 hover:bg-primary-container hover:text-on-primary-container"  onClick={toggleSidebar}>
@@ -121,7 +123,7 @@ export default function Sidebar() {
           </ul>
         </nav>
 
-        <div className="p-4 border-t border-gray-100">
+        <div className="p-4">
           <a
             href="#"
             className={cn(
@@ -129,10 +131,10 @@ export default function Sidebar() {
               isCollapsed && "justify-center"
             )}
           >
-            <Settings className="h-5 w-5" />
-            {!isCollapsed && <span className="ml-3">Settings</span>}
+            <Settings className="dark:text-primary h-5 w-5" />
+            {!isCollapsed && <span className="dark:text-primary ml-3">Settings</span>}
           </a>
-          <Button onClick={notify}>Notify !</Button>
+          {/* <Button className="mt-5" onClick={notify}>Notify !</Button> */}
         </div>
       </div>
     </div>

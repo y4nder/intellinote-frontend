@@ -53,10 +53,6 @@ const createAppRouter = () =>
                         element: <Home />,
                       },
                       {
-                        path: "folder/:folderId/note/:noteId", // 💡 Clear and safe
-                        element: <NoteEditor />,
-                      },
-                      {
                         path: "folder/:folderId", // 💡 Now only handles folders
                         element: <Folder />,
                       },
@@ -71,9 +67,9 @@ const createAppRouter = () =>
                     ],
                   },
                   {
-                    path: "note/:noteId", // 💡 Top-level note access, distinct from folders
+                    path: "note/:noteId/:blockId?", 
                     element: <NoteEditor />,
-                  },
+                  }                  
                 ],
               },
             ],

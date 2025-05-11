@@ -35,9 +35,9 @@ export default function NoteHeaderUpdateFolderButton() {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger 
-                className="text-xs rounded-2xl bg-secondary hover:bg-secondary/80 text-white flex py-2 px-4 items-center gap-2"
+                className="text-[12px] rounded-2xl bg-secondary hover:bg-primary-fixed-dim duration-300 text-on-secondary  cursor-pointer flex py-2 px-4 items-center gap-2"
             >
-                <FolderIcon/>
+                <FolderIcon width={18}/>
                 Add To Folder
             </DialogTrigger>
             <AddToFolderModal

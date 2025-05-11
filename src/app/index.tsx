@@ -5,7 +5,6 @@ const App = () => {
   return (
     <MainAppProvider>
         <AppRouter />
-             
     </MainAppProvider>
   )
 }

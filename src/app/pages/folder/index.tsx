@@ -30,6 +30,7 @@ const itemVariants = {
 
 export default function FolderPage() {
   const { selectedFolder, isQuerying } = useSelector((state: RootState) => state.folderNotes)
+  
   const { folderId } = useParams();
   const id = extractIdFromSlug(folderId!);
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ export default function FolderPage() {
   }
 
   return (
-    <div className="w-full py-8 mx-auto bg-white px-8 rounded-3xl shadow-2xs">
+    <div className="w-full py-8 mx-auto bg-background px-8 rounded-3xl shadow-2xs">
       <FolderPageHeader/>
       {/* interactive buttons */}
       {/* Tabs */}

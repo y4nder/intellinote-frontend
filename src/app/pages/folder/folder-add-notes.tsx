@@ -92,7 +92,7 @@ export default function AddNotesDialog() {
           <NotebookIcon width={16} />
           Add Notes
         </DialogTrigger>
-        <DialogContent className="min-w-[800px] max-w-[1000px]">
+        <DialogContent className="min-w-[800px] max-w-[1000px] bg-surface-container text-on-primary-container">
           <DialogHeader>
             <DialogTitle className="text-lg">Add notes to {selectedFolder?.name}</DialogTitle>
             <DialogDescription className="text-sm">Select notes to be added to the folder</DialogDescription>
@@ -140,7 +140,9 @@ export default function AddNotesDialog() {
               {selectedNoteIds.length} {selectedNoteIds.length === 1 ? "item" : "items"} selected
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+              <Button 
+                className="border-none bg-surface-container text-on-surface hover:text-on-surface hover:bg-surface cursor-pointer" 
+                onClick={() => setIsDialogOpen(false)}>
                 Cancel
               </Button>
               <Button 

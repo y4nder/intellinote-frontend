@@ -14,7 +14,10 @@ export default function NoteSummaryLoading(props: NoteSummaryLoadingProps = {typ
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="flex flex-col gap-3 mt-3 bg-gradient-to-b from-white to-[#ECE4FF] py-4 px-4 rounded-3xl text-gray-900"
+      className="flex flex-col gap-3 mt-3 py-4 px-4 rounded-3xl 
+                bg-gradient-to-b from-white to-[#ECE4FF] 
+                dark:bg-gradient-to-b dark:from-[#1C1B1F] dark:to-[#2A2730] 
+                text-gray-900 dark:text-gray-100"
     >
       {/* Simulated Keyword Badges */}
       <div className="flex flex-wrap gap-2">
@@ -27,7 +30,7 @@ export default function NoteSummaryLoading(props: NoteSummaryLoadingProps = {typ
       <div className="mt-4 space-y-3">
         <div className="flex items-center gap-2">
             {/* <h1 className="text-primary-hard text-lg font-medium">Summarizing</h1> */}
-            <SparklesText sparklesCount={4} className="text-lg text-primary-hard">
+            <SparklesText sparklesCount={4} className="text-lg text-primary-hard dark:text-primary">
                 <p className="font-medium">
                     {props.type === "Loading" ? "Preparing your note" : "Summarizing for you"}
                 </p>

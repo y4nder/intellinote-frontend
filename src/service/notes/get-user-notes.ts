@@ -18,7 +18,7 @@ export interface GetUserNotesParams {
 }
 
 
-const getUserNotes = async ({ term, skip = 0, take = 10 }: GetUserNotesParams): Promise<GetUserNotesResponse> => {
+export const getUserNotes = async ({ term, skip = 0, take = 10 }: GetUserNotesParams): Promise<GetUserNotesResponse> => {
   const query = new URLSearchParams();
   if (term) query.append("term", term);
   query.append("skip", skip.toString());
@@ -50,3 +50,11 @@ export const useInfiniteGetUserNotes = (params: Omit<GetUserNotesParams, "skip">
     initialPageParam: 0,
   });
 };
+
+export const useSearchUserNotes = (params: GetUserNotesParams) => {
+  return useQuery({
+    queryKey: ["user-notes", params],
+    queryFn: () => getUserNotes(params),
+    enabled: params.term != null && params.term.trim().length > 0,
+  })
+}

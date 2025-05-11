@@ -39,7 +39,7 @@ export function BreadcrumbUi({ dynamicLastLabel }: BreadcrumbUiProps) {
             <BreadcrumbLink asChild>
               <Link
                 to="/"
-                className="flex items-center gap-1 text-muted-foreground hover:text-primary"
+                className="flex items-center gap-1 text-primary hover:text-primary-hard"
               >
                 <Home className="w-4 h-4" />
                 <span className="sr-only md:not-sr-only">Home</span>
@@ -62,17 +62,17 @@ export function BreadcrumbUi({ dynamicLastLabel }: BreadcrumbUiProps) {
               transition={{ duration: 0.3, delay: 0.05 * (index + 1) }}
               className="flex items-center gap-1 md:gap-2"
             >
-              <BreadcrumbSeparator />
+              <BreadcrumbSeparator className="dark:text-on-secondary" />
               <BreadcrumbItem>
               {isLast || !STATIC_SEGMENT_LABELS[segment] ? (
-                <BreadcrumbPage className="text-foreground truncate max-w-[250px] md:max-w-[350px]">
+                <BreadcrumbPage className="text-primary truncate max-w-[250px] md:max-w-[350px]">
                   {dynamicLastLabel ?? label}
                 </BreadcrumbPage>
               ) : (
                 <BreadcrumbLink asChild>
                   <Link
                     to={to}
-                    className="text-muted-foreground hover:text-primary truncate max-w-[150px] md:max-w-[200px]"
+                    className="text-secondary-fixed hover:text-primary truncate max-w-[150px] md:max-w-[200px]"
                   >
                     {label}
                   </Link>
