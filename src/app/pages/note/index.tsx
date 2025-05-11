@@ -19,12 +19,14 @@ import { useNotifyEmbeddingDoneSocket, useSummarizerSocket} from "@/hooks/socket
 import { toast } from "react-toastify";
 import PillNotification from "@/components/notification/pill-notification";
 import ScrollTooltip from "@/components/ui/scroll-tooltip";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 export default function NoteEditor() {
     const dispatch = useDispatch();
     const { selectedNote } = useSelector((state: RootState) => state.folderNotes);
     const {noteId, blockId} = useParams();
+    const queryClient = useQueryClient();
     const id = extractIdFromSlug(noteId!);
     
     const {data, isLoading} =  useGetUserNote(id!);
@@ -72,25 +74,29 @@ export default function NoteEditor() {
       }, {
         onSuccess: () => {
           console.log("saved note...");
+          queryClient.invalidateQueries({queryKey:["user-notes", id!]})
           dispatch(setIsSaving(false));
         },
       })
     }, [dispatch, id, mutate]), 3000);
 
-
-    // fetching if id exists
     useEffect(() => {
-      if(data && data.note) {
-        dispatch(setSelectedNote(data.note!));
-        setInitialContent(data.content);
-      }
+      if (!data?.note) return;
+      
+      const noteChanged = !selectedNote || selectedNote.id !== data.note.id;
+      const contentMissing = !initialContent || initialContent === "loading";
 
-      if(data && data.note && (!selectedNote || data && data?.note?.id !== selectedNote?.id)){
-        dispatch(setSelectedNote(data.note!));
+      console.log("note changed:", noteChanged, "content missing", contentMissing);
+      
+      if (noteChanged) {
+        console.log("entered here");
+        dispatch(setSelectedNote(data.note));
+        setInitialContent(data.content);
+      } else if (contentMissing) {
+        console.log("entered here");
         setInitialContent(data.content);
       }
-    }, [data, selectedNote, dispatch]);
-    
+    }, [data, selectedNote, initialContent, dispatch]);
 
     // creating the editor
     const editor = useMemo(() => {
@@ -125,7 +131,7 @@ export default function NoteEditor() {
 
     
     return (
-      <div className="min-h-screen w-full bg-white flex flex-col">
+      <div className="min-h-screen w-full bg-background flex flex-col">
         <NoteTopBar/>
         {id && (
           <PageLoadingProgress loading={isLoading} /> 

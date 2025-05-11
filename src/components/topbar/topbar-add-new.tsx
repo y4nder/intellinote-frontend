@@ -11,6 +11,8 @@ import { useCreateFolder } from "@/service/folders/create-folder";
 import { useState } from "react";
 import { SparklesText } from "../magicui/sparkles-text";
 import { Button } from "../ui/button";
+import { useIsMobile } from "@/hooks/use-is-mobile";
+import { cn } from "@/lib/utils";
 
 
 export default function TopBarAddNew() {
@@ -19,6 +21,7 @@ export default function TopBarAddNew() {
     const { mutate: newNoteMutation } = useCreateNote();
     const { mutate: newFolderMutation, isPending: isCreatingFolder } = useCreateFolder();
     const [folderName, setFolderName] = useState("");
+    const isMobile = useIsMobile();
     
 
     const queryClient = useQueryClient();
@@ -64,20 +67,25 @@ export default function TopBarAddNew() {
             <Dialog>
                 <DropdownMenu>
                     <DropdownMenuTrigger
-                        className="flex gap-3 items-center transition-all duration-300 text-sm w-fit rounded-3xl ml-4 bg-primary-container hover:bg-primary/90 hover:text-white text-on-surface-variant px-6 h-12"
+                        className={
+                            cn(
+                                "flex gap-3 items-center transition-all duration-300 text-sm w-fit  py-2 rounded-3xl ml-4 bg-primary-container hover:bg-primary/90 hover:text-white text-on-surface-variant px-3 cursor-pointer",
+                                `${isMobile ? "p-2 py-1.5 h-fit" : ""}`
+                            )}
                     >                    
                         <PlusCircle width={20}/>
-                        <span className="">New</span>
+                        {!isMobile && (<span className="">New</span>)}
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem 
                             onClick={handleCreateNote}
+                            className="text-on-surface-variant"
                         >
                             <NotebookIcon/>
                             Create new note
                         </DropdownMenuItem>
-                        <DialogTrigger className="w-full">
+                        <DialogTrigger className="w-full text-on-surface-variant">
                             <DropdownMenuItem>
                                 <FolderIcon/>
                                 Create new folder
@@ -85,11 +93,11 @@ export default function TopBarAddNew() {
                         </DialogTrigger>
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <DialogContent>
+                <DialogContent className="bg-surface">
                     <DialogHeader>
-                        <DialogTitle>New Folder</DialogTitle>
+                        <DialogTitle className="text-on-surface">New Folder</DialogTitle>
                         <DialogDescription>
-                            <Input className="mt-4 border-primary" 
+                            <Input className="mt-4 border-primary bg-surface-container-high text-on-secondary-container" 
                                 placeholder="Folder Name"
                                 value={folderName}
                                 onChange={(e) => setFolderName(e.target.value)}
@@ -99,9 +107,10 @@ export default function TopBarAddNew() {
                     <DialogFooter>
                         <DialogClose>
                             <Button                             
-                                className="text-xs rounded-2xl bg-primary-hard/50 hover:bg-primary-hard/80 text-white"
+                                className="text-xs rounded-2xl bg-primary-hard/50 hover:bg-primary-hard/80 text-on-secondary dark:bg-secondary"
                                 onClick={handleCreateFolder}
-                                disabled={!isValid || isCreatingFolder}>
+                                disabled={!isValid || isCreatingFolder}
+                            >
                                 {isCreatingFolder ? (
                                 <div className="flex items-center gap-2">
                                     <SparklesText sparklesCount={4} className="text-sm text-primary-hard">

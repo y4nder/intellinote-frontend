@@ -9,6 +9,7 @@ import App from './app'
 //   </StrictMode>,
 // )
 
+
 createRoot(document.getElementById('root')!).render(
   <App />
 );

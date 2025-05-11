@@ -40,10 +40,10 @@ export default function SearchNoteItem({note, onSelect} : SearchNoteItemProps) {
                 onSelect();
             }}
         >
-            <File className="h-5 w-5 text-muted-foreground shrink-0" />
+            <File className="h-5 w-5 text-on-background shrink-0" />
             <div className="flex-1 min-w-0">
-                <div className="font-medium text-sm">{note.title}</div>
-                <p className="text-gray-600 truncate text-xs max-w-dvw">
+                <div className="font-medium text-sm text-on-background">{note.title}</div>
+                <p className="text-secondary truncate text-xs max-w-dvw">
                     {note.snippet ? (
                         <>
                             {note.snippet.text}
@@ -58,7 +58,7 @@ export default function SearchNoteItem({note, onSelect} : SearchNoteItemProps) {
             <div className="flex items-center">
                 { note.snippet && (
                     <Button 
-                        className="text-[10px] pl-4 py-4 cursor-pointer bg-primary-fixed hover:bg-surface"
+                        className="text-[10px] pl-4 py-4 cursor-pointer bg-primary dark:bg-on-surface hover:bg-primary"
                         onClick={(e) => {
                             e.stopPropagation();
                             handleNavigateToSnippet();

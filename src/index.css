@@ -88,8 +88,8 @@
 }
 
 .bn-container[data-theming-css-variables-demo][data-color-scheme] {
-  --bn-colors-editor-text: #3f3f3f;
-  --bn-colors-editor-background: #ffffff;
+  --bn-colors-editor-text: var(--color-on-background);
+  --bn-colors-editor-background: var(--md-sys-color-surface);
   --bn-colors-menu-text: #3f3f3f;
   --bn-colors-menu-background: #ffffff;
   --bn-colors-tooltip-text: #3f3f3f;

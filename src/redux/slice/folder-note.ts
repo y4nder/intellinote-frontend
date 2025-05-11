@@ -8,7 +8,7 @@ interface FolderNoteState {
     notes: Note[];
     folders: Folder[];
     selectedNote: Note | null;
-    selectedFolder: Folder | null;
+selectedFolder: Folder | null;
     searchQuery: string;
     isQuerying: boolean;
     isSaving: boolean;
@@ -135,8 +135,28 @@ const folderNoteSlice = createSlice({
             if(state.selectedFolder && state.selectedFolder.id === folder.id){
                 state.selectedFolder.notes = [note, ...state.selectedFolder.notes]
             }
-          },
+        },
+        setNoteFolder: (state, action: PayloadAction<{ noteId: string; folderId: string }>) => {
+            const { noteId, folderId } = action.payload;
           
+            // Find the full folder object in state
+            const folder = state.folders.find(f => f.id === folderId);
+            console.log("state folder", folder?.name);
+            if (!folder) return; // early exit if folder not found
+          
+            // Update the folder of the target note in notes[]
+            const note = state.notes.find(n => n.id === noteId);
+            console.log("state note", note);
+            if (note) {
+              note.folder = folder;
+            }
+          
+            // Also update the selected note if it matches
+            if (state.selectedNote?.id === noteId) {
+                console.log("state selected note", state.selectedNote.title);
+                state.selectedNote.folder = folder;
+            }
+        },
         setSelectedNote: (state, action: PayloadAction<Note | null>) => {
             state.selectedNote = action.payload;
         },
@@ -157,8 +177,8 @@ const folderNoteSlice = createSlice({
         setSearchQuery: (state, action: PayloadAction<string>) => {
             state.searchQuery = action.payload;
         },
-        setNoteContent: (state, action: PayloadAction<Note>) => {
-            const note = state.notes.find(f => f.id === action.payload.id);
+        setNoteContent: (state, action: PayloadAction<{noteId: string, content:string}>) => {
+            const note = state.notes.find(f => f.id === action.payload.noteId);
             if(!note) return;
             note!.content = action.payload.content;
         },
@@ -194,7 +214,8 @@ export const {
     addNotesToFolder,
     removeNote,
     removeNoteFromFolder,
-    addNoteToFolder
+    addNoteToFolder,
+    setNoteFolder
 } = folderNoteSlice.actions;
 
 export default folderNoteSlice.reducer;

@@ -2,7 +2,14 @@ import { api } from "@/lib/axios";
 import { useMutation } from "@tanstack/react-query";
 
 export interface AssignNoteFolderResponse {
-    scores: FolderScore[];
+    folder: PotentialFolder;
+}
+
+export interface PotentialFolder {
+    folderId? : string | null;
+    folderName: string | null;
+    suggestedFolderName: string | null;
+    reason: string | null;
 }
 
 export interface FolderScore {

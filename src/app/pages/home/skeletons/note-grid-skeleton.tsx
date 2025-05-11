@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function NoteGridSkeleton() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 xl:grid-cols-4">
+    <div className="flex flex-wrap gap-6">
         {Array.from({ length: 10 }).map((_, index) => (
             <NoteCardSkeleton key={index} />
         ))}
@@ -10,7 +10,7 @@ export default function NoteGridSkeleton() {
   )
 }
 
-const NoteCardSkeleton = () => {
+export const NoteCardSkeleton = () => {
     return (
       <div className="bg-surface-container rounded-3xl md:max-w-sm lg:max-w-sm shadow-sm animate-pulse">
         <div className="bg-muted h-[40px] rounded-t-3xl" />

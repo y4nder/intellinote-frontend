@@ -121,14 +121,14 @@ export default function ChatPanel() {
 
   if (isCollapsed) {
     return (
-      <div className={cn("chatPanelButton translate-x-[0%] right-4 fixed z-90 p-2 bg-white rounded-full shadow-sm group hover:scale-105 transition-all duration-300", 
+      <div className={cn("chatPanelButton translate-x-[0%] right-4 fixed z-90 p-2 bg-surface rounded-full shadow-sm group hover:scale-105 transition-all duration-300", 
         isMobile? "bottom-20" : "bottom-4"
       )}>
         <div
             onClick={handleToggleChat}
             className="rounded-full bg-primary-container text-on-surface-variant p-2 group-hover:bg-primary/90 transition-all duration-300"
         >   
-            <BotMessageSquare className="text-primary-hard group-hover:text-white"/>
+            <BotMessageSquare className="text-primary-hard dark:text-on-surface group-hover:text-white"/>
         </div>
       </div>
     );
@@ -136,15 +136,15 @@ export default function ChatPanel() {
 
   return (
     <div className="h-full z-30">
-      <div className="bg-white h-full flex flex-col transition-all duration-300 ease-in-out border-l border-gray-100 w-full md:w-full z-30 relative">
-        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+      <div className="bg-surface h-full flex flex-col transition-colors ease-in-out border-l border-inverse-on-surface w-full md:w-full z-30 relative">
+        <div className="p-4 border-b border-inverse-on-surface flex items-center justify-between">
           <div className="flex items-center">
             <div
-              className="rounded-full bg-primary-container/40 text-on-surface-variant p-3 group-hover:bg-primary/90 transition-all duration-300"
+              className="rounded-full bg-primary-container text-on-surface-variant p-2 group-hover:bg-primary/90"
             >   
-              <BotMessageSquare className="text-primary-hard group-hover:text-white"/>
+              <BotMessageSquare className="text-primary-hard dark:text-on-surface group-hover:text-white"/>
             </div>  
-            <span className="ml-3 font-medium">Nora</span>
+            <span className="ml-3 font-medium text-on-background">Nora</span>
           </div>
           <button
             onClick={handleToggleChat}
@@ -178,7 +178,7 @@ export default function ChatPanel() {
           </button>
         )}
 
-        <div className="chat-footer p-4 border-t border-gray-100">
+        <div className="chat-footer p-4 border-t border-inverse-on-surface dark:border-none">
           <div className={cn("relative w-full", isMobile? "mb-4" : "mb-2")}>
             <div className="flex items-center bg-secondary-container/50 rounded-2xl px-4 py-2 text-xs font-mono text-secondary shadow-sm">
               <textarea  

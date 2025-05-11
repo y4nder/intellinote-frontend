@@ -16,23 +16,22 @@ export default function ConfirmDeleteModal({note, onConfirm, onCancel} : Confirm
     };
 
     return (
-        <DialogContent onClick={handleClick}>
+        <DialogContent onClick={handleClick} className="bg-surface">
             <DialogHeader>
-                <DialogTitle>Delete {note.title} ?</DialogTitle>
-                <DialogDescription>
-                    This action cannot be undone. Are you sure you want to permanently
-                    delete this file from our servers?
+                <DialogTitle className="text-on-surface">Delete {note.title} ?</DialogTitle>
+                <DialogDescription className="text-on-surface">
+                    This Note will be binned, and will be <strong>deleted</strong> forever <strong>in 30 days</strong>
                 </DialogDescription>
             </DialogHeader>
             <DialogFooter>
                 <Button 
-                    className="bg-surface-container text-gray-700 hover:bg-surface-dim"
+                    className="hover:bg-surface-container text-gray-700 dark:text-on-surface bg-surface-dim cursor-pointer"
                     onClick={onCancel}
                 >
                     Cancel
                 </Button>
                 <Button 
-                    className="bg-red-400 text-white px-4 hover:bg-red-500"
+                    className="bg-red-400 text-white px-4 hover:bg-red-500 cursor-pointer"
                     onClick={onConfirm}>
                     <Trash2Icon/>
                     Delete

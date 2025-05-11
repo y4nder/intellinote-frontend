@@ -14,7 +14,7 @@ export interface GetFoldersResponse {
     totalCount: number;
 }
 
-const getUserFolders = async ({term, skip = 0, take = 10}: GetUserFolderParams) : Promise<GetFoldersResponse> => {
+export const getUserFolders = async ({term, skip = 0, take = 10}: GetUserFolderParams) : Promise<GetFoldersResponse> => {
     const query = new URLSearchParams();
     if (term) query.append("term", term);
     query.append("skip", skip.toString());

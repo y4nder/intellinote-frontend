@@ -18,10 +18,10 @@ export default function AddToFolderModal({ note, onCancel, onConfirm }: AddToFol
   const [selectedFolder, setSelectedFolder] = useState<Folder | null>(null)
 
   return (
-    <DialogContent onClick={(e) => e.stopPropagation()}>
+    <DialogContent onClick={(e) => e.stopPropagation()} className="bg-surface">
       <DialogHeader>
-        <DialogTitle>Add "{note.title}" to folder</DialogTitle>
-        <DialogDescription>Select a folder to add this note to</DialogDescription>
+        <DialogTitle className="text-on-surface">Add "{note.title}" to folder</DialogTitle>
+        <DialogDescription className="text-secondary" >Select a folder to add this note to</DialogDescription>
       </DialogHeader>
 
       <div className="max-h-[300px] overflow-y-auto py-2 space-y-2">
@@ -34,16 +34,16 @@ export default function AddToFolderModal({ note, onCancel, onConfirm }: AddToFol
               className={`flex items-center p-3 rounded-md cursor-pointer transition-colors ${
                 selectedFolder?.id === folder.id
                   ? "bg-primary/10 border border-primary"
-                  : "bg-surface-container hover:bg-surface-dim border border-transparent"
+                  : "bg-surface-container hover:bg-surface-container-highest border border-transparent"
               }`}
               onClick={() => setSelectedFolder(folder)}
             >
               <div className="flex-shrink-0 mr-3">
                 <FolderIcon
-                  className={`h-5 w-5 ${selectedFolder?.id === folder.id ? "text-primary" : "text-muted-foreground"}`}
+                  className={`h-5 w-5 ${selectedFolder?.id === folder.id ? "text-primary" : "text-on-surface-variant"}`}
                 />
               </div>
-              <div className="flex-grow font-medium">{folder.name}</div>
+              <div className="flex-grow font-medium text-on-surface">{folder.name}</div>
               {selectedFolder?.id === folder.id && (
                 <div className="flex-shrink-0">
                   <CheckIcon className="h-5 w-5 text-primary" />
@@ -55,12 +55,12 @@ export default function AddToFolderModal({ note, onCancel, onConfirm }: AddToFol
       </div>
 
       <DialogFooter>
-        <Button className="bg-surface-container text-gray-700 hover:bg-surface-dim" onClick={onCancel}>
+        <Button className="hover:bg-surface-container text-on-surface bg-surface cursor-pointer" onClick={onCancel}>
           Cancel
         </Button>
         <Button
           disabled={selectedFolder === null}
-          className="bg-primary text-white px-4 hover:bg-primary/90"
+          className="bg-primary text-on-primary px-4 hover:bg-on-primary-container cursor-pointer"
           onClick={() => onConfirm(selectedFolder!)}
         >
           Add to folder

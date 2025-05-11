@@ -6,12 +6,16 @@ import { Note } from "@/types/note";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
-import NoteGridSkeleton from "./skeletons/note-grid-skeleton";
+import { NoteCardSkeleton } from "./skeletons/note-grid-skeleton";
+import { cn } from "@/lib/utils";
+import ViewToggle from "@/components/ui/view-toggle";
+import { BreadcrumbUi } from "@/components/ui/breadcrumb-ui";
 
 
 export default function AllNotes() {
     const {notes} = useSelector((state: RootState) => state.folderNotes);
-
+    const {isCollapsed} = useSelector((state: RootState) => state.chatAgent);
+    const {isNoteGrid} = useSelector((state: RootState) => state.preference);
     const dispatch = useDispatch();
 
     const {
@@ -20,7 +24,7 @@ export default function AllNotes() {
         fetchNextPage: fetchNextNotes,
         isLoading: isLoadingNotes,
       } = useInfiniteGetUserNotes({
-          take: 10
+          take: 20
     });
 
     useEffect(() => {
@@ -49,18 +53,34 @@ export default function AllNotes() {
 
     return (
     <div className="mb-8">
-        <h2 className="text-3xl font-bold mb-4 text-primary-hard">
-            All Notes
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 xl:grid-cols-4">
+        <div className=" pb-4">
+            <BreadcrumbUi/>
+        </div>
+        <div className="flex gap-4 items-center-safe mb-4 justify-between">
+            <h2 className="text-3xl font-bold text-primary-hard dark:text-primary-fixed-dim">
+                All Notes
+            </h2>
+            <ViewToggle className="mr-2"/>
+        </div>
+        <div 
+            className={cn(
+                "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:grid-cols-5",
+                `${!isCollapsed ? "xl:grid-cols-4 gap-4" : ""}`,
+                `${!isNoteGrid ? "flex flex-col gap-0": ""}`
+            )}
+        >
             {notes.map((note: Note) => (
                 <NoteCard key={note.id} note={note} />
             ))}
+            {isFetching && (
+                <>
+                    {Array.from({ length: 10 }).map((_, index) => (
+                        <NoteCardSkeleton key={index} />
+                    ))}
+                </>
+            )}
+            <div ref={ref} />
         </div>
-        {isFetching && (
-            <NoteGridSkeleton/>
-        )}
-        <div ref={ref} />
     </div>
     )
 }

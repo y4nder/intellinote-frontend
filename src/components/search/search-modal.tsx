@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { Search, Folder as FolderIcon, ChevronRight } from "lucide-react"
+import { Search } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { RootState } from "@/redux/store"
@@ -12,6 +12,9 @@ import SearchModalSkeleton from "./search-modal-skeleton"
 import SearchNoteItem from "./search-note-item"
 import { DialogDescription } from "@radix-ui/react-dialog"
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import { getUserFolders } from "@/service/folders/get-user-folders"
+import SearchFolderItem from "./search-folder-item"
+import { cn } from "@/lib/utils"
 
 
 const SEARCH_DELAY = 800;
@@ -54,15 +57,10 @@ export function SearchModal({ open, onOpenChange }: { open: boolean; onOpenChang
     const fetchData = async (query: string) => {
         setLoading(true)
         try {
-            const {notes} = await getUserNotes({
-                term: query,
-                skip: 0,
-                take: 5
-            })
-
-            
+            const {notes} = await getUserNotes({term: query,skip: 0,take: 5})
+            const { folders } = await getUserFolders({term: query,skip: 0,take: 5})
             setNotes(notes)
-            // setFolders(mockFolders)
+            setFolders(folders)
 
         } catch (error) {
             console.error("Error fetching data:", error)
@@ -87,18 +85,20 @@ export function SearchModal({ open, onOpenChange }: { open: boolean; onOpenChang
 
     return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="border border-secondary/20 p-0 gap-0 min-w-[750px] max-h-[750px] top-[450px] backdrop-blur-[80px] shadow-2xl">
+        <DialogContent className={cn("border border-secondary/20 p-0 gap-0 min-w-[750px] max-h-[750px] top-[450px] backdrop-blur-[80px] dark:bg-surface-container shadow-2xl",
+            ``
+        )}>
             <DialogHeader>
                 <VisuallyHidden>
                     <DialogTitle>Dialog Title</DialogTitle> 
                 </VisuallyHidden>
                 <DialogDescription className="p-4 border-b border-surface-container flex items-center gap-2">
-                    <Search className="h-5 w-5 text-muted-foreground shrink-0" />
+                    <Search className="h-5 w-5 text-on-background shrink-0" />
                     <input
                         ref={searchInputRef}
                         type="text"
                         placeholder="Search..."
-                        className="flex-1 bg-transparent border-none outline-none"
+                        className="flex-1 bg-transparent border-none outline-none text-on-surface"
                         value={searchQuery}
                         onChange={handleSearchChange}
                     />
@@ -114,7 +114,7 @@ export function SearchModal({ open, onOpenChange }: { open: boolean; onOpenChang
                     {/* Notes Section */}
                     {notes.length > 0 && (
                         <div className="py-2">
-                            <div className="px-4 py-1 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                            <div className="px-4 py-1 text-xs font-medium text-on-background uppercase tracking-wider">
                                 Notes{" "}
                                 <Badge variant="outline" className="ml-1">
                                     {notes.length}
@@ -129,33 +129,21 @@ export function SearchModal({ open, onOpenChange }: { open: boolean; onOpenChang
                     {/* Folders Section */}
                     {folders.length > 0 && (
                         <div className="py-2">
-                            <div className="px-4 py-1 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                            <div className="px-4 py-1 text-xs font-medium text-on-background uppercase tracking-wider">
                                 Folders{" "}
                                 <Badge variant="outline" className="ml-1">
                                     {folders.length}
                                 </Badge>
                             </div>
                             {folders.map((folder) => (
-                                <div
-                                    key={folder.id}
-                                    className={`flex items-center gap-3 px-4 py-3 hover:bg-muted/50 cursor-pointer`}
-                                    onClick={() => {
-                                        console.log("Selected folder:", folder)
-                                    }}
-                                >
-                                    <FolderIcon className="h-5 w-5 text-muted-foreground shrink-0" />
-                                    <div className="flex-1 min-w-0">
-                                        <div className="font-medium text-sm">{folder.name}</div>
-                                    </div>
-                                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                                </div>
+                                <SearchFolderItem key={folder.id} folder={folder} onSelect={() => onOpenChange(false)} />
                             ))}
                         </div>
                     )}
 
                     {/* No Results */}
                     {folders.length === 0 && notes.length === 0 && (
-                        <div className="flex justify-center p-8 text-muted-foreground">No results found</div>
+                        <div className="flex justify-center p-8 text-on-background">No results found</div>
                     )}
                 </>
                 )}
