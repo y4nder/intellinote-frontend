@@ -7,6 +7,7 @@ import {
   Settings,
   SidebarCloseIcon,
   Triangle,
+  View,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { useSidebar } from "@/providers/sidebar";
@@ -119,6 +120,10 @@ export default function Sidebar() {
             <SidebarItem
               icon={<Folder className="h-5 w-5" />}
               label="Folders" to={"/folders"}            
+            />
+            <SidebarItem
+              icon={<View className="h-5 w-5" />}
+              label="Smart Views" to={"/smart-views"}            
             />
           </ul>
         </nav>

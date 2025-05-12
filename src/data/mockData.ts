@@ -1,4 +1,5 @@
 import { SummarizerMessage } from "@/hooks/sockets";
+import { PromptResponse } from "@/service/nora/chat/send-chat-message";
 import { AssignNoteFolderResponse } from "@/service/notes/auto-assign-note";
 // import { Folder } from "@/types/folder";
 // import { GetUserNotesResponse } from "@/types/note";
@@ -5949,3 +5950,42 @@ export const mockScores : AssignNoteFolderResponse = {
     }
   ]
 }
+
+export const mockChatResponses : PromptResponse[]  =  [
+  {
+    "threadId": "thread_Y3v4gLqBptu5R8BobemwmtKF",
+    "responseMessage": "Dante's guide is the Roman poet Virgil, highlighting the themes of recognition and rejection of sin.",
+    "noteCitations": [
+      {
+        "noteId": "eb01fe2c-a30a-4f98-a33d-830acea48501",
+        "snippetId": "40ce53e2-b482-40f7-b1d4-a3837fe5c32d",
+        "text": "guide virgil roman poet theme recognition rejection of sin"
+      }
+    ],
+    "folderCitations": []
+  },
+  {
+    "threadId": "thread_Y3v4gLqBptu5R8BobemwmtKF",
+    "responseMessage": "The note provides a concise overview of Dante Alighieri and his epic poem, \"The Divine Comedy.\" It describes Dante's major works, including \"Vita Nuova\" and \"De Monarchia,\" and outlines the structure and key themes of \"The Divine Comedy,\" emphasizing its three parts: Inferno, Purgatorio, and Paradiso.",
+    "noteCitations": [
+      {
+        "noteId": "eb01fe2c-a30a-4f98-a33d-830acea48501",
+        "snippetId": "6c19833e-8920-45c2-833f-26574ddf91df",
+        "text": "dante alighieri the divine comedy"
+      }
+    ],
+    "folderCitations": []
+  },
+  {
+    "threadId": "thread_Y3v4gLqBptu5R8BobemwmtKF",
+    "responseMessage": "Dante's girl was Beatrice Portinari, to whom he dedicated his poetic work \"Vita Nuova.\"",
+    "noteCitations": [
+      {
+        "noteId": "eb01fe2c-a30a-4f98-a33d-830acea48501",
+        "snippetId": "40c413ed-79f1-4454-918a-4758c1523c11",
+        "text": "vita nuova poetic tribute to beatrice portinari"
+      }
+    ],
+    "folderCitations": []
+  }
+]

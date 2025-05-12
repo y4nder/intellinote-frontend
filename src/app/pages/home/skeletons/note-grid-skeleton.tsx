@@ -16,7 +16,7 @@ export const NoteCardSkeleton = () => {
         <div className="bg-muted h-[40px] rounded-t-3xl" />
         <div className="p-5 flex flex-col justify-between gap-4">
           <div className="flex justify-between items-start">
-            <Skeleton className="w-[60%] h-[20px] rounded-md" />
+            <Skeleton className="bg-surface-container w-[60%] h-[20px] rounded-md" />
             <Skeleton className="w-[20px] h-[20px] rounded-full" />
           </div>
   

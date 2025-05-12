@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { useGetUserNote } from "@/service/notes/get-user-note";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/lib/utils";
-import { setIsSaving, setSelectedNote } from "@/redux/slice/folder-note";
+import { setIsSaving, setSelectedFolder, setSelectedNote } from "@/redux/slice/folder-note";
 import NoteTopBar from "./note-topbar";
 import { PageLoadingProgress } from "@/components/ui/page-loading-progress";
 import NoteHeader from "./note-header";
@@ -20,6 +20,8 @@ import { toast } from "react-toastify";
 import PillNotification from "@/components/notification/pill-notification";
 import ScrollTooltip from "@/components/ui/scroll-tooltip";
 import { useQueryClient } from "@tanstack/react-query";
+import { useThreadManager } from "@/service/nora/chat/chat-thread-manager";
+import { setChatThreadId } from "@/redux/slice/chat-agent";
 
 
 export default function NoteEditor() {
@@ -33,6 +35,7 @@ export default function NoteEditor() {
     const [initialContent, setInitialContent] = useState<PartialBlock[] | undefined | "loading">("loading");
     const [blocks, setBlocks] = useState<Block[] | undefined>(undefined);
     const {mutate} = useUpdateNote();
+    const { getThreadId } = useThreadManager();
 
     useNotifyEmbeddingDoneSocket((notification) => {
       toast(PillNotification, {
@@ -98,6 +101,20 @@ export default function NoteEditor() {
       }
     }, [data, selectedNote, initialContent, dispatch]);
 
+    useEffect(() => {
+      const threadId = getThreadId(id!);
+      if(threadId){
+        console.log("thread id:", threadId);
+        dispatch(setChatThreadId(threadId));
+      }
+      else {
+        console.log("no thread id");
+        dispatch(setChatThreadId(undefined));
+      }
+      
+      dispatch(setSelectedFolder(null));
+    }, [])
+
     // creating the editor
     const editor = useMemo(() => {
       if(initialContent === "loading"){
@@ -108,8 +125,10 @@ export default function NoteEditor() {
     }, [initialContent])
 
     const editorRef = useRef<HTMLDivElement | null>(null);
-
+   
     const blockToScrollToId = blockId; 
+    // const blockToScrollToId = "9d54b906-e24e-4e33-a11e-db5760473bbd"; 
+    
     const [tooltipBlockEl, setTooltipBlockEl] = useState<HTMLElement | null>(null);
 
     useLayoutEffect(() => {
