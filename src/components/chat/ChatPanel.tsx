@@ -1,22 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import { cn } from "@/lib/utils";
-import { Send, ChevronRight, ChevronDown, BotMessageSquare, StopCircleIcon } from "lucide-react";
+import { Send, ChevronRight, ChevronDown, BotMessageSquare, StopCircleIcon, RotateCwIcon } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { ChatMessage } from "@/types/chatMessage";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { addChatMessage, setChatCollapsed, setLoading, toggleChat } from "@/redux/slice/chat-agent";
-import { mockResponses } from "@/data/mockData";
+// import { mockResponses } from "@/data/mockData";
 import ChatMessageContainer from "./ChatMessageContainer";
+import { PromptContext, useSendChatMessage } from "@/service/nora/chat/send-chat-message";
+import { useThreadManager } from "@/service/nora/chat/chat-thread-manager";
 
 export default function ChatPanel() {
   const isMobile = useIsMobile();
   const [newChatMessage, setNewChatMessage] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
-  const {isCollapsed, chatMessages, loadingState} = useSelector((state: RootState) => state.chatAgent);
+  const {isCollapsed, chatMessages, loadingState, threadId} = useSelector((state: RootState) => state.chatAgent);
+  const {selectedFolder, selectedNote} = useSelector((state: RootState) => state.folderNotes);
   const dispatch = useDispatch<AppDispatch>();
+  const { mutate: sendChatMutation } = useSendChatMessage();
+  const {setThreadId, setGlobalThread, clearThread} = useThreadManager();
   
 
   //scroll button
@@ -77,18 +82,55 @@ export default function ChatPanel() {
     dispatch(addChatMessage(newMessage));
     dispatch(setLoading(true));
 
-    // todo replace with actual api call
-    setTimeout(() => {
-      const botMessage: ChatMessage = {
-        id: new Date().toISOString() + "_" + Math.random().toString(),
-        content: mockResponses[Math.floor(Math.random() * mockResponses.length)],
-        isUser: false,
-        timestamp: new Date().toISOString(),
-      };
+    const promptContext: PromptContext = {
+      ...(selectedNote && { noteId: selectedNote.id }),
+      ...(selectedFolder && { folderId: selectedFolder.id })
+    };
 
-      dispatch(setLoading(false));
-      dispatch(addChatMessage(botMessage));
-    }, 1000);
+    console.log("context: ", promptContext)
+    
+    sendChatMutation({
+      ...(threadId && { threadId }),
+      promptMessage: message,
+      promptContext 
+    }, {
+      onSuccess : (data) => {
+        const noraMessage: ChatMessage = {
+          id: new Date().toISOString() + "_" + Math.random().toString(),
+          content: data.responseMessage,
+          noteCitations:data.noteCitations,
+          folderCitations: data.folderCitations,          
+          isUser: false,
+          timestamp: new Date().toISOString(),
+        };  
+        
+        const threadId = data.threadId;
+
+        if(!selectedFolder && !selectedNote)
+          setGlobalThread(threadId);
+
+        if(selectedNote)
+          setThreadId(selectedNote.id, threadId);
+
+        if(selectedFolder)
+          setThreadId(selectedFolder.id, threadId);
+
+        dispatch(setLoading(false));
+        dispatch(addChatMessage(noraMessage))
+      }
+    })
+
+    // setTimeout(() => {
+    //   const botMessage: ChatMessage = {
+    //     id: new Date().toISOString() + "_" + Math.random().toString(),
+    //     content: mockResponses[Math.floor(Math.random() * mockResponses.length)],
+    //     isUser: false,
+    //     timestamp: new Date().toISOString(),
+    //   };
+
+    //   dispatch(setLoading(false));
+    //   dispatch(addChatMessage(botMessage));
+    // }, 1000);
   }
 
   
@@ -118,6 +160,15 @@ export default function ChatPanel() {
     }
   };
 
+  const handleResetConversation = () => {
+    if (selectedNote) {
+      clearThread(selectedNote.id); // Clear note-specific thread
+    } else if (selectedFolder) {
+      clearThread(selectedFolder.id); // Clear folder-specific thread
+    } else {
+      clearThread(); // Clear global thread
+    }
+  };
 
   if (isCollapsed) {
     return (
@@ -153,6 +204,29 @@ export default function ChatPanel() {
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
+        
+        <div className="my-2 flex justify-between px-4">
+          <div/>
+          <div>
+            {selectedNote && (
+              <p className="text-xs text-on-surface text-center">note Id: {selectedNote.id}</p>
+            )}
+
+            {selectedFolder && (
+              <p className="text-xs text-on-surface text-center">folder Id: {selectedFolder.id}</p>
+            )}
+            { (!selectedFolder && !selectedNote) && (
+              <p className="text-xs text-on-surface text-center">global</p>
+            )}
+            <p className="text-xs text-on-surface text-center">thread Id: {threadId ? threadId : "no thread id"}</p>
+          </div>
+          <button
+            className="text-gray-400 hover:text-secondary cursor-pointer hover:-rotate-180 transition-transform"
+            onClick={handleResetConversation}
+          >
+            <RotateCwIcon width={16}/>
+          </button>
+        </div>
 
         <div
           className="flex-1 overflow-y-auto p-4"
@@ -162,7 +236,7 @@ export default function ChatPanel() {
           <ScrollArea>
             <div className="space-y-4">
               {chatMessages.map((message: ChatMessage) => (
-                <ChatMessageContainer key={message.id} message={message}/>
+                  <ChatMessageContainer key={new Date().toISOString() + "_" + Math.random().toString()} message={message}/>
               ))}
               <div ref={scrollRef} className="h-0"></div>
             </div>

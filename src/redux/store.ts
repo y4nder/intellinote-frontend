@@ -3,13 +3,15 @@ import authReducer from "./slice/auth";
 import folderNoteReducer from "./slice/folder-note";
 import chatAgentReducer from "./slice/chat-agent";
 import preferenceReducer from "./slice/preference";
+import viewSliceReducer from "./slice/views";
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
         folderNotes: folderNoteReducer,
         chatAgent: chatAgentReducer,
-        preference: preferenceReducer
+        preference: preferenceReducer,
+        views: viewSliceReducer
     }
 })
 

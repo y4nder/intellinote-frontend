@@ -1,7 +1,6 @@
 import { ChatMessage } from "@/types/chatMessage";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-
 export type LoadingType = "Thinking..." | "Analyzing..." | undefined
 
 interface ChatAgentLoadingState {
@@ -10,12 +9,14 @@ interface ChatAgentLoadingState {
 }
 
 interface ChatAgentState {
+    threadId? : string;
     isCollapsed: boolean;
     chatMessages: ChatMessage[];
     loadingState: ChatAgentLoadingState
 }
 
 const initialState : ChatAgentState = {
+    threadId : undefined,
     isCollapsed: true,
     chatMessages: [
         {
@@ -69,9 +70,19 @@ const chatAgentSlice = createSlice({
                 isThinking: true,
                 type: "Thinking...",
             };
+        },
+        setChatThreadId : (state, action: PayloadAction<string | undefined>) => {
+            state.threadId = action.payload
         }
     },
 })
 
-export const { setChatMessages, addChatMessage, toggleChat, setChatCollapsed, setLoading } = chatAgentSlice.actions;
+export const {
+    setChatThreadId, 
+    setChatMessages, 
+    addChatMessage, 
+    toggleChat, 
+    setChatCollapsed, 
+    setLoading 
+} = chatAgentSlice.actions;
 export default chatAgentSlice.reducer;

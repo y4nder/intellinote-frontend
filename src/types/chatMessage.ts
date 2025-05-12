@@ -1,9 +1,22 @@
 export type MessageType = "normal" | "loading";
 
 export interface ChatMessage {
-    id: string;
-    content: string;
-    isUser: boolean;
-    timestamp: string;
-    type?: MessageType; 
-  }
+  id: string;
+  content: string;
+  noteCitations?: NoteCitation[];
+  folderCitations?: FolderCitation[];
+  isUser: boolean;
+  timestamp: string;
+  type?: MessageType; 
+}
+
+export interface NoteCitation {
+  noteId: string;
+  snippetId: string;
+  text: string;
+}
+
+export interface FolderCitation {
+  folderId: string;
+  text: string;
+}

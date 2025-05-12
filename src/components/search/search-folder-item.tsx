@@ -13,7 +13,7 @@ export default function SearchFolderItem({folder, onSelect}: SearchFolderItemPro
     const handleNavigation = () => {
         const folderId = `${folder.name.toLowerCase().replace(/\s+/g, "-")}-${folder.id}`;
         navigate(`/Folder/${folderId}`);
-      }
+    }
 
     return (
         <div

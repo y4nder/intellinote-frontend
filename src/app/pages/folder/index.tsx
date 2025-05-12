@@ -8,8 +8,10 @@ import NoteCard from "@/components/notecard/NoteCard"
 import { extractIdFromSlug } from "@/lib/utils"
 import { useGetUserFolder } from "@/service/folders/get-user-folder"
 import { useParams } from "react-router-dom"
-import { setSelectedFolder} from "@/redux/slice/folder-note"
+import { setSelectedFolder, setSelectedNote} from "@/redux/slice/folder-note"
 import FolderPageHeader from "./folder-page-header"
+import { useThreadManager } from "@/service/nora/chat/chat-thread-manager"
+import { setChatThreadId } from "@/redux/slice/chat-agent"
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -35,12 +37,28 @@ export default function FolderPage() {
   const id = extractIdFromSlug(folderId!);
   const dispatch = useDispatch();
   const { data: folder } = useGetUserFolder(id!);
+  const {getThreadId} = useThreadManager();
 
   useEffect(() => {
     if(folder && (!selectedFolder || folder && folder?.id !== selectedFolder?.id)){
         dispatch(setSelectedFolder(folder));
     }
   }, [folder, selectedFolder, dispatch]);
+
+  useEffect(() => {
+    const threadId = getThreadId(id!);
+    if(threadId){
+      console.log("thread id:", threadId);
+      dispatch(setChatThreadId(threadId));
+    }
+    else {
+      console.log("no thread id");
+      dispatch(setChatThreadId(undefined));
+    }
+    dispatch(setSelectedNote(null));
+  },[id])
+
+  
 
   const [activeTab, setActiveTab] = useState<"all" | "recent">("all")
     

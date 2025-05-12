@@ -13,6 +13,8 @@ import NoteEditor from "./pages/note";
 import { ToastContainer } from "react-toastify";
 import { SlideDownBlur } from "@/lib/utils";
 import Folder from "./pages/folder";
+import SmartViewsPage from "./pages/smart-views";
+import ViewPage from "./pages/smart-views/view-page";
 // import AuthGuard from "@/components/auth/auth-guard";
 
 
@@ -63,7 +65,15 @@ const createAppRouter = () =>
                       {
                         path: "folders",
                         element: <Folders />,
-                      },  
+                      },
+                      {
+                        path: "smart-views",
+                        element: <SmartViewsPage/>
+                      },
+                      {
+                        path: "view/:viewId",
+                        element: <ViewPage/>
+                      }  
                     ],
                   },
                   {

@@ -13,6 +13,8 @@ import ViewToggle from "@/components/ui/view-toggle";
 import { cn } from "@/lib/utils";
 import Banner from "./banner";
 import { BreadcrumbUi } from "@/components/ui/breadcrumb-ui";
+import { useThreadManager } from "@/service/nora/chat/chat-thread-manager";
+import { setChatThreadId } from "@/redux/slice/chat-agent";
 
 
 // Animation variants
@@ -49,12 +51,23 @@ export default function Home() {
         skip: 0,
         take: 100
     });
+    const {getGlobalThread} = useThreadManager();
 
     const dispatch = useDispatch();
 
     useEffect(() => {
         console.log("using note grid:", isNoteGrid)
     },[isNoteGrid]);
+
+    useEffect(() => {
+        const globalThreadId = getGlobalThread();
+
+        if(globalThreadId){
+            dispatch(setChatThreadId(globalThreadId));
+        } else {
+            dispatch(setChatThreadId(undefined));
+        }
+    }, [])
 
     useEffect(() => {
         dispatch(setSelectedNote(null));
