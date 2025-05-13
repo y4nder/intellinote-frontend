@@ -17,6 +17,7 @@ import { useSummarizeNote } from "@/service/notes/summarize-note";
 import NoteHeaderUpdateFolderButton from "./note-header-update-folder-button";
 import NoteHeaderAutoAssignButton from "./note-header-auto-assign-button";
 import { queryClient } from "@/lib/react-query";
+import { toggleChat } from "@/redux/slice/chat-agent";
 
 const TOPIC_DISPLAY_LIMIT = 4;
 
@@ -226,7 +227,11 @@ export default function NoteHeader() {
               <NotebookIcon/>
               Create Study Set
             </Button>
-            <Button className="text-xs rounded-2xl">
+            <Button className="text-xs rounded-2xl text-on-primary cursor-pointer hover:-translate-y-0.5 transition-transform"
+              onClick={() => {
+                dispatch(toggleChat());
+              }}
+            >
               <BotMessageSquareIcon/>
               Ask
             </Button>

@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 export default function Folders() {
     const {folders} = useSelector((state: RootState) => state.folderNotes);
     return (
-        <div>
+        <div className="px-6 pb-6">
             <div className=" pb-4">
                 <BreadcrumbUi/>
             </div>

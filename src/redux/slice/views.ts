@@ -2,7 +2,7 @@ import { FilterCondition } from "@/app/pages/smart-views/filter-utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface FilteredView {
-    id: string;
+    id?: string;
     name: string;
     conditions: FilterCondition[]
 }
@@ -14,22 +14,22 @@ interface ViewsState {
 
 const initialState : ViewsState = {
     views: [
-        {
-            id: '2025-05-12T19:37:21.190Z_0.2556326589033866',
-            name: 'Data Structures view',
-            conditions: [
-              {
-                id: '1',
-                property: 'topics',
-                operator: 'contains',
-                value: [
-                  'data structures',
-                  'graph',
-                  'data'
-                ]
-              }
-            ]
-        }
+        // {
+        //     id: '2025-05-12T19:37:21.190Z_0.2556326589033866',
+        //     name: 'Data Structures view',   
+        //     conditions: [
+        //       {
+        //         id: '1',
+        //         property: 'topics',
+        //         operator: 'contains',
+        //         value: [
+        //           'data structures',
+        //           'graph',
+        //           'data'
+        //         ]
+        //       }
+        //     ]
+        // }
     ],
     selectedView: null
 }
@@ -55,13 +55,17 @@ const viewSlice = createSlice({
                 state.selectedView = updated;
             }
         },
+        setViews : (state, action: PayloadAction<FilteredView[]>) => {
+            state.views = action.payload
+        }
     }
 });
 
 export const {
     addView,
     setSelectedView,
-    updateView
+    updateView,
+    setViews
 } = viewSlice.actions
 
 export default viewSlice.reducer;
