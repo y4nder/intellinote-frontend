@@ -117,6 +117,16 @@ export default function ChatPanel() {
 
         dispatch(setLoading(false));
         dispatch(addChatMessage(noraMessage))
+      },
+      onError: () => {
+        const noraMessage: ChatMessage = {
+          id: new Date().toISOString() + "_" + Math.random().toString(),
+          content: "An error occured",
+          isUser: false,
+          timestamp: new Date().toISOString(),
+        };
+        dispatch(setLoading(false));
+        dispatch(addChatMessage(noraMessage))
       }
     })
 

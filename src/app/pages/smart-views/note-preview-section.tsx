@@ -10,9 +10,9 @@ const NotePreviewSection: FC<NotePreviewSectionProps> = ({ filteredNotes }) => {
   return (
     <div className="space-y-2">
       <h3 className="text-sm font-medium">Notes preview ({filteredNotes.length} matching notes)</h3>
-      <div className="border rounded-md overflow-hidden">
+      <div className="bg-surface-container-lowest border border-primary-container rounded-md overflow-hidden">
         {filteredNotes.length > 0 ? (
-          <div className="max-h-[650px] overflow-y-auto min-h-[450px]">
+          <div className="max-h-[70vh] min-h-[70vh] overflow-y-auto">
             <table className="w-full">
               <thead className="bg-surface-container-high sticky top-0">
                 <tr>
@@ -23,8 +23,8 @@ const NotePreviewSection: FC<NotePreviewSectionProps> = ({ filteredNotes }) => {
               </thead>
               <tbody>
                 {filteredNotes.map((note) => (
-                  <tr key={note.id} className="border-t hover:bg-muted/20">
-                    <td className="p-2 text-sm">{note.title}</td>
+                  <tr key={note.id} className="border-t border-primary-container bg-surface-container-lowest hover:bg-surface-container-low">
+                    <td className="p-2 pl-4 text-sm font-medium">{note.title}</td>
                     <td className="p-2">
                       <div className="flex flex-wrap gap-1">
                         {note.keywords.map((keyword, i) => (
@@ -49,7 +49,7 @@ const NotePreviewSection: FC<NotePreviewSectionProps> = ({ filteredNotes }) => {
             </table>
           </div>
         ) : (
-          <div className="p-8 text-center text-muted-foreground">No notes match the current filters</div>
+          <div className="p-8 text-center text-muted-foreground min-h-[70vh]">No notes match the current filters</div>
         )}
       </div>
     </div>

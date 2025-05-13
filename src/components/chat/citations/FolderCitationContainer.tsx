@@ -1,8 +1,7 @@
-import { setSelectedFolder } from "@/redux/slice/folder-note";
 import { RootState } from "@/redux/store";
 import { FolderCitation } from "@/types/chatMessage"
 import { FolderIcon } from "lucide-react"
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 type FolderCitationContainerProps = {
@@ -11,12 +10,10 @@ type FolderCitationContainerProps = {
 
 export default function FolderCitationContainer({ citation } : FolderCitationContainerProps) {
     const { folders } = useSelector((state: RootState) => state.folderNotes);
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     
     const handleNavigation = () => {
         const folder = folders.find(f => f.id === citation.folderId);
-        // dispatch(setSelectedFolder(folder!));
         const folderId = `${folder!.name.toLowerCase().replace(/\s+/g, "-")}-${folder!.id}`;
         navigate(`/Folder/${folderId}`);
     }

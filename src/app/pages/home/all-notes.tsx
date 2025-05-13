@@ -52,7 +52,7 @@ export default function AllNotes() {
     
 
     return (
-    <div className="mb-8">
+    <div className="mb-8 px-6 pb-6">
         <div className=" pb-4">
             <BreadcrumbUi/>
         </div>

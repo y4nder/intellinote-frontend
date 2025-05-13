@@ -19,6 +19,9 @@ import NotePreviewSection from "./note-preview-section"
 import { Note } from "@/types/note"
 import { FilterCondition, filterNotes, FilterProperty, OperatorOption, FilterOperator } from "./filter-utils"
 import { addView, FilteredView, updateView } from "@/redux/slice/views"
+import { useCreateView } from "@/service/view/create-user-view"
+import { useUpdateView } from "@/service/view/update-user-view"
+import { useQueryClient } from "@tanstack/react-query"
 
 
 type CreateViewModalProps = {
@@ -43,6 +46,11 @@ export default function CreateViewModal({isUpdating = false, view = null} : Crea
 
   const [filteredNotes, setFilteredNotes] = useState<Note[]>([])
   const dispatch = useDispatch();
+
+  const {mutate: createViewMutation} = useCreateView();
+  const {mutate: updateViewMutation} = useUpdateView();
+  const client = useQueryClient();
+
 
   useEffect(() => {
     if (view) {
@@ -110,38 +118,75 @@ export default function CreateViewModal({isUpdating = false, view = null} : Crea
 
   const handleCreateView = () => {
     // Create a stringified object with the filter conditions
-    const filterObject : FilteredView = {
-      id: new Date().toISOString() + "_" + Math.random().toString(),
+    const filterConditions =  filters.map((filter) => ({
+      id: filter.id,
+      property: filter.property,
+      operator: filter.operator,
+      value: filter.value,
+    }));
+
+    createViewMutation({
       name: viewName,
-      conditions: filters.map((filter) => ({
-        id: filter.id,
-        property: filter.property,
-        operator: filter.operator,
-        value: filter.value,
-      })),
-    }
+      filterObject: JSON.stringify(filterConditions)
+    }, {
+      onSuccess : (data) => {
+        dispatch(addView(data));
+        console.log("Created view:", JSON.stringify(data, null, 2));
+        client.invalidateQueries({
+          queryKey: ["views"]
+        });
+      },
+      onSettled : () => {
+        setIsOpen(false)  
+      }
+    })
 
-    dispatch(addView(filterObject));
 
-    console.log("Created view:", JSON.stringify(filterObject, null, 2))
-    setIsOpen(false)
   }
 
   const handleUpdateView = () => {
     if(!view) return;
-    const filterObject : FilteredView = {
-      id: view.id,
+
+    const filterConditions =  filters.map((filter) => ({
+      id: filter.id,
+      property: filter.property,
+      operator: filter.operator,
+      value: filter.value,
+    }));
+
+    updateViewMutation({
+      viewId: view.id!,
       name: viewName,
-      conditions: filters.map((filter) => ({
-        id: filter.id,
-        property: filter.property,
-        operator: filter.operator,
-        value: filter.value,
-      })),
+      filterObject: JSON.stringify(filterConditions)
+    }, {
+      onSuccess : (data) => {
+        dispatch(updateView(data));
+        console.log("Updated view:", JSON.stringify(data, null, 2));
+        client.invalidateQueries({
+          queryKey: ["views"]
+        });
+      },
+      onSettled : () => {
+        setIsOpen(false)
+      }
+    })
+  }
+
+  const handleCancel = () => {
+    if(isUpdating && view) {
+      setViewName(view.name);
+      setFilters(() =>
+        view?.conditions.map(cond => ({
+          ...cond,
+        })))
+    } else {
+      setViewName("");
+      setFilters([
+        { id: Date.now().toString(), property: "title", operator: "contains", value: "" },
+      ]);
     }
-    dispatch(updateView(filterObject));
-    console.log("Updated view:", JSON.stringify(filterObject, null, 2))
-    setIsOpen(false)
+
+    setIsOpen(false);
   }
 
   const renderFilterValueInput = (filter: FilterCondition) => {
@@ -150,31 +195,34 @@ export default function CreateViewModal({isUpdating = false, view = null} : Crea
       const currentValue = Array.isArray(filter.value) ? filter.value : []
 
       return (
-        <div className=" flex flex-col gap-2 w-full bg-background">
-          <div className="flex flex-wrap gap-0.5 mb-2">
-            {currentValue.map((tag, index) => (
-              <Badge
-                key={index}
-                className="flex items-center gap-1 text-on-surface py-1 bg-surface-container rounded-full"
+        <div className=" flex flex-col gap-2 w-full">
+        <div className="flex flex-wrap gap-0.5 mb-2">
+          {currentValue.map((tag, index) => (
+            <Badge
+              key={index}
+              className="flex items-center gap-1 px-2 py-1 rounded-full bg-surface-container hover:bg-surface-container-high transition"
+            >
+              <span className="truncate max-w-[220px]" title={tag}>
+                {tag}
+              </span>
+              <button
+                type="button"
+                aria-label={`Remove ${tag}`}
+                className="ml-1 flex-shrink-0 p-1 rounded-full hover:bg-destructive hover:bg-red-500 transition"
+                onClick={() => {
+                  const newValue = [...currentValue]
+                  newValue.splice(index, 1)
+                  updateFilter(filter.id, { value: newValue })
+                }}
               >
-                <span className="truncate">{tag}</span>
-                <button
-                  type="button"
-                  aria-label={`Remove ${tag}`}
-                  className="flex-shrink-0 p-1 hover:bg-red-600 hover:text-white rounded-full transition"
-                  onClick={() => {
-                    const newValue = [...currentValue]
-                    newValue.splice(index, 1)
-                    updateFilter(filter.id, { value: newValue })
-                  }}
-                >
-                  <X className="h-3 w-3" />
-                </button>
-              </Badge>
-            ))}
-          </div>
+                <X className="h-3 w-3" />
+              </button>
+            </Badge>
+          ))}
+        </div>
           <div className="flex gap-2">
             <Input
+              className="w-full border-primary-container"
               placeholder={`Enter ${filter.property}`}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && (e.target as HTMLInputElement).value.trim()) {
@@ -185,7 +233,7 @@ export default function CreateViewModal({isUpdating = false, view = null} : Crea
               }}
             />
             <Button
-              variant="outline"
+              className="bg-surface-container-high text-on-surface hover:bg-surface-container-highest cursor-pointer"
               size="icon"
               onClick={(e) => {
                 const input = e.currentTarget.previousSibling as HTMLInputElement
@@ -209,7 +257,7 @@ export default function CreateViewModal({isUpdating = false, view = null} : Crea
         placeholder="Enter value"
         value={(filter.value as string) || ""}
         onChange={(e) => updateFilter(filter.id, { value: e.target.value })}
-        className="w-full"
+        className="w-full border-primary-container"
       />
     )
   }
@@ -218,7 +266,7 @@ export default function CreateViewModal({isUpdating = false, view = null} : Crea
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          className="rounded-full p-4 bg-primary shadow-lg hover:bg-primary-dark focus:outline-none cursor-pointer text-on-primary"
+          className="rounded-full p-4 bg-primary shadow-lg focus:outline-none cursor-pointer text-on-primary hover:-translate-y-0.5 transition-transform"
           aria-label={isUpdating ? "Edit View" : "Create View"}
         >
           {isUpdating ? 
@@ -227,11 +275,11 @@ export default function CreateViewModal({isUpdating = false, view = null} : Crea
           </> : 
           <>
             <PlusIcon size={20} />
-            Create A view
+            New view
           </>}
         </Button>
       </DialogTrigger>
-      <DialogContent className="min-w-[1640px] bg-surface text-on-surface min-h-[850px]">
+      <DialogContent className="min-w-[90vw] min-h-[90vh] overflow-y-auto bg-surface text-on-surface">
         <DialogHeader>
           <DialogTitle>
             {isUpdating ? <>Update View</> : <>Create View</>} 
@@ -250,19 +298,23 @@ export default function CreateViewModal({isUpdating = false, view = null} : Crea
           <div className="space-y-4 col-span-3">
             <div className="space-y-2 mt-2">
               <h3 className="text-sm font-medium">View name</h3>
-              <Input placeholder="Enter view name" value={viewName} onChange={(e) => setViewName(e.target.value)} />
+              <Input 
+                className="border-primary-container"
+                placeholder="Enter view name" value={viewName} onChange={(e) => setViewName(e.target.value)} />
             </div>
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-medium">Filters</h3>
-              <Button variant="outline" size="sm" onClick={addFilter}>
+              <Button 
+                className="bg-primary text-on-primary cursor-pointer"
+                size="sm" onClick={addFilter}>
                 <Plus className="h-4 w-4 mr-2" />
                 Add filter
               </Button>
             </div>
 
-            <div className="space-y-3 max-h-[550px] overflow-y-auto pr-2">
+            <div className="space-y-3 overflow-y-auto pr-2 max-h-[60vh]">
               {filters.map((filter) => (
-                <div key={filter.id} className="flex items-start gap-2 p-3 border rounded-md">
+                <div key={filter.id} className="flex items-start gap-2 p-3 rounded-md bg-surface-container-low shadow-md">
                   {/* Property selector */}
                   <Select
                     value={filter.property}
@@ -280,13 +332,13 @@ export default function CreateViewModal({isUpdating = false, view = null} : Crea
                       })
                     }}
                   >
-                    <SelectTrigger className="w-fit">
+                    <SelectTrigger className="w-fit shadow-lg bg-surface-container-highest hover:bg-surface-container-high border border-primary-container cursor-pointer">
                       <SelectValue placeholder="Select property" />
                     </SelectTrigger>
-                    <SelectContent className="bg-surface text-on-surface">
-                      <SelectItem value="title">Title</SelectItem>
-                      <SelectItem value="keywords">Keywords</SelectItem>
-                      <SelectItem value="topics">Topics</SelectItem>
+                    <SelectContent className="bg-surface text-on-surface border border-primary-container">
+                      <SelectItem className="hover:bg-surface-container-high" value="title">Title</SelectItem>
+                      <SelectItem className="hover:bg-surface-container-high" value="keywords">Keywords</SelectItem>
+                      <SelectItem className="hover:bg-surface-container-high" value="topics">Topics</SelectItem>
                     </SelectContent>
                   </Select>
 
@@ -300,12 +352,14 @@ export default function CreateViewModal({isUpdating = false, view = null} : Crea
                       })
                     }}
                   >
-                    <SelectTrigger className="w-fit">
+                    <SelectTrigger className="w-fit shadow-lg bg-surface-container-highest hover:bg-surface-container-high border border-primary-container cursor-pointer">
                       <SelectValue placeholder="Select operator" />
                     </SelectTrigger>
-                    <SelectContent className="bg-surface text-on-surface">
+                    <SelectContent className="bg-surface text-on-surface border border-primary-container">
                       {getOperatorOptions(filter.property).map((op) => (
-                        <SelectItem key={op.value} value={op.value}>
+                        <SelectItem 
+                          className="hover:bg-surface-container-high"
+                          key={op.value} value={op.value}>
                           {op.label}
                         </SelectItem>
                       ))}
@@ -316,33 +370,16 @@ export default function CreateViewModal({isUpdating = false, view = null} : Crea
                   <div className="flex-1">{renderFilterValueInput(filter)}</div>
 
                   {/* Remove filter button */}
-                  <Button variant="ghost" size="icon" onClick={() => removeFilter(filter.id)} className="self-center">
+                  <Button
+                    size="icon" onClick={() => removeFilter(filter.id)} 
+                    className="bg-surface-container hover:bg-red-400 cursor-pointer">
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
               ))}
             </div>
-            {/* Preview of the filter object */}
-            <div className="space-y-2">
-              <h3 className="text-sm font-medium">Filter preview</h3>
-              <pre className="bg-surface-container-high p-4 rounded-md text-xs overflow-y-auto max-h-[250px]">
-                {JSON.stringify(
-                  {
-                    name: viewName,
-                    conditions: filters.map((filter) => ({
-                      property: filter.property,
-                      operator: filter.operator,
-                      value: filter.value,
-                    })),
-                  },
-                  null,
-                  2,
-                )}
-              </pre>
-            </div>
+          
           </div>
-
-
           {/* Note preview section */}
           <div className="col-span-5">
             <NotePreviewSection filteredNotes={filteredNotes} />
@@ -350,7 +387,7 @@ export default function CreateViewModal({isUpdating = false, view = null} : Crea
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => setIsOpen(false)}>
+          <Button variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
           <Button
@@ -365,3 +402,25 @@ export default function CreateViewModal({isUpdating = false, view = null} : Crea
     </Dialog>
   )
 }
+
+
+
+
+{/* Preview of the filter object */}
+{/* <div className="space-y-2">
+  <h3 className="text-sm font-medium">Filter preview</h3>
+  <pre className="bg-surface-container-high p-4 rounded-md text-xs overflow-y-auto max-h-[150px]">
+    {JSON.stringify(
+      {
+        name: viewName,
+        conditions: filters.map((filter) => ({
+          property: filter.property,
+          operator: filter.operator,
+          value: filter.value,
+        })),
+      },
+      null,
+      2,
+    )}
+  </pre>
+</div> */}

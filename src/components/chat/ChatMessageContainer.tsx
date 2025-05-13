@@ -4,6 +4,9 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { BotMessageSquare } from "lucide-react"
 import NoteCitationContainer from "./citations/NoteCitationContainer";
 import FolderCitationContainer from "./citations/FolderCitationContainer";
+import Markdown from 'markdown-to-jsx'
+
+
 
 interface ChatMessageProps {
   message: ChatMessage
@@ -25,7 +28,7 @@ export default function ChatMessageContainer({ message }: ChatMessageProps) {
 
       <div
         className={cn(
-          "p-3 rounded-2xl max-w-[85%]",
+          "px-4 py-2 rounded-2xl max-w-[85%]",
           isUser
             ? "bg-primary/10 rounded-tr-none mr-3"
             : "bg-secondary-container/50 rounded-tl-none"
@@ -41,9 +44,12 @@ export default function ChatMessageContainer({ message }: ChatMessageProps) {
           </div>
         ) : (
           <>
-            <p className="text-xs text-on-secondary-container whitespace-pre-line break-words">
+            {/* <p className="text-xs text-on-secondary-container whitespace-pre-line break-words">
               {message.content}
-            </p>
+            </p> */}
+            <Markdown className="text-[13px] text-on-secondary-container whitespace-pre-line break-words">
+              {message.content}
+            </Markdown>
             {message.noteCitations && (
               message.noteCitations.map(citation => (
                 <div className="mt-2" key={new Date().toISOString() + "_" + Math.random().toString()} >

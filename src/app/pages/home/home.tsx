@@ -82,7 +82,7 @@ export default function Home() {
 
     
     return (
-        <div className="top-0">
+        <div className="top-0 px-6 pb-6">
             {/* Banner Section */}
             <Banner 
                 imageUrl="https://w.wallhaven.cc/full/yq/wallhaven-yq761d.png" 

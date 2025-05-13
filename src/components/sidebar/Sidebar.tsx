@@ -123,7 +123,7 @@ export default function Sidebar() {
             />
             <SidebarItem
               icon={<View className="h-5 w-5" />}
-              label="Smart Views" to={"/smart-views"}            
+              label="Perspectives" to={"/smart-views"}            
             />
           </ul>
         </nav>
