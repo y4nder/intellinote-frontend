@@ -10,6 +10,8 @@ import { NoteCardSkeleton } from "./skeletons/note-grid-skeleton";
 import { cn } from "@/lib/utils";
 import ViewToggle from "@/components/ui/view-toggle";
 import { BreadcrumbUi } from "@/components/ui/breadcrumb-ui";
+import NoteList from "@/components/notelist/NoteList";
+import NoteListSkeleton from "./skeletons/note-list-skeleton";
 
 
 export default function AllNotes() {
@@ -62,25 +64,40 @@ export default function AllNotes() {
             </h2>
             <ViewToggle className="mr-2"/>
         </div>
-        <div 
-            className={cn(
-                "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:grid-cols-5",
-                `${!isCollapsed ? "xl:grid-cols-4 gap-4" : ""}`,
-                `${!isNoteGrid ? "flex flex-col gap-0": ""}`
-            )}
-        >
-            {notes.map((note: Note) => (
-                <NoteCard key={note.id} note={note} />
-            ))}
-            {isFetching && (
-                <>
-                    {Array.from({ length: 10 }).map((_, index) => (
-                        <NoteCardSkeleton key={index} />
+
+        {isNoteGrid ? 
+            (
+                <div 
+                    className={cn(
+                        "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:grid-cols-5",
+                        `${!isCollapsed ? "xl:grid-cols-4 gap-4" : ""}`
+                    )}
+                >
+                    {notes.map((note: Note) => (
+                        <NoteCard key={note.id} note={note} />
                     ))}
+                    {isFetching && (
+                        <>
+                            {Array.from({ length: 10 }).map((_, index) => (
+                                <NoteCardSkeleton key={index} />
+                            ))}
+                        </>
+                    )}
+                    <div ref={ref} />
+                </div>
+            ):
+            (
+                <>
+                    <NoteList notes={notes}/>   
+                    {
+                        isFetching && (
+                            <NoteListSkeleton/>
+                        )
+                    }
+                    <div ref={ref} />
                 </>
-            )}
-            <div ref={ref} />
-        </div>
+            )
+        }
     </div>
     )
 }

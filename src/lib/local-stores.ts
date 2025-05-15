@@ -1,5 +1,6 @@
 import { SignInResponse } from "@/service/auth/login";
-import { AUTH_KEY } from "./constants"
+import { AUTH_KEY, PREFERENCE_KEY } from "./constants"
+import { PreferenceState } from "@/redux/slice/preference";
 
 export const GetAuthKey = () => {
     const item = localStorage.getItem(AUTH_KEY);
@@ -15,4 +16,23 @@ export const GetAuthKey = () => {
 
 export const StoreKey = (item: SignInResponse) => {
     localStorage.setItem(AUTH_KEY, JSON.stringify(item));
+}
+
+export const RemoveKey = () => {
+    localStorage.removeItem(AUTH_KEY);
+}
+
+export const GetPreferences = () => {
+    const item = localStorage.getItem(PREFERENCE_KEY);
+    if(!item) return null;
+
+    try {
+        return JSON.parse(item) as PreferenceState
+    } catch(errr){
+        return null;
+    }
+}
+
+export const StorePreferences = (item: PreferenceState) => {
+    localStorage.setItem(PREFERENCE_KEY, JSON.stringify(item));
 }

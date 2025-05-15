@@ -378,8 +378,25 @@ export default function CreateViewModal({isUpdating = false, view = null} : Crea
                 </div>
               ))}
             </div>
-          
-          </div>
+              {/* Preview of the filter object */}
+              {/* <div className="space-y-2">
+                <h3 className="text-sm font-medium">Filter preview</h3>
+                <pre className="bg-surface-container-high p-4 rounded-md text-xs overflow-y-auto max-h-[150px]">
+                  {JSON.stringify(
+                    {
+                      name: viewName,
+                      conditions: filters.map((filter) => ({
+                        property: filter.property,
+                        operator: filter.operator,
+                        value: filter.value,
+                      })),
+                    },
+                    null,
+                    2,
+                  )}
+                </pre>
+              </div> */}
+            </div>
           {/* Note preview section */}
           <div className="col-span-5">
             <NotePreviewSection filteredNotes={filteredNotes} />

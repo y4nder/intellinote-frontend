@@ -1,7 +1,7 @@
 // import { mockApiCallNote } from "@/data/mockData";
 import { api } from "@/lib/axios";
 import { GetUserNoteResponse, GetUserNoteResponseParsed } from "@/types/note";
-import { PartialBlock } from "@blocknote/core";
+import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { useQuery } from "@tanstack/react-query";
 
 // const getUserNoteMock = async (noteId: string): Promise<GetUserNoteResponseParsed> => {
@@ -26,9 +26,19 @@ import { useQuery } from "@tanstack/react-query";
 
 const getUserNote = async (noteId: string): Promise<GetUserNoteResponseParsed> => {
   const {data} = await api.get<GetUserNoteResponse>("/api/notes/" + noteId);
+  let parsedContent : PartialBlock[];
+
+  try{
+    parsedContent = JSON.parse(data.note!.content!) as PartialBlock[]
+  }catch(error){
+    const editor = BlockNoteEditor.create();
+    const blocksFromMd = await editor.tryParseMarkdownToBlocks(data.note!.content!)
+    parsedContent = blocksFromMd
+  }
+
   const noteParsed: GetUserNoteResponseParsed = {
     note: data.note,
-    content: JSON.parse(data.note!.content!) as PartialBlock[],
+    content: parsedContent,
   };
 
   return noteParsed;

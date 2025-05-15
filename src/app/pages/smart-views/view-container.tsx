@@ -99,7 +99,7 @@ export default function ViewCard({ view  }: ViewPageProps) {
                                 )}
                             </div>
                         ) : (
-                            <span className="truncate">{formatCondition(condition)}</span>
+                            <span className="truncate max-w-[220px]">{formatCondition(condition)}</span>
                         )}
                     </div>
                 )

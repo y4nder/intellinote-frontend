@@ -5,13 +5,15 @@ import { cn, extractIdFromSlug, getGradientClassesFromString } from "@/lib/utils
 import { setIsSaving, setSelectedFolderDescription, setSelectedFolderTitle } from "@/redux/slice/folder-note";
 import { RootState } from "@/redux/store";
 import { useUpdateFolder } from "@/service/folders/update-folder";
-import { BotMessageSquareIcon, CalendarDays, FileText, NotebookIcon, Plus, Tag, User } from "lucide-react";
+import { BotMessageSquareIcon, CalendarDays, FileText, Tag, User } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import AddNotesDialog from "./folder-add-notes";
 import { useFolderUpdateDoneSocket } from "@/hooks/sockets";
 import { useQueryClient } from "@tanstack/react-query";
+import { toggleChat } from "@/redux/slice/chat-agent";
+import ViewToggle from "@/components/ui/view-toggle";
 
 
 export default function FolderPageHeader() {
@@ -201,17 +203,17 @@ export default function FolderPageHeader() {
                 </div>
             </div>
         </div>
-        <div className="mt-4 flex gap-2 justify-items-center text-white pl-2 pb-4">
-            <AddNotesDialog/>
-            <Button className="text-xs rounded-2xl bg-red-400 hover:bg-red-600 font-bold">
-                <Plus/>
-                <NotebookIcon/>
-                Create Study Set
-            </Button>
-            <Button className="text-xs rounded-2xl">
-                <BotMessageSquareIcon/>
-                Ask
-            </Button>
+        <div className="mt-4 flex gap-2 justify-between items-center-safe text-white pl-2 pb-4 ">
+            <div className="flex gap-2 ">
+                <AddNotesDialog/>
+                <Button className="text-xs rounded-2xl text-on-primary cursor-pointer hover:-translate-y-0.5 transition-transform"
+                    onClick={() => dispatch(toggleChat())}
+                >
+                    <BotMessageSquareIcon/>
+                    Ask
+                </Button>
+            </div>
+            <ViewToggle className="mr-2"/>
         </div>
     </>
   )

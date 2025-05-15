@@ -1,13 +1,12 @@
+import { GetPreferences, StorePreferences } from "@/lib/local-stores";
 import { createSlice } from "@reduxjs/toolkit";
 
-interface PreferenceState {
+export interface PreferenceState {
     isNoteGrid: boolean;
-    isDarkMode: boolean
 }
 
-const initialState : PreferenceState = {
-    isNoteGrid: true,
-    isDarkMode: false
+const initialState : PreferenceState = GetPreferences() ?? {
+    isNoteGrid : true
 }
 
 const preferenceSlice = createSlice({
@@ -16,6 +15,7 @@ const preferenceSlice = createSlice({
     reducers: {
         toggleNoteGrid : (state) => {
             state.isNoteGrid = !state.isNoteGrid;
+            StorePreferences(state);
         }
     }
 })

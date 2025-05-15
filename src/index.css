@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "./themes/light.css";
 @import "./themes/dark.css";
+@import 'markmap-toolbar/dist/style.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -91,6 +92,7 @@
   --bn-colors-editor-text: var(--color-on-background);
   --bn-colors-editor-background: var(--md-sys-color-background);
   --bn-colors-menu-text: #3f3f3f;
+ 
   --bn-colors-menu-background: #ffffff;
   --bn-colors-tooltip-text: #3f3f3f;
   --bn-colors-tooltip-background: #efefef;
@@ -132,6 +134,20 @@
   
 
 }
+
+
+
+.markmap-foreign {
+  background-color: var(--color-surface-container-low); /* Light or theme-based surface color */
+  color: var(--color-on-surface, #333);   /* Ensure text is readable */
+  border-radius: 12px;                    /* Softer, more modern rounding */
+  padding: 0px 20px 12px 20px;           /* Balanced padding: T/R/B/L */
+  font-size: 1rem;                     /* Slightly refined text size */
+  line-height: 2.0;                       /* Better readability */
+} 
+
+
+
 
 /* .bn-container {
   display: flex;
@@ -274,4 +290,28 @@
 .block-highlight {
   animation: flashHighlight 2s ease-out;
   background-color: !!yellow
+}
+
+*::-webkit-scrollbar {
+  width: 8px !important;
+  height: 2px !important;
+}
+
+*::-webkit-scrollbar-track {
+  @apply bg-surface;
+}
+
+*::-webkit-scrollbar-thumb {
+  @apply bg-secondary-container cursor-auto;
+  border-radius: 20px;
+}
+
+/* Dark mode */
+.dark *::-webkit-scrollbar-thumb {
+  background-color: var(--color-surface-bright);
+}
+
+/* Hover state */
+*::-webkit-scrollbar-thumb:hover {
+  @apply !bg-surface-variant;
 }

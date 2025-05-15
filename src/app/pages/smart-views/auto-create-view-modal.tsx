@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { addView } from "@/redux/slice/views";
 import { useGenerateView } from "@/service/view/generate-view";
 import { useQueryClient } from "@tanstack/react-query";
@@ -52,10 +52,17 @@ export default function AutoCreateViewModal() {
                 </DialogTitle>
                 <DialogDescription className="text-on-surface space-y-6">
                     Describe the kind of notes you want to see. Think of it as a lens — what topics, themes, or ideas matter to you right now?
-                    <Input className="mt-4 border-primary bg-surface-container-high text-on-secondary-container" 
+                    {/* <Input className="mt-4 border-primary bg-surface-container-high text-on-secondary-container" 
                         placeholder="Enter view description"
                         value={viewPrompt}
                         onChange={(e) => setViewPrompt(e.target.value)}
+                    /> */}
+                    <Textarea
+                        className="mt-4 border-primary bg-surface-container-high text-on-secondary-container"
+                        placeholder="Enter view description"
+                        value={viewPrompt}
+                        onChange={(e) => setViewPrompt(e.target.value)}
+                        rows={10} 
                     />
                     <small className="text-secondary">
                     💡 Tip: Use natural language — the AI will figure it out. The more specific, the better.

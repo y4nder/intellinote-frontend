@@ -9,6 +9,9 @@ import App from './app'
 //   </StrictMode>,
 // )
 
+// const splash = document.getElementById('splash-screen')
+// if (splash) splash.remove()
+
 
 createRoot(document.getElementById('root')!).render(
   <App />

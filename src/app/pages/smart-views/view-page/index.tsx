@@ -15,6 +15,9 @@ import { useParams } from "react-router"
 import { useGetUserView } from "@/service/view/get-user-view"
 import { setSelectedView } from "@/redux/slice/views"
 import { cn } from "@/lib/utils"
+import NoteList from "@/components/notelist/NoteList"
+import NoteListSkeleton from "../../home/skeletons/note-list-skeleton"
+import ViewToggle from "@/components/ui/view-toggle"
 
 
 const propertyStyles: Record<string, string> = {
@@ -55,6 +58,8 @@ function formatCondition(condition: FilterCondition) {
 export default function ViewPage() {
     const { selectedView } = useSelector((state: RootState) => state.views)
     const { notes } = useSelector((state: RootState) => state.folderNotes)
+    const { isCollapsed } = useSelector((state: RootState) => state.chatAgent)
+    const { isNoteGrid } = useSelector((state: RootState) => state.preference)
     const dispatch = useDispatch();
     const {viewId} = useParams();
     const {data: queriedNotes} =  useGetUserNotes({
@@ -93,7 +98,10 @@ export default function ViewPage() {
     }, [])
 
     if (!selectedView || notes.length === 0) {
-        return <NoteGridSkeleton />;
+        if(isNoteGrid)
+            return <NoteGridSkeleton />;
+        else
+            return <NoteListSkeleton />
     }
       
 
@@ -110,9 +118,8 @@ export default function ViewPage() {
                         {selectedView?.name}
                     </h1>
                     <CreateViewModal isUpdating view={selectedView} />
-
-
                 </div>
+                <ViewToggle/>
             </div>
             {/* Filter Conditions Display */}
             {(selectedView && selectedView.conditions?.length > 0) && (
@@ -139,10 +146,11 @@ export default function ViewPage() {
 
             {filteredNotes.length === 0 ? (
             <p className="text-on-background text-sm">No notes matched this view.</p>
-            ) : (
+                ) : isNoteGrid ? (
             <motion.div
                 className={cn(
-                "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:grid-cols-5"
+                "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4",
+                !isCollapsed && "xl:grid-cols-4 gap-4"
                 )}
                 initial="hidden"
                 animate="visible"
@@ -153,6 +161,8 @@ export default function ViewPage() {
                 </motion.div>
                 ))}
             </motion.div>
+            ) : (
+                <NoteList notes={filteredNotes} />
             )}
 
         </div>

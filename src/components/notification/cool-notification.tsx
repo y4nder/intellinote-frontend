@@ -22,12 +22,12 @@ export default function CoolNotification({ closeToast, title, content, name, id,
   }
 
   return (
-    <div className="flex flex-col w-full">
-      <h3 className="text-zinc-800 text-sm font-semibold flex items-center gap-1">
+    <div className="flex flex-col w-full bg-surface">
+      <h3 className="text-on-surface text-sm font-semibold flex items-center gap-1">
       <div
-        className="rounded-full bg-primary-container/40 text-on-surface-variant p-3 group-hover:bg-primary/90 transition-all duration-300"
+        className="rounded-full bg-primary-container text-on-surface-variant p-3 group-hover:bg-primary/90 transition-all duration-300"
       >   
-        <BotMessageSquare className="text-primary-hard group-hover:text-white"/>
+        <BotMessageSquare className="text-primary-hard dark:text-on-primary-container group-hover:text-white"/>
       </div>
         {title}
       </h3>

@@ -11,8 +11,8 @@ const AppRoot = () => {
   
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
 
+  
   useEffect(() => {
     if(user){
       console.log("who am i response: ", user)
