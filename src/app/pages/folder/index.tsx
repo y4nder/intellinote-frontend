@@ -12,6 +12,8 @@ import { setSelectedFolder, setSelectedNote} from "@/redux/slice/folder-note"
 import FolderPageHeader from "./folder-page-header"
 import { useThreadManager } from "@/service/nora/chat/chat-thread-manager"
 import { setChatThreadId } from "@/redux/slice/chat-agent"
+import NoteListSkeleton from "../home/skeletons/note-list-skeleton"
+import NoteList from "@/components/notelist/NoteList"
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -32,12 +34,13 @@ const itemVariants = {
 
 export default function FolderPage() {
   const { selectedFolder, isQuerying } = useSelector((state: RootState) => state.folderNotes)
-  
+  const { isNoteGrid } = useSelector((state: RootState) => state.preference)
   const { folderId } = useParams();
   const id = extractIdFromSlug(folderId!);
   const dispatch = useDispatch();
   const { data: folder } = useGetUserFolder(id!);
   const {getThreadId} = useThreadManager();
+
 
   useEffect(() => {
     if(folder && (!selectedFolder || folder && folder?.id !== selectedFolder?.id)){
@@ -103,8 +106,8 @@ export default function FolderPage() {
         </h2>
 
         {selectedFolder.notes.length === 0 && isQuerying ? (
-          <NoteGridSkeleton />
-        ) : (
+          isNoteGrid ? <NoteGridSkeleton /> : <NoteListSkeleton />
+        ) : isNoteGrid ? (
           <motion.div
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
             variants={containerVariants}
@@ -113,10 +116,10 @@ export default function FolderPage() {
           >
             {selectedFolder.notes
               .filter((note) => {
-                if (activeTab === "all") return true
-                const sevenDaysAgo = new Date()
-                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
-                return new Date(note.updatedAt!) >= sevenDaysAgo
+                if (activeTab === "all") return true;
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                return new Date(note.updatedAt!) >= sevenDaysAgo;
               })
               .map((note) => (
                 <motion.div key={note.id} variants={itemVariants}>
@@ -124,7 +127,10 @@ export default function FolderPage() {
                 </motion.div>
               ))}
           </motion.div>
+        ) : (
+          <NoteList notes={selectedFolder.notes} />
         )}
+
 
         {selectedFolder.notes.length > 0 &&
           !isQuerying &&

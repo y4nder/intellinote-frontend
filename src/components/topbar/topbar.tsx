@@ -7,16 +7,36 @@ import { useState } from "react";
 import { SearchModal } from "../search/search-modal";
 import { KeyboardShortcut } from "../search/keyboard-shortcut";
 import { ModeToggle } from "../ui/mode-toggle";
+import { useWebSocket } from "@/providers/socketProvider";
+import { cn } from "@/lib/utils";
+import { NoteGeneratorDialog } from "../ui/note-generator-dialog";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+import { MultiStepLoader } from "../ui/multi-step-loader";
 
+
+
+const loadingStates = [
+    { text: "🧠 Summoning your thoughts..." },
+    { text: "📚 Gathering your inspirations..." },
+    { text: "✍️ Drafting your masterpiece..." },
+    { text: "🧩 Organizing ideas into structure..." },
+    { text: "🎨 Adding finishing touches..." },
+    { text: "💾 Saving your note to the vault..." },
+    { text: "🚀 Launching your note into the cloud..." },
+];
 
 export default function TopBar() {
+    const { isGeneratingNote } = useSelector((state: RootState) => state.folderNotes);
     const isMobile = useIsMobile();
     const [searchOpen, setSearchOpen] = useState(false)
     const { isCollapsed,  toggleSidebar } = useSidebar();
+    const { isConnected } = useWebSocket();
     
     return (
         <>
             <KeyboardShortcut keys={["meta", "j"]} callback={() => setSearchOpen(true)} />
+            <MultiStepLoader loadingStates={loadingStates} loading={isGeneratingNote} duration={2000} loop={false}/>
             <div className="sticky top-0 z-40 flex items-center justify-between px-4 py-2  backdrop-blur-md">
                 {isCollapsed ?
                     <div className="rounded-full p-2 hover:bg-primary-container hover:text-on-primary-container" onClick={toggleSidebar}>
@@ -35,10 +55,18 @@ export default function TopBar() {
                                     Search <span className="hidden xl:inline-block">Notes</span>
                                 </span>
                             </button>
-                            <TopBarAddNew/>
+                            <div className="flex items-center gap-2">
+                                <TopBarAddNew/>
+                                <NoteGeneratorDialog/>
+                            </div>
                         </div>
-                        <div className="flex">
+                        <div className="flex items-center gap-2">
                             <ModeToggle/>
+                            <div
+                                className={cn("rounded-full p-1 max-h-[1px]",
+                                    `${isConnected ? "bg-green-500" : "bg-red-500"}`
+                            )}
+                            />
                         </div>
                     </>
                 ) : (

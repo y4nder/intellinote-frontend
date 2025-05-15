@@ -12,6 +12,7 @@ import { addChatMessage, setChatCollapsed, setLoading, toggleChat } from "@/redu
 import ChatMessageContainer from "./ChatMessageContainer";
 import { PromptContext, useSendChatMessage } from "@/service/nora/chat/send-chat-message";
 import { useThreadManager } from "@/service/nora/chat/chat-thread-manager";
+import { useAgentStepUpdateSocket } from "@/hooks/sockets";
 
 export default function ChatPanel() {
   const isMobile = useIsMobile();
@@ -71,6 +72,20 @@ export default function ChatPanel() {
       setNewChatMessage("");
     }
   };
+
+  useAgentStepUpdateSocket((notification) => {
+    dispatch(setLoading(false));
+    const noraMessage: ChatMessage = {
+      id: new Date().toISOString() + "_" + Math.random().toString(),
+      content: notification.message,
+      isUser: false,
+      timestamp: new Date().toISOString(),
+      type: "step"
+    };
+    dispatch(setLoading(false));
+    dispatch(addChatMessage(noraMessage))
+    dispatch(setLoading(true));
+  });
 
   const handleAddMessage = (message: string, isUser: boolean) => {
     const newMessage: ChatMessage = {

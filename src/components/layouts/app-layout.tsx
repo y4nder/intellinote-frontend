@@ -6,14 +6,17 @@ import { toast } from "react-toastify";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import PillNotification from "../notification/pill-notification";
+import { useTheme } from "@/providers/theme";
 
 const AppLayout = ({ children }: PropsWithChildren) => {
   const { selectedNote } = useSelector((state: RootState) => state.folderNotes);
+  const {getTheme} = useTheme();
+  const isDark = getTheme() === "dark";
   
 
   // todo change to proper standard socket
   useStandardNotificationSocket((notification) => {
-    console.log("global notif:", notification, "selected:", selectedNote);
+    console.log("global notif:", notification.id, "selected:", selectedNote?.id);
     if(selectedNote?.id !== notification.id){
       toast(      
         <CoolNotification
@@ -24,7 +27,9 @@ const AppLayout = ({ children }: PropsWithChildren) => {
           id={notification.id}
         />,{
         autoClose: 8000,
-        position: 'bottom-center'
+        className:"bg-surface",
+        position: 'bottom-center',
+        theme: isDark ? "dark" : "light"
       })
     } else {
       console.log("skipped global notif")
@@ -33,14 +38,15 @@ const AppLayout = ({ children }: PropsWithChildren) => {
 
   useNotificationSocket((notification) => {
     toast(PillNotification, {
-        className: 'p-0 w-[30px] border flex items-center gap-3 rounded-full bg-red-500 px-4 py-2 shadow-md border border-zinc-200 text-sm',
+        className: 'p-0 min-w-[200px] flex items-center gap-3 rounded-full px-4 py-2 shadow-md text-sm',
         data: {
           message: notification.message,
           milliSeconds: 1
         },
-        autoClose: 3000,
+        autoClose: 1000,
         closeButton:false,
-        position: 'bottom-center',
+        position: 'bottom-left',
+        theme: isDark ? "dark" : "light",
     });
     
   })

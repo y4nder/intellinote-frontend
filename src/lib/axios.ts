@@ -70,18 +70,8 @@ api.interceptors.response.use(
 
         // const { token_type, access_token } = authCredentials;
         // console.log("refreshing with", access_token);
-        const response = await Axios.post<SignInResponse>(
-        `${baseURL}/api/auth/signin/refresh`,
-          {},
-          {
-            // headers: {
-            //   Authorization: `${token_type} ${access_token}`,
-            //   'Content-Type': 'application/json',
-            // },
-            withCredentials: true
-          }
-        );
-        StoreKey(response.data);
+        await tokenRefresh();
+        
         processQueue(null);
 
         // Retry original request after successful refresh
@@ -97,3 +87,14 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const tokenRefresh = async () : Promise<void>  => {
+  const response = await Axios.post<SignInResponse>(
+    `${baseURL}/api/auth/signin/refresh`,
+      {},
+      {
+        withCredentials: true
+      }
+  );
+  StoreKey(response.data);
+}

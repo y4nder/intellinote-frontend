@@ -6,6 +6,7 @@ import SavingIndicator from "@/components/ui/saving-indicator";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "@/providers/sidebar";
+import { useWebSocket } from "@/providers/socketProvider";
 import { Search, SidebarOpenIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -15,6 +16,7 @@ export default function NoteTopBar() {
   const { isCollapsed, toggleSidebar } = useSidebar();
   const [searchOpen, setSearchOpen] = useState(false)
   const isMobile = useIsMobile();
+  const {isConnected} = useWebSocket();
 
   return (
     <div className="sticky top-0 z-10 backdrop-blur-md mb-4 flex items-center justify-between gap-4 px-3 pt-4">
@@ -46,8 +48,13 @@ export default function NoteTopBar() {
             </button>
             <TopBarAddNew/>
             {!isMobile && (
-              <div className="ml-4">
-                <ModeToggle/>                        
+              <div className="ml-4 flex items-center gap-4">
+                <ModeToggle/>     
+                <div
+                    className={cn("rounded-full p-1 max-h-[1px]",
+                        `${isConnected ? "bg-green-500" : "bg-red-500"}`
+                )}
+                />                   
               </div>
             )}
           </div>

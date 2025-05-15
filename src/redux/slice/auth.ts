@@ -1,4 +1,4 @@
-import { StoreKey } from "@/lib/local-stores";
+import { RemoveKey, StoreKey } from "@/lib/local-stores";
 import { SignInResponse } from "@/service/auth/login";
 import { User } from "@/types/user";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -25,7 +25,9 @@ export const authSlice = createSlice({
             state.user = action.payload;
         },
         logoutUser: (state) => {
+            RemoveKey();
             state.user = null;
+            state.auth = null;
         }
     }
 })

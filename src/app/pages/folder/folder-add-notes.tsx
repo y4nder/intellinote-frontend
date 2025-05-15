@@ -85,7 +85,7 @@ export default function AddNotesDialog() {
     <>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger
-          className="flex items-center px-3 py-1 gap-1 text-xs rounded-2xl bg-primary-hard/50 hover:bg-primary-hard/80 font-bold"
+          className="flex items-center px-3 py-1 gap-1 text-xs rounded-2xl bg-primary-hard/50 hover:bg-primary-hard/80 font-bold hover:-translate-y-0.5 transition-transform cursor-pointer"
           onClick={() => setIsDialogOpen(true)}
         >
           <Plus width={16} />

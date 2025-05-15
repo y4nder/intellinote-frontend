@@ -12,6 +12,7 @@ selectedFolder: Folder | null;
     searchQuery: string;
     isQuerying: boolean;
     isSaving: boolean;
+    isGeneratingNote: boolean;
 }
 
 const initialState: FolderNoteState = {
@@ -22,7 +23,8 @@ const initialState: FolderNoteState = {
     selectedFolder: null,
     searchQuery: "",
     isQuerying: false,
-    isSaving: false
+    isSaving: false,
+    isGeneratingNote: false
 };
 
 const folderNoteSlice = createSlice({
@@ -194,6 +196,14 @@ const folderNoteSlice = createSlice({
                 state.selectedNote.keywords = action.payload.keywords;
                 state.selectedNote.topics = action.payload.topics;
             }
+        },
+        setMindMap : (state, action : PayloadAction<string>) => {
+            if(state.selectedNote){
+                state.selectedNote.mindmap = action.payload;
+            }
+        },
+        setIsGeneratingNote : (state, action: PayloadAction<boolean>) => {
+            state.isGeneratingNote = action.payload
         }
     }
 })
@@ -215,7 +225,9 @@ export const {
     removeNote,
     removeNoteFromFolder,
     addNoteToFolder,
-    setNoteFolder
+    setNoteFolder,
+    setMindMap,
+    setIsGeneratingNote
 } = folderNoteSlice.actions;
 
 export default folderNoteSlice.reducer;

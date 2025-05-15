@@ -13,7 +13,7 @@ export default function SavingIndicator() {
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -10 }}
-                className="flex items-center gap-1 text-sm text-muted-foreground"
+                className="flex items-center gap-1 text-sm text-primary"
             >
                 <Loader2 className="w-4 h-4 animate-spin" />
                 <span>Saving...</span>
@@ -24,7 +24,7 @@ export default function SavingIndicator() {
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -10 }}
-                className="flex items-center gap-1 text-sm text-green-600"
+                className="flex items-center gap-1 text-sm text-green-600 dark:text-green-400"
             >
                 <CheckCircle className="w-4 h-4" />
                 <span>Saved</span>

@@ -15,13 +15,14 @@ import { PageLoadingProgress } from "@/components/ui/page-loading-progress";
 import NoteHeader from "./note-header";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useUpdateNote } from "@/service/notes/update-note";
-import { useNotifyEmbeddingDoneSocket, useSummarizerSocket} from "@/hooks/sockets";
+import { useNotifyEmbeddingDoneSocket, useSummarizerFailedSocket, useSummarizerSocket} from "@/hooks/sockets";
 import { toast } from "react-toastify";
 import PillNotification from "@/components/notification/pill-notification";
 import ScrollTooltip from "@/components/ui/scroll-tooltip";
 import { useQueryClient } from "@tanstack/react-query";
 import { useThreadManager } from "@/service/nora/chat/chat-thread-manager";
 import { setChatThreadId } from "@/redux/slice/chat-agent";
+import { useTheme } from "@/providers/theme";
 
 
 export default function NoteEditor() {
@@ -36,10 +37,12 @@ export default function NoteEditor() {
     const [blocks, setBlocks] = useState<Block[] | undefined>(undefined);
     const {mutate} = useUpdateNote();
     const { getThreadId } = useThreadManager();
+    const { getTheme } = useTheme();
+    const isDark = getTheme() === "dark";
 
     useNotifyEmbeddingDoneSocket((notification) => {
       toast(PillNotification, {
-          className: 'p-0 w-[30px] border flex items-center gap-3 rounded-full bg-red-500 px-4 py-2 shadow-md border border-zinc-200 text-sm',
+          className: 'p-0 w-[500px] flex items-center gap-3 rounded-full px-4 py-2 shadow-md text-sm',
           data: {
             message: notification.message,
             milliSeconds: notification.milleSeconds
@@ -47,12 +50,13 @@ export default function NoteEditor() {
           autoClose: 3000,
           closeButton:false,
           position: 'bottom-center',
+          theme : isDark ? "dark" : "light"
       });
     })
 
     useSummarizerSocket((notification) => {
       toast(PillNotification, {
-          className: 'p-0 w-[30px] border flex items-center gap-3 rounded-full bg-red-500 px-4 py-2 shadow-md border border-zinc-200 text-sm',
+          className: 'p-0 w-[500px] flex items-center gap-3 rounded-full px-4 py-2 shadow-md text-sm',
           data: {
             message: `${notification.name} was summarized`,
             milliSeconds: notification.milleSeconds
@@ -60,6 +64,21 @@ export default function NoteEditor() {
           autoClose: 3000,
           closeButton:false,
           position: 'bottom-center',
+          theme : isDark ? "dark" : "light"
+      });
+    })
+
+    useSummarizerFailedSocket((notification) => {
+      toast(PillNotification, {
+        className: 'p-0 w-[500px] flex items-center gap-3 rounded-full px-4 py-2 shadow-md text-sm',
+        data: {
+          message: `${notification.message}`,
+          milliSeconds: notification.milleSeconds
+        },
+        autoClose: 3000,
+        closeButton:false,
+        position: 'bottom-center',
+        theme : isDark ? "dark" : "light"
       });
     })
 
@@ -81,7 +100,7 @@ export default function NoteEditor() {
           dispatch(setIsSaving(false));
         },
       })
-    }, [dispatch, id, mutate]), 3000);
+    }, [dispatch, id, mutate]), 1500);
 
     useEffect(() => {
       if (!data?.note) return;

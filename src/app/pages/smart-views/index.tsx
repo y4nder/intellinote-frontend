@@ -42,9 +42,9 @@ export default function SmartViewsPage() {
           {/* Background Illustration Blobs */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 pointer-events-none"
+            className="absolute inset-0 pointer-events-none bg-background"
           >
-            <div className="absolute -top-10 -left-20 w-[600px] h-[600px] bg-gradient-to-br from-primary/30 to-surface-container-high/20 rounded-full blur-3xl opacity-40"></div>
+            <div className="absolute -top-10 -left-20 w-[600px] h-[600px] dark:bg-gradient-to-br dark:from-primary/30 dark:to-surface-container-high/20 rounded-full blur-3xl opacity-40 dark:bg-fuchsia-400/10"></div>
             <div className="absolute -bottom-20 -right-10 w-[400px] h-[400px] bg-gradient-to-tr from-secondary/20 to-primary/10 rounded-full blur-2xl opacity-30"></div>
           </div>
       

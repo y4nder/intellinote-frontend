@@ -75,6 +75,23 @@ export const useSummarizerSocket = (onNotification: (notification: SummarizerMes
   }, [on, off, onNotification]);
 };
 
+export interface SummarizationFailedMessage {
+  id: string;
+  message: string;
+  dateTime: string;
+  milleSeconds: number;
+}
+
+export const useSummarizerFailedSocket = (onNotification: (notification: SummarizationFailedMessage) => void) => {
+  const message = "NotifyGenerationFailed";
+  const { on, off } = useWebSocket();
+  useEffect(() => {
+    on(message, onNotification);
+    return () => off(message, onNotification);
+  }, [on, off, onNotification]);
+};
+
+
 export const useSummarizerSocketMocked = (onNotification: (notification: SummarizerMessage) => void) => {
     useEffect(() => {
       startConnection().then(() => {
@@ -103,3 +120,17 @@ export const useFolderUpdateDoneSocket = (onNotification: (notification: FolderU
     return () => off(message, onNotification);
   }, [on, off, onNotification]);
 };
+
+export interface AgentStepMessage {
+  message: string;
+}
+
+export const useAgentStepUpdateSocket = (onNotification: (notification: AgentStepMessage) => void) => {
+  const message = "NotifyAgentStep";
+  const { on, off } = useWebSocket();
+  useEffect(() => {
+    on(message, onNotification);
+    return () => off(message, onNotification);
+  }, [on, off, onNotification]);
+};
+

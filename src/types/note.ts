@@ -16,6 +16,7 @@ export interface Note {
     keywords: string[];
     topics: string[];
     snippet?: BlockSnippet | null;
+    mindmap? : string | null;
 }
 
 export interface BlockSnippet {

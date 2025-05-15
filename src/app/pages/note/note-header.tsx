@@ -10,14 +10,15 @@ import { useUpdateNote } from "@/service/notes/update-note";
 import { useNavigate, useParams } from "react-router-dom";
 import { cn, extractIdFromSlug } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Loader2, PenIcon, NotebookIcon, BotMessageSquareIcon, FolderIcon } from "lucide-react";
+import { Loader2, PenIcon, BotMessageSquareIcon, FolderIcon } from "lucide-react";
 import NoteSummaryLoading from "../home/skeletons/note-generating-loader";
-import { useSummarizerSocket} from "@/hooks/sockets";
+import { useSummarizerFailedSocket, useSummarizerSocket} from "@/hooks/sockets";
 import { useSummarizeNote } from "@/service/notes/summarize-note";
 import NoteHeaderUpdateFolderButton from "./note-header-update-folder-button";
 import NoteHeaderAutoAssignButton from "./note-header-auto-assign-button";
 import { queryClient } from "@/lib/react-query";
 import { toggleChat } from "@/redux/slice/chat-agent";
+import MindMapModal from "./mindmap-modal";
 
 const TOPIC_DISPLAY_LIMIT = 4;
 
@@ -51,6 +52,13 @@ export default function NoteHeader() {
           dispatch(setSummarized(response));
           setIsSummarizing(false);
           queryClient.invalidateQueries({queryKey:["user-notes"]})
+        }
+    })
+
+    useSummarizerFailedSocket((notification) => {
+        console.log("failed notif ", notification);
+        if(notification.id === selectedNote!.id){
+          setIsSummarizing(false);
         }
     })
 
@@ -223,10 +231,7 @@ export default function NoteHeader() {
                 </>
               }
             </Button>
-            <Button className="text-xs rounded-2xl bg-red-400 hover:bg-red-600 font-bold">
-              <NotebookIcon/>
-              Create Study Set
-            </Button>
+              <MindMapModal/>
             <Button className="text-xs rounded-2xl text-on-primary cursor-pointer hover:-translate-y-0.5 transition-transform"
               onClick={() => {
                 dispatch(toggleChat());

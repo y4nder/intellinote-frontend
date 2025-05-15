@@ -4,7 +4,6 @@ import { cn, gradientsCombos } from "@/lib/utils";
 import { 
   Home, 
   Folder, 
-  Settings,
   SidebarCloseIcon,
   Triangle,
   View,
@@ -14,6 +13,11 @@ import { useSidebar } from "@/providers/sidebar";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import SettingsPage from "@/app/pages/settings";
+import { Button } from "../ui/button";
+import PillNotification from "../notification/pill-notification";
+import { toast } from "react-toastify";
+import { useTheme } from "@/providers/theme";
 // import { Button } from "../ui/button";
 // import { toast } from "react-toastify";
 // import PillNotification from "../notification/pill-notification";
@@ -53,6 +57,8 @@ export function SidebarItem({ icon, label, to }: SidebarItemProps) {
 export default function Sidebar() {
   const {isCollapsed, toggleSidebar} = useSidebar();
   const {user} = useSelector((state: RootState) => state.auth);
+  const { getTheme } = useTheme();
+  const isDark = getTheme() === "dark";
 
   useEffect(() => {
     console.log("user: ", user);
@@ -61,18 +67,19 @@ export default function Sidebar() {
   
   const isMobile = useIsMobile();
   
-  // const notify = () => {
-  //   toast(PillNotification, {
-  //     className: 'p-0 w-[30px] border flex items-center gap-3 rounded-full px-4 py-2 shadow-md border border-zinc-200 text-sm',
-  //     data: {
-  //       message: 'Message Archived',
-  //       milliSeconds: 234
-  //     },
-  //     autoClose: 3000,
-  //     closeButton:false,
-  //     position: 'bottom-center',
-  //   });
-  // }
+  const notify = () => {
+    toast(PillNotification, {
+      className: 'p-0 w-[30px] flex items-center gap-3 rounded-full px-4 py-2 shadow-md text-sm',
+      data: {
+        message: 'Message Archived',
+        milliSeconds: 234
+      },
+      autoClose: 3000,
+      closeButton:false,
+      position: 'bottom-center',
+      theme: isDark ? "dark" : "light"
+    });
+  }
 
   return (
     <div className="relative h-full">
@@ -123,13 +130,13 @@ export default function Sidebar() {
             />
             <SidebarItem
               icon={<View className="h-5 w-5" />}
-              label="Perspectives" to={"/smart-views"}            
+              label="Perspectives" to={"/perspectives"}            
             />
           </ul>
         </nav>
 
         <div className="p-4">
-          <a
+          {/* <a
             href="#"
             className={cn(
               "flex items-center text-sm font-semibold hover:text-primary",
@@ -138,8 +145,9 @@ export default function Sidebar() {
           >
             <Settings className="dark:text-primary h-5 w-5" />
             {!isCollapsed && <span className="dark:text-primary ml-3">Settings</span>}
-          </a>
+          </a> */}
           {/* <Button className="mt-5" onClick={notify}>Notify !</Button> */}
+          <SettingsPage/>
         </div>
       </div>
     </div>

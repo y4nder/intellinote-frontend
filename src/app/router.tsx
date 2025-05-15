@@ -1,21 +1,21 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "@/components/layouts/main-layout";
-import { useMemo } from "react";
-import Login from "./pages/auth/login";
-import AuthRoot from "./pages/auth/root";
-import Signup from "./pages/auth/signup";
-import AppRoot from "./pages/root";
-import HomeLayout from "./pages/home";
-import Home from "./pages/home/home";
-import AllNotes from "./pages/home/all-notes";
-import Folders from "./pages/home/folders";
-import NoteEditor from "./pages/note";
+import { lazy, useMemo } from "react";
 import { ToastContainer } from "react-toastify";
 import { SlideDownBlur } from "@/lib/utils";
-import Folder from "./pages/folder";
-import SmartViewsPage from "./pages/smart-views";
-import ViewPage from "./pages/smart-views/view-page";
-// import AuthGuard from "@/components/auth/auth-guard";
+import AuthRoot from "./pages/auth/root";
+import AppRoot from "./pages/root";
+
+const Login = lazy(() => import("./pages/auth/login"));
+const Signup = lazy(() => import("./pages/auth/signup"));
+const Home = lazy(() => import("./pages/home/home"));
+const HomeLayout = lazy(() => import("./pages/home"));
+const AllNotes = lazy(() => import("./pages/home/all-notes"));
+const Folders = lazy(() => import("./pages/home/folders"));
+const NoteEditor = lazy(() => import("./pages/note"));
+const Folder = lazy(() => import("./pages/folder"));
+const SmartViewsPage = lazy(() => import("./pages/smart-views"));
+const ViewPage = lazy(() => import("./pages/smart-views/view-page"));
 
 
 const createAppRouter = () =>
@@ -67,7 +67,7 @@ const createAppRouter = () =>
                         element: <Folders />,
                       },
                       {
-                        path: "smart-views",
+                        path: "perspectives",
                         element: <SmartViewsPage/>
                       },
                       {
@@ -88,8 +88,9 @@ const createAppRouter = () =>
 
 
 export const AppRouter = () => {
-    const router = useMemo(() => createAppRouter(), []);
+  const router = useMemo(() => createAppRouter(), []);
 
-
-    return <RouterProvider  router={router}/>
-}
+  return (
+      <RouterProvider router={router} />
+  );
+};

@@ -15,6 +15,9 @@ import Banner from "./banner";
 import { BreadcrumbUi } from "@/components/ui/breadcrumb-ui";
 import { useThreadManager } from "@/service/nora/chat/chat-thread-manager";
 import { setChatThreadId } from "@/redux/slice/chat-agent";
+import { useTheme } from "@/providers/theme";
+import NoteList from "@/components/notelist/NoteList";
+import NoteListSkeleton from "./skeletons/note-list-skeleton";
 
 
 // Animation variants
@@ -47,6 +50,7 @@ export default function Home() {
     const {folders, recentNotes: notes, isQuerying} = useSelector((state: RootState) => state.folderNotes);
     const {isCollapsed} = useSelector((state: RootState) => state.chatAgent);
     const {isNoteGrid} = useSelector((state: RootState) => state.preference);
+    const { getTheme } = useTheme();
     const {data, isLoading} =  useGetUserNotes({
         skip: 0,
         take: 100
@@ -54,6 +58,9 @@ export default function Home() {
     const {getGlobalThread} = useThreadManager();
 
     const dispatch = useDispatch();
+
+    const currentTheme = getTheme()
+    const isDark = currentTheme === "dark"
 
     useEffect(() => {
         console.log("using note grid:", isNoteGrid)
@@ -85,8 +92,13 @@ export default function Home() {
         <div className="top-0 px-6 pb-6">
             {/* Banner Section */}
             <Banner 
-                imageUrl="https://w.wallhaven.cc/full/yq/wallhaven-yq761d.png" 
-                // height={240} 
+                // imageUrl="https://w.wallhaven.cc/full/yq/wallhaven-yq761d.png" 
+                imageUrl={
+                    isDark ? 
+                    "https://64.media.tumblr.com/0901013c2121ffe2b48a755080bf4523/c606e4a7979684c2-78/s1280x1920/e668408582fde369ac25cfa2fbec4451d66f9673.gif" :
+                    "https://i.pinimg.com/originals/50/0d/05/500d05bcbc3c80383458ee245122acb8.gif"
+                } 
+                height={240} 
                 title="Yander's workspace"
             />
             <div className=" pb-4">
@@ -120,23 +132,27 @@ export default function Home() {
                     <ViewToggle className="mr-2"/>
                 </div>
                 
-                {notes.length === 0 || isQuerying? (
-                    <NoteGridSkeleton/>
+                { notes.length === 0 || isQuerying ?   (
+                    isNoteGrid ? <NoteGridSkeleton /> : <NoteListSkeleton />
                 ): (
-                    <motion.div
-                        className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:grid-cols-5",
-                            `${!isCollapsed ? "xl:grid-cols-4" : ""}`
-                        )}
-                        variants={containerVariants}
-                        initial="hidden"
-                        animate="visible"
-                    >
-                        {notes.map((note: Note) => (
-                            <motion.div key={note.id} variants={itemVariants}>
-                                <NoteCard note={note} />
-                            </motion.div>
-                        ))}
-                    </motion.div>
+                    isNoteGrid ? (
+                        <motion.div
+                            className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:grid-cols-5",
+                                `${!isCollapsed ? "xl:grid-cols-4" : ""}`
+                            )}
+                            variants={containerVariants}
+                            initial="hidden"
+                            animate="visible"
+                        >
+                            {notes.map((note: Note) => (
+                                <motion.div key={note.id} variants={itemVariants}>
+                                    <NoteCard note={note} />
+                                </motion.div>
+                            ))}
+                        </motion.div>
+                    ) : (
+                        <NoteList notes={notes}/>
+                    )
                 )}
                 
             </div>

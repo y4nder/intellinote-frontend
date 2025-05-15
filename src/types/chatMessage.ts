@@ -1,4 +1,4 @@
-export type MessageType = "normal" | "loading";
+export type MessageType = "normal" | "loading" | "step";
 
 export interface ChatMessage {
   id: string;
