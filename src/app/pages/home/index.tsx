@@ -8,18 +8,12 @@ import { Outlet } from "react-router-dom";
 
 
 export default function HomeLayout() {
-    const {data: folderData, isLoading: isFolderLoading} = useGetUserFolders({
-        skip: 0,
-        take: 100
-    });
-
-    
-
+    const {data: folderData, isLoading: isFolderLoading} = useGetUserFolders({skip: 0,take: 100});
     const dispatch = useDispatch();
+    
     useEffect(() => {
         dispatch(setIsQuerying(isFolderLoading));
         if(folderData){
-            console.log("folders arrived");
             dispatch(setFolders(folderData.folders));
             dispatch(setIsQuerying(isFolderLoading));
         }

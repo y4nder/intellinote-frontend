@@ -1,5 +1,4 @@
 import { PropsWithChildren } from "react"
-// import { SearchDialog } from "../ui/search-dialog"
 import { useNotificationSocket, useStandardNotificationSocket} from "@/hooks/sockets"
 import CoolNotification from "../notification/cool-notification";
 import { toast } from "react-toastify";
@@ -14,7 +13,7 @@ const AppLayout = ({ children }: PropsWithChildren) => {
   const isDark = getTheme() === "dark";
   
 
-  // todo change to proper standard socket
+  // done change to proper standard socket
   useStandardNotificationSocket((notification) => {
     console.log("global notif:", notification.id, "selected:", selectedNote?.id);
     if(selectedNote?.id !== notification.id){
@@ -54,7 +53,6 @@ const AppLayout = ({ children }: PropsWithChildren) => {
   return (
     <div className="">
         <main>
-            {/* <SearchDialog/> */}
             {children}
         </main>
     </div>

@@ -11,7 +11,7 @@ import { addChatMessage, setChatCollapsed, setLoading, toggleChat } from "@/redu
 // import { mockResponses } from "@/data/mockData";
 import ChatMessageContainer from "./ChatMessageContainer";
 import { PromptContext, useSendChatMessage } from "@/service/nora/chat/send-chat-message";
-import { useThreadManager } from "@/service/nora/chat/chat-thread-manager";
+import { useThreadManager } from "@/lib/chat-thread-manager";
 import { useAgentStepUpdateSocket } from "@/hooks/sockets";
 
 export default function ChatPanel() {

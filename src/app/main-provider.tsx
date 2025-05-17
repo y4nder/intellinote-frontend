@@ -5,7 +5,6 @@ import { PropsWithChildren } from "react"
 import { Provider } from "react-redux";
 import { store } from "@/redux/store";
 import { SidebarProvider } from "@/providers/sidebar";
-import { SearchDialogProvider } from "@/providers/searchDialog";
 import { WebSocketProvider } from "@/providers/socketProvider";
 
 
@@ -14,13 +13,11 @@ const MainAppProvider = ({ children }: PropsWithChildren) => {
     <QueryClientProvider client={queryClient}>
       <WebSocketProvider>
         <Provider store={store}>
-          <SearchDialogProvider>
             <SidebarProvider>
               <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
                 {children}
               </ThemeProvider>
             </SidebarProvider>
-          </SearchDialogProvider>
         </Provider>
       </WebSocketProvider>
     </QueryClientProvider>

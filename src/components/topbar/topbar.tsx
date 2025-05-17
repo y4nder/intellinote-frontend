@@ -1,5 +1,4 @@
 import { Search, SidebarOpenIcon } from "lucide-react";
-// import { useSearchDialog } from "@/providers/searchDialog";
 import { useSidebar } from "@/providers/sidebar";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import TopBarAddNew from "./topbar-add-new";
@@ -13,7 +12,6 @@ import { NoteGeneratorDialog } from "../ui/note-generator-dialog";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { MultiStepLoader } from "../ui/multi-step-loader";
-
 
 
 const loadingStates = [
@@ -73,11 +71,11 @@ export default function TopBar() {
                     <div className="flex flex-row">
                         <button onClick={() => setSearchOpen(true)}
                                 className="flex items-center w-fit gap-2 rounded-3xl bg-white px-4 py-2 text-sm text-muted-foreground dark:border-white/20 dark:bg-brand h-12 hover:shadow-md transition-all duration-300 shadow-sm cursor-pointer"
-                            >
-                                <Search className="h-4 w-4 text-secondary" />
-                                <span className="text-secondary/50  sm:text-sm font-medium">
-                                    Search <span className="hidden xl:inline-block">Notes</span>
-                                </span>
+                        >
+                            <Search className="h-4 w-4 text-secondary" />
+                            <span className="text-secondary/50  sm:text-sm font-medium">
+                                Search <span className="hidden xl:inline-block">Notes</span>
+                            </span>
                         </button>
                         <TopBarAddNew/>                        
                     </div>

@@ -10,7 +10,7 @@ type NoteItemProps = {
 }
 
 export default function NoteItem({ note, isSelected, onToggleSelect }: NoteItemProps) {
-  // Format the date to show relative time (e.g., "2 days ago")
+  
   const formattedDate = note.updatedAt
     ? formatDistanceToNow(new Date(note.updatedAt), { addSuffix: true })
     : "Unknown date"

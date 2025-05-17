@@ -1,4 +1,3 @@
-import { connection, startConnection } from "@/lib/socket";
 import { useWebSocket } from "@/providers/socketProvider";
 import { useEffect } from "react";
 
@@ -91,18 +90,6 @@ export const useSummarizerFailedSocket = (onNotification: (notification: Summari
   }, [on, off, onNotification]);
 };
 
-
-export const useSummarizerSocketMocked = (onNotification: (notification: SummarizerMessage) => void) => {
-    useEffect(() => {
-      startConnection().then(() => {
-        connection.on("ManualDevNotify", onNotification);
-    });
-  
-    return () => {
-        connection.off("ManualDevNotify", onNotification);
-    };
-    }, [onNotification]);
-};
 
 export interface FolderUpdateDoneMessage {
   id: string;

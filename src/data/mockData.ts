@@ -5936,20 +5936,20 @@ export const sampleSocketGeneratedResponse : SummarizerMessage = {
   milleSeconds: 6707
 }
 
-export const mockScores : AssignNoteFolderResponse = {
-  "folder": [
-    {
-      "folderId": "284d7f45-5fb5-4564-b68b-b7fe8fe14952",
-      "folderName": "Computer Science Notes",
-      "score": 0.651205587387085
-    },
-    {
-      "folderId": "276959e3-0aed-4980-bfc2-ff571361e92c",
-      "folderName": "Medical Technology Notes",
-      "score": 0.6366117417812348
-    }
-  ]
-}
+// export const mockScores : AssignNoteFolderResponse = {
+//   "folder": [
+//     {
+//       "folderId": "284d7f45-5fb5-4564-b68b-b7fe8fe14952",
+//       "folderName": "Computer Science Notes",
+//       "score": 0.651205587387085
+//     },
+//     {
+//       "folderId": "276959e3-0aed-4980-bfc2-ff571361e92c",
+//       "folderName": "Medical Technology Notes",
+//       "score": 0.6366117417812348
+//     }
+//   ]
+// }
 
 export const mockChatResponses : PromptResponse[]  =  [
   {

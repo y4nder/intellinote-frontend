@@ -13,24 +13,7 @@ interface ViewsState {
 }
 
 const initialState : ViewsState = {
-    views: [
-        // {
-        //     id: '2025-05-12T19:37:21.190Z_0.2556326589033866',
-        //     name: 'Data Structures view',   
-        //     conditions: [
-        //       {
-        //         id: '1',
-        //         property: 'topics',
-        //         operator: 'contains',
-        //         value: [
-        //           'data structures',
-        //           'graph',
-        //           'data'
-        //         ]
-        //       }
-        //     ]
-        // }
-    ],
+    views: [],
     selectedView: null
 }
 

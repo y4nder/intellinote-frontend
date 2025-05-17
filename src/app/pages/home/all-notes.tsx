@@ -15,20 +15,21 @@ import NoteListSkeleton from "./skeletons/note-list-skeleton";
 import { AnimatePresence, motion } from "framer-motion";
 
 
-// Animation variants
-const containerVariants = {
-    hidden: {},
-    visible: {
-        transition: {
-        staggerChildren: 0.02
-        }
-    }
+const noteContainerVariants = {
+  hidden: {},
+  visible: {
+      transition: {
+      staggerChildren: 0.02
+      }
+  }
 };  
-  
-const cardVariants = {
+
+const noteCardVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 }
 };
+
+
 
 export default function AllNotes() {
     const {notes} = useSelector((state: RootState) => state.folderNotes);
@@ -46,10 +47,6 @@ export default function AllNotes() {
     });
 
     useEffect(() => {
-        if(isFetching){
-            console.log("Fetching notes...");
-        }
-
         dispatch(setSelectedNote(null));
         dispatch(setIsQuerying(isFetching || isLoadingNotes));
       
@@ -88,7 +85,7 @@ export default function AllNotes() {
                     "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:grid-cols-5",
                     `${!isCollapsed ? "xl:grid-cols-4 gap-4" : ""}`
                     )}
-                    variants={containerVariants}
+                    variants={noteContainerVariants}
                     initial="hidden"
                     animate="visible"
               >
@@ -96,7 +93,7 @@ export default function AllNotes() {
                   {notes.map((note: Note) => (
                     <motion.div
                       key={note.id}
-                      variants={cardVariants}
+                      variants={noteCardVariants}
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.3 }}
                     >

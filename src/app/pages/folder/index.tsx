@@ -10,27 +10,12 @@ import { useGetUserFolder } from "@/service/folders/get-user-folder"
 import { useParams } from "react-router-dom"
 import { setSelectedFolder, setSelectedNote} from "@/redux/slice/folder-note"
 import FolderPageHeader from "./folder-page-header"
-import { useThreadManager } from "@/service/nora/chat/chat-thread-manager"
+import { useThreadManager } from "@/lib/chat-thread-manager"
 import { setChatThreadId } from "@/redux/slice/chat-agent"
 import NoteListSkeleton from "../home/skeletons/note-list-skeleton"
 import NoteList from "@/components/notelist/NoteList"
+import { folderContainerVariants, folderItemVariants } from "./folder-animation-utils"
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 },
-  },
-}
-
-const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: { type: "spring", stiffness: 100 },
-  },
-}
 
 export default function FolderPage() {
   const { selectedFolder, isQuerying } = useSelector((state: RootState) => state.folderNotes)
@@ -51,11 +36,9 @@ export default function FolderPage() {
   useEffect(() => {
     const threadId = getThreadId(id!);
     if(threadId){
-      console.log("thread id:", threadId);
       dispatch(setChatThreadId(threadId));
     }
     else {
-      console.log("no thread id");
       dispatch(setChatThreadId(undefined));
     }
     dispatch(setSelectedNote(null));
@@ -110,7 +93,7 @@ export default function FolderPage() {
         ) : isNoteGrid ? (
           <motion.div
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-            variants={containerVariants}
+            variants={folderContainerVariants}
             initial="hidden"
             animate="visible"
           >
@@ -122,7 +105,7 @@ export default function FolderPage() {
                 return new Date(note.updatedAt!) >= sevenDaysAgo;
               })
               .map((note) => (
-                <motion.div key={note.id} variants={itemVariants}>
+                <motion.div key={note.id} variants={folderItemVariants}>
                   <NoteCard note={note} />
                 </motion.div>
               ))}

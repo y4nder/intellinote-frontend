@@ -1,11 +1,4 @@
-import {
-    createContext,
-    useContext,
-    useEffect,
-    useRef,
-    ReactNode,
-    useCallback,
-  } from "react";
+import {createContext,useContext,useEffect,useRef,ReactNode,useCallback} from "react";
 import * as signalR from "@microsoft/signalr";
 import { GetAuthKey } from "@/lib/local-stores";
 import { useState } from "react";
@@ -19,10 +12,13 @@ type WebSocketContextType = {
 };
   
 const WebSocketContext = createContext<WebSocketContextType | null>(null);
+
+const baseURL = import.meta.env.VITE_API_BASE_URL as string;
+const socketEndpoint = import.meta.env.VITE_SOCKET_ENDPOINT as string;
   
 // Set up the connection
 const connection = new signalR.HubConnectionBuilder()
-  .withUrl("https://localhost:7050/note-hub", {
+  .withUrl(`${baseURL}/${socketEndpoint}`, {
     accessTokenFactory: () => GetAuthKey()?.access_token!,
   })
   .configureLogging(signalR.LogLevel.Information)
