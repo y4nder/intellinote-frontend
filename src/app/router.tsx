@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { SlideDownBlur } from "@/lib/utils";
 import AuthRoot from "./pages/auth/root";
 import AppRoot from "./pages/root";
+import RecycleBinPage from "./pages/recycle-bin";
 
 const Login = lazy(() => import("./pages/auth/login"));
 const Signup = lazy(() => import("./pages/auth/signup"));
@@ -73,6 +74,10 @@ const createAppRouter = () =>
                       {
                         path: "view/:viewId",
                         element: <ViewPage/>
+                      },
+                      {
+                        path: "recycled",
+                        element : <RecycleBinPage/>
                       }  
                     ],
                   },

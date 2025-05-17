@@ -8,7 +8,7 @@ interface FolderNoteState {
     notes: Note[];
     folders: Folder[];
     selectedNote: Note | null;
-selectedFolder: Folder | null;
+    selectedFolder: Folder | null;
     searchQuery: string;
     isQuerying: boolean;
     isSaving: boolean;

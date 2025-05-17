@@ -92,10 +92,9 @@ export default function Home() {
         <div className="top-0 px-6 pb-6">
             {/* Banner Section */}
             <Banner 
-                // imageUrl="https://w.wallhaven.cc/full/yq/wallhaven-yq761d.png" 
                 imageUrl={
                     isDark ? 
-                    "https://64.media.tumblr.com/0901013c2121ffe2b48a755080bf4523/c606e4a7979684c2-78/s1280x1920/e668408582fde369ac25cfa2fbec4451d66f9673.gif" :
+                    "https://i.pinimg.com/originals/eb/cc/2b/ebcc2bbe06889c7b104786ea1a189622.gif":
                     "https://i.pinimg.com/originals/50/0d/05/500d05bcbc3c80383458ee245122acb8.gif"
                 } 
                 height={240} 

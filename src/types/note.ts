@@ -17,6 +17,7 @@ export interface Note {
     topics: string[];
     snippet?: BlockSnippet | null;
     mindmap? : string | null;
+    isDeleted: boolean
 }
 
 export interface BlockSnippet {

@@ -11,10 +11,10 @@ export default function NoteListSkeleton() {
               className="border-b border-primary-container/20 hover:bg-surface-container/30 transition-colors"
             >
               {/* Title cell */}
-              <td className="py-4 px-4">
+              <td className="py-4 px-4 w-[220px]">
                 <div className="flex items-center gap-2">
                   <Skeleton className="bg-on-surface/50 h-4 w-4 rounded" />
-                  <Skeleton className="bg-on-surface/50 h-4 w-[120px]" />
+                  <Skeleton className="bg-on-surface/50 h-4 w-[220px]" />
                 </div>
               </td>
 

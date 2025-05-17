@@ -12,7 +12,23 @@ import ViewToggle from "@/components/ui/view-toggle";
 import { BreadcrumbUi } from "@/components/ui/breadcrumb-ui";
 import NoteList from "@/components/notelist/NoteList";
 import NoteListSkeleton from "./skeletons/note-list-skeleton";
+import { AnimatePresence, motion } from "framer-motion";
 
+
+// Animation variants
+const containerVariants = {
+    hidden: {},
+    visible: {
+        transition: {
+        staggerChildren: 0.02
+        }
+    }
+};  
+  
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
+};
 
 export default function AllNotes() {
     const {notes} = useSelector((state: RootState) => state.folderNotes);
@@ -67,24 +83,45 @@ export default function AllNotes() {
 
         {isNoteGrid ? 
             (
-                <div 
+                <motion.div
                     className={cn(
-                        "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:grid-cols-5",
-                        `${!isCollapsed ? "xl:grid-cols-4 gap-4" : ""}`
+                    "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:grid-cols-5",
+                    `${!isCollapsed ? "xl:grid-cols-4 gap-4" : ""}`
                     )}
-                >
-                    {notes.map((note: Note) => (
-                        <NoteCard key={note.id} note={note} />
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+              >
+                <AnimatePresence>
+                  {notes.map((note: Note) => (
+                    <motion.div
+                      key={note.id}
+                      variants={cardVariants}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <NoteCard note={note} />
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+            
+                {isFetching && (
+                  <>
+                    {Array.from({ length: 10 }).map((_, index) => (
+                      <motion.div
+                        key={`skeleton-${index}`}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: index * 0.03 }}
+                      >
+                        <NoteCardSkeleton />
+                      </motion.div>
                     ))}
-                    {isFetching && (
-                        <>
-                            {Array.from({ length: 10 }).map((_, index) => (
-                                <NoteCardSkeleton key={index} />
-                            ))}
-                        </>
-                    )}
-                    <div ref={ref} />
-                </div>
+                  </>
+                )}
+            
+                <div ref={ref} />
+              </motion.div>
             ):
             (
                 <>
