@@ -20,12 +20,14 @@ export default function NoteCard({ note }: NoteCardProps) {
 
   
   const handleNavigation = () => {
+    if(note.isDeleted) return;
     dispatch(setSelectedNote(note));
     const noteId = `${note.title.toLowerCase().replace(/\s+/g, "-")}-${note.id}`;
     navigate(`/Note/${noteId}`);
   };
 
   const handleFolderNavigation = () => {
+      if(note.isDeleted) return;
       if(!note.folder) return;
       const folder = folders.find(f => f.id === note.folder?.id);
       dispatch(setSelectedFolder(folder!));

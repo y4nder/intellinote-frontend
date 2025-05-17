@@ -12,17 +12,21 @@ import AddToFolderModal from "@/components/modals/folder-add-note-item";
 import { Folder } from "@/types/folder";
 import { useUpdateFolderAction } from "@/service/folders/add-notes-to-folder";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSoftDelete } from "@/service/notes/soft-delete-note";
+import { useRestoreNote } from "@/service/notes/restore-note";
 
 type NoteCarDropDownProps = {
     note: Note  
-}
+};
 
 type ModalTypes = "add to folder" | "remove from folder" | "delete note" | null;
 
 export default function NoteCardDropDown({note} : NoteCarDropDownProps) {
     const dispatch = useDispatch();
     const { mutate: updateFolder } = useUpdateFolderAction();
+    const {mutate: softDelete } = useSoftDelete();
     const queryClient = useQueryClient();
+    const { mutate: restoreNote } = useRestoreNote();
 
     const handleClick = (e: React.MouseEvent) => {
         e.stopPropagation(); 
@@ -41,9 +45,17 @@ export default function NoteCardDropDown({note} : NoteCarDropDownProps) {
 
 
     const handleConfirmDelete = () => {
-        dispatch(removeNote(note));
-        setIsModalOpen(false);
-        //todo add persistence
+        softDelete({
+            noteId: note.id
+        },{
+            onSuccess: () => {
+                dispatch(removeNote(note));
+                setIsModalOpen(false);
+                queryClient.invalidateQueries({
+                    queryKey: ["user-notes"]
+                });
+            }
+        })
     }
 
     const handleConfirmRemoveFromFolder = () => {
@@ -82,6 +94,19 @@ export default function NoteCardDropDown({note} : NoteCarDropDownProps) {
         });
     }
 
+    const handlRestoreNote = () => {
+        if(!note.isDeleted) return;
+        restoreNote({
+            noteId: note.id
+        }, {
+            onSuccess: () => {
+                queryClient.invalidateQueries({
+                    queryKey: ["user-notes"]
+                });
+            }
+        })
+    }
+
 
     return (
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -94,29 +119,41 @@ export default function NoteCardDropDown({note} : NoteCarDropDownProps) {
                 <DropdownMenuContent className="w-fit px-2" onClick={handleClick}>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup className="flex flex-col text-on-background">
+                        {!note.isDeleted && (
+                            <DialogTrigger>
+                                <DropdownMenuItem disabled={note.folder !== null}
+                                    onClick={() => handleChangeModalType("add to folder")}
+                                >
+                                    <PlusIcon/>
+                                    Add to Folder
+                                </DropdownMenuItem>
+                            </DialogTrigger>
+                        )}
+                        {!note.isDeleted && (
+                            <DialogTrigger>
+                                <DropdownMenuItem disabled={note.folder === null}
+                                    onClick={() => handleChangeModalType("remove from folder")}
+                                >
+                                    <LucideFolderArchive/>
+                                    Remove from Folder
+                                </DropdownMenuItem>
+                            </DialogTrigger>
+                        )}
                         <DialogTrigger>
-                            <DropdownMenuItem disabled={note.folder !== null}
-                                onClick={() => handleChangeModalType("add to folder")}
-                            >
-                                <PlusIcon/>
-                                Add to Folder
-                            </DropdownMenuItem>
-                        </DialogTrigger>
-                        <DialogTrigger>
-                            <DropdownMenuItem disabled={note.folder === null}
-                                onClick={() => handleChangeModalType("remove from folder")}
-                            >
-                                <LucideFolderArchive/>
-                                Remove from Folder
-                            </DropdownMenuItem>
-                        </DialogTrigger>
-                        <DialogTrigger>
+                            {note.isDeleted ? (
                             <DropdownMenuItem className="text-red-500"
-                                onClick={() => handleChangeModalType("delete note")}
+                            onClick={handlRestoreNote}
                             >
-                                <Trash2Icon/>
-                                Delete Note
+                                Restore
                             </DropdownMenuItem>
+                            ): (
+                                <DropdownMenuItem className="text-red-500"
+                                    onClick={() => handleChangeModalType("delete note")}
+                                >
+                                    <Trash2Icon/>
+                                    Delete Note
+                                </DropdownMenuItem>
+                            )}
                         </DialogTrigger>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />

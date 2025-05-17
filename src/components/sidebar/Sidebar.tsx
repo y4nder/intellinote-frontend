@@ -7,6 +7,7 @@ import {
   SidebarCloseIcon,
   Triangle,
   View,
+  Trash,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { useSidebar } from "@/providers/sidebar";
@@ -14,10 +15,9 @@ import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import SettingsPage from "@/app/pages/settings";
-import { Button } from "../ui/button";
-import PillNotification from "../notification/pill-notification";
-import { toast } from "react-toastify";
-import { useTheme } from "@/providers/theme";
+// import PillNotification from "../notification/pill-notification";
+// import { toast } from "react-toastify";
+// import { useTheme } from "@/providers/theme";
 // import { Button } from "../ui/button";
 // import { toast } from "react-toastify";
 // import PillNotification from "../notification/pill-notification";
@@ -57,8 +57,8 @@ export function SidebarItem({ icon, label, to }: SidebarItemProps) {
 export default function Sidebar() {
   const {isCollapsed, toggleSidebar} = useSidebar();
   const {user} = useSelector((state: RootState) => state.auth);
-  const { getTheme } = useTheme();
-  const isDark = getTheme() === "dark";
+  // const { getTheme } = useTheme();
+  // const isDark = getTheme() === "dark";
 
   useEffect(() => {
     console.log("user: ", user);
@@ -67,19 +67,19 @@ export default function Sidebar() {
   
   const isMobile = useIsMobile();
   
-  const notify = () => {
-    toast(PillNotification, {
-      className: 'p-0 w-[30px] flex items-center gap-3 rounded-full px-4 py-2 shadow-md text-sm',
-      data: {
-        message: 'Message Archived',
-        milliSeconds: 234
-      },
-      autoClose: 3000,
-      closeButton:false,
-      position: 'bottom-center',
-      theme: isDark ? "dark" : "light"
-    });
-  }
+  // const notify = () => {
+  //   toast(PillNotification, {
+  //     className: 'p-0 w-[30px] flex items-center gap-3 rounded-full px-4 py-2 shadow-md text-sm',
+  //     data: {
+  //       message: 'Message Archived',
+  //       milliSeconds: 234
+  //     },
+  //     autoClose: 3000,
+  //     closeButton:false,
+  //     position: 'bottom-center',
+  //     theme: isDark ? "dark" : "light"
+  //   });
+  // }
 
   return (
     <div className="relative h-full">
@@ -131,6 +131,10 @@ export default function Sidebar() {
             <SidebarItem
               icon={<View className="h-5 w-5" />}
               label="Perspectives" to={"/perspectives"}            
+            />
+            <SidebarItem
+              icon={<Trash className="h-5 w-5" />}
+              label="Recycle Bin" to={"/recycled"}            
             />
           </ul>
         </nav>

@@ -72,9 +72,7 @@ const Login = () => {
                 Intellinote
               </TypingAnimation>
               <TypingAnimation className="max-w-lg text-xs md:text-sm opacity-90 mt-2 md:mt-4 font-normal" as="p" duration={10}>
-                smart note-taking app powered by AI that helps you organize your thoughts effortlessly. Using intelligent
-                keyword detection and automatic folder categorization, IntelliNote instantly sorts your notes into relevant
-                topics as you type.
+                Take notes, brainstorm, or journal freely — IntelliNote uses advanced AI to detect keywords and understand topics as you write. Your thoughts are instantly sorted into the right folders, so you stay organized without lifting a finger.
               </TypingAnimation>
             </div>
           </div>

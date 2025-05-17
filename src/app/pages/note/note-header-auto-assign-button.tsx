@@ -202,7 +202,7 @@ export default function NoteHeaderAutoAssignButton() {
                 ) : toCreateFolder ? (
                   <Button
                     onClick={handleCreateAutoAssignNote}
-                    className="rounded-md bg-green-600 dark:bg-green-800 px-4 py-2 text-sm font-medium text-on-surface cursor-pointer hover:bg-green-700"
+                    className="rounded-md bg-green-600 dark:bg-green-800 px-4 py-2 text-sm font-medium text-white cursor-pointer hover:bg-green-700"
                   >
                     Create Folder & Assign
                   </Button>

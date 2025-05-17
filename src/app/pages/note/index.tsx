@@ -100,7 +100,7 @@ export default function NoteEditor() {
           dispatch(setIsSaving(false));
         },
       })
-    }, [dispatch, id, mutate]), 1500);
+    }, [dispatch, id, mutate]), 1800);
 
     useEffect(() => {
       if (!data?.note) return;
