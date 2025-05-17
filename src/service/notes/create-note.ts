@@ -13,15 +13,6 @@ export interface CreateNoteResponse {
 }
 
 const createNote = async(payload: CreateNoteRequest) : Promise<Note> => {
-    // return new Promise((resolve) => {
-    //     setTimeout(() => {
-    //         console.log("mocking create note with ", payload.title);
-    //         const response : CreateNoteResponse = {
-    //             note: mockedCreatedNote
-    //         };
-    //         resolve(response.note);
-    //     }, 300 * Math.random())
-    // })
     const {title, content} = payload;
     const response = await api.post<CreateNoteResponse>("/api/notes", {
         title, content

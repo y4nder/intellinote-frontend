@@ -13,7 +13,7 @@ import ViewToggle from "@/components/ui/view-toggle";
 import { cn } from "@/lib/utils";
 import Banner from "./banner";
 import { BreadcrumbUi } from "@/components/ui/breadcrumb-ui";
-import { useThreadManager } from "@/service/nora/chat/chat-thread-manager";
+import { useThreadManager } from "@/lib/chat-thread-manager";
 import { setChatThreadId } from "@/redux/slice/chat-agent";
 import { useTheme } from "@/providers/theme";
 import NoteList from "@/components/notelist/NoteList";
@@ -155,8 +155,6 @@ export default function Home() {
                 )}
                 
             </div>
-
-
         </div>
     )
 }

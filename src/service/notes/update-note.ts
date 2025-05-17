@@ -12,19 +12,6 @@ export interface UpdateNoteRequest{
     summary?: string
 }
 
-// const updateNoteMock = async (payLoad: UpdateNoteRequest): Promise<UpdateNoteResponseParsed> => {    
-//     return new Promise((resolve) => {
-//         setTimeout(() => {
-//             console.log("mocking update note with: ", payLoad.noteId);
-//             const response : UpdateNoteResponse = mockApiCallNote(payLoad.noteId)!;
-//             const noteParsed : UpdateNoteResponseParsed = {
-//                 note: response.note,
-//                 content: (JSON.parse(response.note!.content!) as PartialBlock[])
-//             }
-//             resolve(noteParsed);
-//         }, 1000 * Math.random())
-//     })
-// }
 
 const updateNote = async (payLoad: UpdateNoteRequest): Promise<UpdateNoteResponseParsed> => {
     const { noteId, title, content, summary } = payLoad;
@@ -41,7 +28,7 @@ const updateNote = async (payLoad: UpdateNoteRequest): Promise<UpdateNoteRespons
     return noteParsed;
 }
 
-// todo call api instead of mock
+// done call api instead of mock
 export const useUpdateNote = () => {
     return useMutation({
         mutationFn: updateNote

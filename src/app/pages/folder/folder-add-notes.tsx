@@ -27,10 +27,7 @@ export default function AddNotesDialog() {
   const { mutate, isPending } = useUpdateFolderAction();
   const client = useQueryClient();
 
-  const { data } = useGetUserNotes({
-    skip: 0,
-    take: 100,
-  })
+  const { data } = useGetUserNotes({skip: 0,take: 100,})
 
   const dispatch = useDispatch()
 

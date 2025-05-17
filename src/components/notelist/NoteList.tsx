@@ -8,7 +8,7 @@ import { setSelectedFolder, setSelectedNote } from "@/redux/slice/folder-note";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "@/redux/store";
 import { motion } from "framer-motion";
-import { LinkPreview } from "../ui/link-preview";
+
 
 type NoteListProps ={
     notes : Note[]

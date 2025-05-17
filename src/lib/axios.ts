@@ -3,7 +3,7 @@ import Axios from "axios";
 import { GetAuthKey, StoreKey } from "./local-stores";
 import { SignInResponse } from "@/service/auth/login";
 
-const baseURL = "https://localhost:7050";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 // const baseURL=  "https://wd0xffs1-7050.asse.devtunnels.ms",
 
 export const api = Axios.create({
@@ -64,12 +64,8 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Call your refresh endpoint
         const authCredentials = GetAuthKey();
         if(!authCredentials) return;
-
-        // const { token_type, access_token } = authCredentials;
-        // console.log("refreshing with", access_token);
         await tokenRefresh();
         
         processQueue(null);

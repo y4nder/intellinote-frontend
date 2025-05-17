@@ -1,4 +1,4 @@
-import { mockChatResponses } from "@/data/mockData";
+// import { mockChatResponses } from "@/data/mockData";
 import { api } from "@/lib/axios";
 import { FolderCitation, NoteCitation } from "@/types/chatMessage";
 import { useMutation } from "@tanstack/react-query";
@@ -29,19 +29,19 @@ const sendChatMessage = async (payload: PromptRequest) : Promise<PromptResponse>
     return response.data;
 }
 
-const sendChatMessageMock = async (payload: PromptRequest) : Promise<PromptResponse> => {
-    console.log("sending mock chat prompt: ", payload);
-    const randomIndex = Math.floor(Math.random() * mockChatResponses.length);
-    const mockResponse = mockChatResponses[randomIndex];
+// const sendChatMessageMock = async (payload: PromptRequest) : Promise<PromptResponse> => {
+//     console.log("sending mock chat prompt: ", payload);
+//     const randomIndex = Math.floor(Math.random() * mockChatResponses.length);
+//     const mockResponse = mockChatResponses[randomIndex];
   
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(mockResponse);
-      }, 1000);
-    });
-}
+//     return new Promise(resolve => {
+//       setTimeout(() => {
+//         resolve(mockResponse);
+//       }, 1000);
+//     });
+// }
 
-// todo set to proper function
+// done set to proper function
 export const useSendChatMessage = () => {
     return useMutation({
         mutationFn: sendChatMessage

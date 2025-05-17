@@ -13,14 +13,14 @@ import { setIsSaving, setSelectedFolder, setSelectedNote } from "@/redux/slice/f
 import NoteTopBar from "./note-topbar";
 import { PageLoadingProgress } from "@/components/ui/page-loading-progress";
 import NoteHeader from "./note-header";
-import { useAutoSave } from "@/hooks/useAutoSave";
+import { useAutoSave } from "@/hooks/use-auto-save";
 import { useUpdateNote } from "@/service/notes/update-note";
 import { useNotifyEmbeddingDoneSocket, useSummarizerFailedSocket, useSummarizerSocket} from "@/hooks/sockets";
 import { toast } from "react-toastify";
 import PillNotification from "@/components/notification/pill-notification";
 import ScrollTooltip from "@/components/ui/scroll-tooltip";
 import { useQueryClient } from "@tanstack/react-query";
-import { useThreadManager } from "@/service/nora/chat/chat-thread-manager";
+import { useThreadManager } from "@/lib/chat-thread-manager";
 import { setChatThreadId } from "@/redux/slice/chat-agent";
 import { useTheme } from "@/providers/theme";
 

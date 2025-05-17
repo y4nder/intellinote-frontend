@@ -3,13 +3,6 @@ import { api } from "@/lib/axios";
 import { GetUserNotesResponse } from "@/types/note";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
-// const getUserNotesMock = (): Promise<GetUserNotesResponse> => {
-//     return new Promise((resolve) => {
-//       setTimeout(() => {
-//         resolve(mockGetUserResponse);
-//       }, 800 * Math.random());
-//     });
-// };
 
 export interface GetUserNotesParams {
   term?: string| null;
@@ -28,7 +21,6 @@ export const getUserNotes = async ({ term, skip = 0, take = 10 }: GetUserNotesPa
   return response.data;
 };
 
-  
   
 export const useGetUserNotes = (params: GetUserNotesParams = { skip: 0, take: 10 }) => {
   return useQuery<GetUserNotesResponse>({

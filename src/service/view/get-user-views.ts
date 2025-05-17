@@ -22,7 +22,6 @@ const getUserViews = async () : Promise<FilteredView[]> => {
     let filteredViews : FilteredView[] = [];
 
     views.forEach(view => {
-        
         const { id, name, filterCondition} = view
         const parsedFilteredCondition = JSON.parse(filterCondition) as FilterCondition[];
         const filterdView : FilteredView = {

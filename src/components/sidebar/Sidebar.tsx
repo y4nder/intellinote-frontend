@@ -67,20 +67,6 @@ export default function Sidebar() {
   
   const isMobile = useIsMobile();
   
-  // const notify = () => {
-  //   toast(PillNotification, {
-  //     className: 'p-0 w-[30px] flex items-center gap-3 rounded-full px-4 py-2 shadow-md text-sm',
-  //     data: {
-  //       message: 'Message Archived',
-  //       milliSeconds: 234
-  //     },
-  //     autoClose: 3000,
-  //     closeButton:false,
-  //     position: 'bottom-center',
-  //     theme: isDark ? "dark" : "light"
-  //   });
-  // }
-
   return (
     <div className="relative h-full">
       {/* Overlay for mobile when sidebar is open */}
@@ -140,17 +126,6 @@ export default function Sidebar() {
         </nav>
 
         <div className="p-4">
-          {/* <a
-            href="#"
-            className={cn(
-              "flex items-center text-sm font-semibold hover:text-primary",
-              isCollapsed && "justify-center"
-            )}
-          >
-            <Settings className="dark:text-primary h-5 w-5" />
-            {!isCollapsed && <span className="dark:text-primary ml-3">Settings</span>}
-          </a> */}
-          {/* <Button className="mt-5" onClick={notify}>Notify !</Button> */}
           <SettingsPage/>
         </div>
       </div>

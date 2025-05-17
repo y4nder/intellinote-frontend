@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import SavingIndicator from "@/components/ui/saving-indicator";
-import { useAutoSave } from "@/hooks/useAutoSave";
+import { useAutoSave } from "@/hooks/use-auto-save";
 import { cn, extractIdFromSlug, getGradientClassesFromString } from "@/lib/utils";
 import { setIsSaving, setSelectedFolderDescription, setSelectedFolderTitle } from "@/redux/slice/folder-note";
 import { RootState } from "@/redux/store";
@@ -76,7 +76,6 @@ export default function FolderPageHeader() {
     const handleSaveTitle = useCallback((latestFolderName: string | undefined) => {
         if (!id || !selectedFolder) return;
         if(!latestFolderName || (latestFolderName === selectedFolder.name)) return;
-        console.log("saving title...");
         dispatch(setIsSaving(true));
         updateFolderMutation({
             folderId: id!,
@@ -84,7 +83,6 @@ export default function FolderPageHeader() {
         }, 
         {
             onSuccess: () => {
-            console.log("saved title");
             dispatch(setSelectedFolderTitle(latestFolderName));
             dispatch(setIsSaving(false));
             }
@@ -94,15 +92,12 @@ export default function FolderPageHeader() {
     const handleSaveDescription = useCallback((latestFolderDescription: string | undefined) => {
         if (!id || !selectedFolder) return;
         if(!latestFolderDescription || (latestFolderDescription === selectedFolder.description)) return;
-        console.log("description guard",(latestFolderDescription === selectedFolder.description));
         dispatch(setIsSaving(true));
-        console.log("saving description...");
         updateFolderMutation({
             folderId: id!,
             description: folderDescription,
         }, {
             onSuccess: () => {
-            console.log("saved description");
             dispatch(setSelectedFolderDescription(latestFolderDescription));
             dispatch(setIsSaving(false));
             }
@@ -113,7 +108,6 @@ export default function FolderPageHeader() {
     useAutoSave(folderTitle, handleSaveTitle, 1000, hasMountedTitle.current);
     useAutoSave(folderDescription, handleSaveDescription, 1000, hasMountedTitle.current);
 
-    //socket
     useFolderUpdateDoneSocket((notification) => {
         console.log("received description:", notification.folderDescription);
         dispatch(setSelectedFolderDescription(notification.folderDescription));

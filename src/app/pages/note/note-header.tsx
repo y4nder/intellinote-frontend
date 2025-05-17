@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import NoteHeaderSkeleton from "./skeletons/note-header-skeleton";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { setIsSaving, setSummarized } from "@/redux/slice/folder-note";
-import { useAutoSave } from "@/hooks/useAutoSave";
+import { useAutoSave } from "@/hooks/use-auto-save";
 import { useUpdateNote } from "@/service/notes/update-note";
 import { useNavigate, useParams } from "react-router-dom";
 import { cn, extractIdFromSlug } from "@/lib/utils";
