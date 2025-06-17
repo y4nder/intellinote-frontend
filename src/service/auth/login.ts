@@ -18,10 +18,6 @@ export type SignInResponse = {
     refresh_token?: string | null;
 }
 
-// const getToken = async (data: SignInSchema) : Promise<SignInResponse> => {
-//     const response = await api.post<SignInResponse>(`/api/auth/token`, data);
-//     return response.data;
-// }
 
 const signIn = async (data: SignInSchema) : Promise<SignInResponse> => {
     const response = await api.post<SignInResponse>(`/api/auth/signin?useCookie=${data.useCookie}`, data);
@@ -32,21 +28,3 @@ const signIn = async (data: SignInSchema) : Promise<SignInResponse> => {
 export const useSignIn = () => useMutation({
     mutationFn: signIn
 });
-
-
-// const simulatedLogin = async (data: LoginSchema): Promise<LoginResponse> => {
-//     return new Promise((resolve) => {
-//         setTimeout(() => {
-//             resolve({
-//                 token: "mocked-jwt-token-1234567890",
-//                 user: {
-//                     id: "user-123",
-//                     email: data.email,
-//                     name: "Jane Doe",
-//                     createdAt: new Date(),
-//                     updatedAt: new Date(),
-//                 },
-//             });
-//         }, 300);
-//     });
-// };
