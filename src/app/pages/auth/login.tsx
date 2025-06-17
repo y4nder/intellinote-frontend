@@ -92,8 +92,8 @@ const Login = () => {
         </div>
         
         <div className="flex flex-col my-auto">  
-          <h1 className="text-primary-hard dark:text-primary text-2xl md:text-3xl font-extrabold">Login</h1>
-          <p className="text-on-surface text-sm mb-4 md:mb-6">You can sign in or join with us if you're new to IntelliNote</p>
+            <h1 className="text-primary-hard dark:text-primary text-2xl md:text-3xl font-extrabold">Login</h1>
+            <p className="text-on-surface text-sm mb-4 md:mb-6">You can sign in or join with us if you're new to IntelliNote</p>
 
           <form className="space-y-3 md:space-y-4" onSubmit={handleLogin}>
             <div>

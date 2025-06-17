@@ -46,6 +46,8 @@ export const PageLoadingProgress = React.forwardRef<
     }
   }, [loading, controls]);
 
+  
+
   const randomGradient = useMemo(() => {
     const index = Math.floor(Math.random() * gradientsCombos.length);
     return gradientsCombos[index];

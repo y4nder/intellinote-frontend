@@ -5,7 +5,7 @@ import { PropsWithChildren } from "react"
 import { Provider } from "react-redux";
 import { store } from "@/redux/store";
 import { SidebarProvider } from "@/providers/sidebar";
-import { WebSocketProvider } from "@/providers/socketProvider";
+import { WebSocketProvider } from "@/providers/socket/socketProvider";
 
 
 const MainAppProvider = ({ children }: PropsWithChildren) => {

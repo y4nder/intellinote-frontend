@@ -6,7 +6,8 @@ import SavingIndicator from "@/components/ui/saving-indicator";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "@/providers/sidebar";
-import { useWebSocket } from "@/providers/socketProvider";
+import { useWebSocket } from "@/providers/socket/socketContext";
+
 import { Search, SidebarOpenIcon } from "lucide-react";
 import { useState } from "react";
 
