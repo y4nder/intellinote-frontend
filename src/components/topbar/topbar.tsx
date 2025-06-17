@@ -6,12 +6,12 @@ import { useState } from "react";
 import { SearchModal } from "../search/search-modal";
 import { KeyboardShortcut } from "../search/keyboard-shortcut";
 import { ModeToggle } from "../ui/mode-toggle";
-import { useWebSocket } from "@/providers/socketProvider";
 import { cn } from "@/lib/utils";
 import { NoteGeneratorDialog } from "../ui/note-generator-dialog";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { MultiStepLoader } from "../ui/multi-step-loader";
+import { useWebSocket } from "@/providers/socket/socketContext";
 
 
 const loadingStates = [
