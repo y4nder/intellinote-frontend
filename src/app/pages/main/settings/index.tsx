@@ -2,10 +2,10 @@ import { SettingsLayout } from "@/components/layouts/settings-layout";
 import AccountSettings from "./account-settings";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { useSidebar } from "@/providers/sidebar";
 import { Button } from "@/components/ui/button";
 import { Settings } from "lucide-react";
 import { useState } from "react";
+import { useSidebar } from "@/providers/sidebar/sidebar-context";
 
 export default function SettingsPage() {
     const {isCollapsed} = useSidebar();

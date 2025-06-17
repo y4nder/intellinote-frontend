@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import AuthLayout from "@/components/layouts/auth";
+import AuthLayout from "@/app/pages/auth/layout";
 import { useGetCurrentUser } from "@/service/auth/get-current.user";
 import { useEffect } from "react";
 import { RootState } from "@/redux/store";

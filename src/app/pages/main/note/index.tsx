@@ -22,7 +22,7 @@ import ScrollTooltip from "@/components/ui/scroll-tooltip";
 import { useQueryClient } from "@tanstack/react-query";
 import { useThreadManager } from "@/lib/chat-thread-manager";
 import { setChatThreadId } from "@/redux/slice/chat-agent";
-import { useTheme } from "@/providers/theme";
+import { useTheme } from "@/providers/theme/theme-context";
 
 
 export default function NoteEditor() {

@@ -1,7 +1,7 @@
 import { Suspense } from "react"
-import MainAppProvider from "./main-provider"
+import MainAppProvider from "./providers"
 import { AppRouter } from "./router"
-import SplashScreen from "./splash"
+import SplashScreen from "./common/splash-screen"
 
 const App = () => {
   return (

@@ -15,9 +15,10 @@ import Banner from "./banner";
 import { BreadcrumbUi } from "@/components/ui/breadcrumb-ui";
 import { useThreadManager } from "@/lib/chat-thread-manager";
 import { setChatThreadId } from "@/redux/slice/chat-agent";
-import { useTheme } from "@/providers/theme";
+
 import NoteList from "@/components/notelist/NoteList";
 import NoteListSkeleton from "./skeletons/note-list-skeleton";
+import { useTheme } from "@/providers/theme/theme-context";
 
 
 // Animation variants

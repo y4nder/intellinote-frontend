@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import PillNotification from "../notification/pill-notification";
-import { useTheme } from "@/providers/theme";
+import { useTheme } from "@/providers/theme/theme-context";
 
 const AppLayout = ({ children }: PropsWithChildren) => {
 	const { selectedNote } = useSelector((state: RootState) => state.folderNotes);

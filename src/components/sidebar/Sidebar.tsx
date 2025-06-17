@@ -10,19 +10,11 @@ import {
   Trash,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-is-mobile";
-import { useSidebar } from "@/providers/sidebar";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import SettingsPage from "@/app/pages/settings";
-// import PillNotification from "../notification/pill-notification";
-// import { toast } from "react-toastify";
-// import { useTheme } from "@/providers/theme";
-// import { Button } from "../ui/button";
-// import { toast } from "react-toastify";
-// import PillNotification from "../notification/pill-notification";
-// import CoolNotification from "../notification/notification-component-new";
-
+import SettingsPage from "@/app/pages/main/settings";
+import { useSidebar } from "@/providers/sidebar/sidebar-context";
 
 interface SidebarItemProps {
   icon: React.ReactNode;

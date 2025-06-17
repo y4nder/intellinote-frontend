@@ -2,7 +2,7 @@ import { useEffect, useRef, ReactNode, useCallback, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 import { GetAuthKey } from "@/lib/local-stores";
 import { tokenRefresh } from "@/lib/axios";
-import { WebSocketContext } from "./socketContext";
+import { WebSocketContext } from "./socket-context";
 import { EventKeys, SocketEvents, MethodKeys, SocketMethods } from "./types";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
@@ -40,7 +40,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
 			const connection = new signalR.HubConnectionBuilder()
 				.withUrl(`${BASE_URL}/${socketEndpoint}`, {
 					accessTokenFactory: () => token,
-          transport: signalR.HttpTransportType.WebSockets
+					transport: signalR.HttpTransportType.WebSockets,
 				})
 				.configureLogging(signalR.LogLevel.Information)
 				.withAutomaticReconnect()

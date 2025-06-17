@@ -1,4 +1,4 @@
-import { useWebSocket } from "@/providers/socket/socketContext";
+import { useWebSocket } from "@/providers/socket/socket-context";
 import {
   AgentStepMessage,
 	BroadcastMessage,
