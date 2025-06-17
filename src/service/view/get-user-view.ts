@@ -1,7 +1,7 @@
 import { api } from "@/lib/axios";
 import { FilteredView } from "@/redux/slice/views";
 import { ViewResponse } from "./create-user-view";
-import { FilterCondition } from "@/app/pages/smart-views/filter-utils";
+import { FilterCondition } from "@/app/pages/(root)/main/(home)/smart-views/filter-utils";
 import { useQuery } from "@tanstack/react-query";
 
 const getUserView = async (viewId: string) : Promise<FilteredView> => {

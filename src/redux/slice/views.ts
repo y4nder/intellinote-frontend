@@ -1,4 +1,4 @@
-import { FilterCondition } from "@/app/pages/smart-views/filter-utils";
+import { FilterCondition } from "@/app/pages/(root)/main/(home)/smart-views/filter-utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface FilteredView {

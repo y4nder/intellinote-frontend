@@ -47,11 +47,14 @@ api.interceptors.response.use(
 		const originalRequest = error.config;
 
 		if (error.response?.status === 401 && !originalRequest._retry) {
+			console.log("retrying with token refresh");
 			if (isRefreshing) {
 				return new Promise((resolve, reject) => {
 					failedQueue.push({
 						resolve: () => resolve(api(originalRequest)),
-						reject: (err: unknown) => reject(err),
+						reject: (err: unknown) => {
+							reject(err)
+						},
 					});
 				});
 			}
@@ -60,8 +63,6 @@ api.interceptors.response.use(
 			isRefreshing = true;
 
 			try {
-				const authCredentials = GetAuthKey();
-				if (!authCredentials) return;
 				await tokenRefresh();
 
 				processQueue(null);
@@ -75,14 +76,14 @@ api.interceptors.response.use(
 				isRefreshing = false;
 			}
 		}
-
+		
 		return Promise.reject(error);
 	}
 );
 
 export const tokenRefresh = async (): Promise<void> => {
 	const response = await Axios.post<SignInResponse>(
-		`${baseURL}/api/auth/signin/refresh`,
+		`${baseURL}/api/auth/signin/refresh?useCookie=true`,
 		{},
 		{
 			withCredentials: true,
