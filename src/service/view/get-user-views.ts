@@ -1,4 +1,4 @@
-import { FilterCondition } from "@/app/pages/main/smart-views/filter-utils";
+import { FilterCondition } from "@/app/pages/(root)/main/(home)/smart-views/filter-utils";
 import { api } from "@/lib/axios";
 import { FilteredView } from "@/redux/slice/views";
 import { useQuery } from "@tanstack/react-query";

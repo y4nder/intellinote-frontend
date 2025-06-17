@@ -5,12 +5,10 @@ import { PropsWithChildren } from "react";
 import { Provider } from "react-redux";
 import { store } from "@/redux/store";
 import { SidebarProvider } from "@/providers/sidebar/sidebar-provider";
-import { WebSocketProvider } from "@/providers/socket/socket-provider";
 
 const MainAppProvider = ({ children }: PropsWithChildren) => {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<WebSocketProvider>
 				<Provider store={store}>
 					<SidebarProvider>
 						<ThemeProvider
@@ -21,7 +19,6 @@ const MainAppProvider = ({ children }: PropsWithChildren) => {
 						</ThemeProvider>
 					</SidebarProvider>
 				</Provider>
-			</WebSocketProvider>
 		</QueryClientProvider>
 	);
 };

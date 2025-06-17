@@ -1,7 +1,7 @@
 import { Search, SidebarOpenIcon } from "lucide-react";
 
 import { useIsMobile } from "@/hooks/use-is-mobile";
-import TopBarAddNew from "./topbar-add-new";
+import TopBarAddNew from "./modals/topbar-add-new";
 import { useState } from "react";
 import { SearchModal } from "../search/search-modal";
 import { KeyboardShortcut } from "../search/keyboard-shortcut";

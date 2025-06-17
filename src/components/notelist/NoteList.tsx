@@ -1,6 +1,6 @@
 import { Note } from "@/types/note";
 import { cn, getDisplayTime, getGradientClassesFromString } from "@/lib/utils";
-import NoteCardDropDown from "../notecard/note-card-dropdown";
+import NoteCardDropDown from "../notes/note-card-dropdown";
 import { NotebookIcon } from "lucide-react";
 import { GradientBadge } from "../ui/gradient-badge";
 import { useDispatch, useSelector } from "react-redux";

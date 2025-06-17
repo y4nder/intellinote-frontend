@@ -35,11 +35,11 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
 		let isMounted = true;
 
 		const startConnection = async () => {
-			const token = GetAuthKey()!.access_token!;
+			let token : string | null = null;
+			token = GetAuthKey()?.access_token!;
 
 			const connection = new signalR.HubConnectionBuilder()
 				.withUrl(`${BASE_URL}/${socketEndpoint}`, {
-					accessTokenFactory: () => token,
 					transport: signalR.HttpTransportType.WebSockets,
 				})
 				.configureLogging(signalR.LogLevel.Information)
