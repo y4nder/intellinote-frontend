@@ -41,10 +41,10 @@ const Login = () => {
     mutate({
       email : email!.toString(),
       password: password!.toString(),
-      useCookie: false
+      useCookie: true
     }, {
       onSuccess : (data) => {
-        dispatch(loginUser(data));
+        if(data.access_token !== null) dispatch(loginUser(data));
         navigate("/");
       },
       onError : (e) => {

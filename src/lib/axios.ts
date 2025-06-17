@@ -4,93 +4,89 @@ import { GetAuthKey, StoreKey } from "./local-stores";
 import { SignInResponse } from "@/service/auth/login";
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;
-// const baseURL=  "https://wd0xffs1-7050.asse.devtunnels.ms",
 
 export const api = Axios.create({
-  baseURL,
-  withCredentials: true
-})
+	baseURL,
+	withCredentials: true,
+});
 
 // Request interceptor
 api.interceptors.request.use(
-  (config) => {
-    const authCredentials = GetAuthKey();
+	(config) => {
+		const authCredentials = GetAuthKey();
 
-    if(authCredentials) {
-      config.headers.Authorization = `${authCredentials.token_type} ${authCredentials.access_token}`;
-    }  
+		if (authCredentials) {
+			config.headers.Authorization = `${authCredentials.token_type} ${authCredentials.access_token}`;
+		}
 
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
+		return config;
+	},
+	(error) => {
+		return Promise.reject(error);
+	}
 );
 
 let isRefreshing = false;
 let failedQueue: any[] = [];
 
 const processQueue = (error: any) => {
-  failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve();
-    }
-  });
+	failedQueue.forEach((prom) => {
+		if (error) {
+			prom.reject(error);
+		} else {
+			prom.resolve();
+		}
+	});
 
-  failedQueue = [];
+	failedQueue = [];
 };
 
 api.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
+	(response) => response,
+	async (error) => {
+		const originalRequest = error.config;
 
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry
-    ) {
-      if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({
-            resolve: () => resolve(api(originalRequest)),
-            reject: (err: unknown) => reject(err),
-          });
-        });
-      }
+		if (error.response?.status === 401 && !originalRequest._retry) {
+			if (isRefreshing) {
+				return new Promise((resolve, reject) => {
+					failedQueue.push({
+						resolve: () => resolve(api(originalRequest)),
+						reject: (err: unknown) => reject(err),
+					});
+				});
+			}
 
-      originalRequest._retry = true;
-      isRefreshing = true;
+			originalRequest._retry = true;
+			isRefreshing = true;
 
-      try {
-        const authCredentials = GetAuthKey();
-        if(!authCredentials) return;
-        await tokenRefresh();
-        
-        processQueue(null);
+			try {
+				const authCredentials = GetAuthKey();
+				if (!authCredentials) return;
+				await tokenRefresh();
 
-        // Retry original request after successful refresh
-        return api(originalRequest);
-      } catch (err) {
-        processQueue(err);
-        return Promise.reject(err);
-      } finally {
-        isRefreshing = false;
-      }
-    }
+				processQueue(null);
 
-    return Promise.reject(error);
-  }
+				// Retry original request after successful refresh
+				return api(originalRequest);
+			} catch (err) {
+				processQueue(err);
+				return Promise.reject(err);
+			} finally {
+				isRefreshing = false;
+			}
+		}
+
+		return Promise.reject(error);
+	}
 );
 
-export const tokenRefresh = async () : Promise<void>  => {
-  const response = await Axios.post<SignInResponse>(
-    `${baseURL}/api/auth/signin/refresh`,
-      {},
-      {
-        withCredentials: true
-      }
-  );
-  StoreKey(response.data);
-}
+export const tokenRefresh = async (): Promise<void> => {
+	const response = await Axios.post<SignInResponse>(
+		`${baseURL}/api/auth/signin/refresh`,
+		{},
+		{
+			withCredentials: true,
+		}
+	);
+	StoreKey(response.data);
+};

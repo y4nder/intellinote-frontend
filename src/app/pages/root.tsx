@@ -5,31 +5,29 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 
-
 const AppRoot = () => {
-  const {data: user, isError: isErrorNotes} = useGetCurrentUser();
-  
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+	const { data: user, isError: isErrorCurrentUser } = useGetCurrentUser();
 
-  
-  useEffect(() => {
-    if(user){
-      console.log("who am i response: ", user)
-      dispatch(setUser(user));
-    }
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
-    if(isErrorNotes){
-      console.error("error who am ai response: ", user)
-      navigate("/auth/login") 
-    }
-  }, [user, dispatch, isErrorNotes, navigate])
+	useEffect(() => {
+		if (user) {
+			console.log("who am i response: ", user);
+			dispatch(setUser(user));
+		}
 
-  return (
-    <AppLayout>
-      <Outlet />
-    </AppLayout>
-  );
+		if (isErrorCurrentUser) {
+			console.error("error who am ai response: ", user);
+			navigate("/auth/login");
+		}
+	}, [user, dispatch, isErrorCurrentUser, navigate]);
+
+	return (
+		<AppLayout>
+			<Outlet />
+		</AppLayout>
+	);
 };
 
 export default AppRoot;
