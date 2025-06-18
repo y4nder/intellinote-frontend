@@ -4,41 +4,38 @@ import { FilteredView } from "@/redux/slice/views";
 import { useQuery } from "@tanstack/react-query";
 
 export interface ViewResponse {
-    id: string;
-    name:string;
-    filterCondition: string;
+	id: string;
+	name: string;
+	filterCondition: string;
 }
 
 export interface GetUserViewResponse {
-    views: ViewResponse[];
+	views: ViewResponse[];
 }
 
+const getUserViews = async (): Promise<FilteredView[]> => {
+	const response = await api.get<GetUserViewResponse>("/api/views");
+	const { views } = response.data;
 
+	const filteredViews: FilteredView[] = [];
 
-const getUserViews = async () : Promise<FilteredView[]> => {
-    const response = await api.get<GetUserViewResponse>("/api/views");
-    const { views } = response.data;
+	views.forEach((view) => {
+		const { id, name, filterCondition } = view;
+		const parsedFilteredCondition = JSON.parse(filterCondition) as FilterCondition[];
+		const filterdView: FilteredView = {
+			id,
+			name,
+			conditions: parsedFilteredCondition,
+		};
 
-    let filteredViews : FilteredView[] = [];
+		filteredViews.push(filterdView);
+	});
 
-    views.forEach(view => {
-        const { id, name, filterCondition} = view
-        const parsedFilteredCondition = JSON.parse(filterCondition) as FilterCondition[];
-        const filterdView : FilteredView = {
-            id,
-            name,
-            conditions : parsedFilteredCondition
-        }
-    
-        filteredViews.push(filterdView);
-    });
+	return filteredViews;
+};
 
-    return filteredViews;
-}
-
-export const useGetUserViews = () => 
-    useQuery({
-        queryKey: ["views"],
-        queryFn: getUserViews
-    })
-
+export const useGetUserViews = () =>
+	useQuery({
+		queryKey: ["views"],
+		queryFn: getUserViews,
+	});

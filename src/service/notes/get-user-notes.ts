@@ -32,8 +32,8 @@ export const useGetUserNotes = (params: GetUserNotesParams = { skip: 0, take: 10
 export const useInfiniteGetUserNotes = (params: Omit<GetUserNotesParams, "skip">) => {
   return useInfiniteQuery({
     queryKey: ["user-notes", params.term], 
-    queryFn: async ({ pageParam = 0 }) => {
-      return await getUserNotes({ ...params, skip: pageParam, take: params.take || 10 });
+    queryFn: ({ pageParam = 0 }) => {
+      return getUserNotes({ ...params, skip: pageParam, take: params.take || 10 });
     },
     getNextPageParam: (lastPage, allPages) => {
       const totalLoaded = allPages.reduce((sum, page) => sum + page.notes.length, 0);
@@ -47,6 +47,6 @@ export const useSearchUserNotes = (params: GetUserNotesParams) => {
   return useQuery({
     queryKey: ["user-notes", params],
     queryFn: () => getUserNotes(params),
-    enabled: params.term != null && params.term.trim().length > 0,
+    enabled: params.term !== null && params.term!.trim().length > 0,
   })
 }

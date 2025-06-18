@@ -24,7 +24,7 @@ export default function ScrollTooltip({ referenceEl, onClose, text = "Jumped her
 		}, 5000);
 
 		return () => clearTimeout(timeout);
-	}, [referenceEl, tooltipEl]);
+	}, [referenceEl, tooltipEl, onClose, refs]);
 
 	return (
 		<div
