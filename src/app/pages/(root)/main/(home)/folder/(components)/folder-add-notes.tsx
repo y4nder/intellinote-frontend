@@ -47,17 +47,17 @@ export default function AddNotesDialog() {
 
 	const handleSubmit = () => {
 		// Placeholder for submission handler
-		console.log("Selected note IDs:", selectedNoteIds);
+		if(!selectedFolder) 
+			return
 
 		mutate(
 			{
-				folderId: selectedFolder?.id!,
+				folderId: selectedFolder.id!,
 				noteIds: selectedNoteIds,
 				actionType: "add",
 			},
 			{
 				onSuccess: (data) => {
-					console.log(data.message);
 					client.invalidateQueries({
 						queryKey: ["user-folders", data.folderId],
 					});

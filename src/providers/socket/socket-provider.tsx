@@ -1,6 +1,5 @@
 import { useEffect, useRef, ReactNode, useCallback, useState } from "react";
 import * as signalR from "@microsoft/signalr";
-import { GetAuthKey } from "@/lib/local-stores";
 import { tokenRefresh } from "@/lib/axios";
 import { WebSocketContext } from "./socket-context";
 import { EventKeys, SocketEvents, MethodKeys, SocketMethods } from "./types";
@@ -28,16 +27,12 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
 	}, []);
 
 	const invoke = useCallback(async <M extends MethodKeys>(method: M, ...args: Parameters<SocketMethods[M]>) => {
-		return await connectionRef.current!.invoke(method, ...args);
+		return connectionRef.current!.invoke(method, ...args);
 	}, []);
 
 	useEffect(() => {
 		let isMounted = true;
-
 		const startConnection = async () => {
-			let token : string | null = null;
-			token = GetAuthKey()?.access_token!;
-
 			const connection = new signalR.HubConnectionBuilder()
 				.withUrl(`${BASE_URL}/${socketEndpoint}`, {
 					transport: signalR.HttpTransportType.WebSockets,

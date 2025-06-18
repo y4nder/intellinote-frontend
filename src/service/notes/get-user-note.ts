@@ -11,7 +11,7 @@ const getUserNote = async (noteId: string): Promise<GetUserNoteResponseParsed> =
 
   try{
     parsedContent = JSON.parse(data.note!.content!) as PartialBlock[]
-  }catch(error){
+  }catch {
     const editor = BlockNoteEditor.create();
     const blocksFromMd = await editor.tryParseMarkdownToBlocks(data.note!.content!)
     parsedContent = blocksFromMd

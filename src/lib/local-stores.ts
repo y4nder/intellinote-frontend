@@ -28,7 +28,7 @@ export const GetPreferences = () => {
 
     try {
         return JSON.parse(item) as PreferenceState
-    } catch(errr){
+    } catch {
         return null;
     }
 }
