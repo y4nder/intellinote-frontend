@@ -29,13 +29,13 @@ export default function SmartViewsPage() {
         if(notes){
             dispatch(setNotes(notes.notes));
         }
-    }, [dispatch, notes])
+    }, [notes])
 
     useEffect(() => {
         if(userViews){
             dispatch(setViews(userViews));
         }
-    }, [dispatch, userViews])
+    }, [userViews])
 
     return (
         <div className="relative overflow-hidden min-h-screen">

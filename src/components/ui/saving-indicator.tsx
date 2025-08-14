@@ -7,7 +7,7 @@ export default function SavingIndicator() {
 	const { isSaving } = useSelector((state: RootState) => state.folderNotes);
 	return (
 		<AnimatePresence
-			mode="wait"
+			mode="sync"
 			initial={false}
 		>
 			{isSaving ? (

@@ -87,6 +87,22 @@ export default function NoteEditor() {
 		useCallback(
 			(latestBlocks: Block[] | undefined) => {
 				if (!latestBlocks) return;
+				const allBlocksAreSlash = latestBlocks.every(block => {
+					if (!block.content || block.content.length === 0) return true;
+					
+					// Check if content is just a single slash text node
+					return (
+						block.content.length === 1 &&
+						block.content[0].type === "text" &&
+						block.content[0].text.trim() === "/"
+					);
+				});
+
+				if (allBlocksAreSlash) {
+					console.log("Skipping autosave because all blocks only contain '/'");
+					return;
+				}
+
 				console.log("saving note...");
 				dispatch(setIsSaving(true));
 
@@ -126,7 +142,7 @@ export default function NoteEditor() {
 			console.log("entered here");
 			setInitialContent(data.content);
 		}
-	}, [data, selectedNote, initialContent, dispatch]);
+	}, [data, selectedNote, dispatch]);
 
 	useEffect(() => {
 		const threadId = getThreadId(id!);

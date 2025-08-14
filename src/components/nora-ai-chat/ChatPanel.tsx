@@ -209,15 +209,43 @@ export default function ChatPanel() {
 					</button>
 				</div>
 
-				<div className="my-2 flex justify-between px-4">
-					<div />
-					<div>
-						{selectedNote && <p className="text-xs text-on-surface text-center">note Id: {selectedNote.id}</p>}
+				<div className="my-2 flex justify-between items-center px-4">
+					{/* Thread Status */}
+					<div className="flex gap-2 items-center">
+						<div>
+							{threadId ? (
+							<span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 flex items-center gap-1 animate-pulse">
+								<span className="w-2 h-2 rounded-full bg-green-500"></span>
+							</span>
+							) : (
+							<span className="px-2 py-1 text-xs rounded-full bg-gray-200 text-gray-600 flex items-center gap-1">
+								<span className="w-2 h-2 rounded-full bg-gray-400"></span>
+							</span>
+							)}
+						</div>
 
-						{selectedFolder && <p className="text-xs text-on-surface text-center">folder Id: {selectedFolder.id}</p>}
-						{!selectedFolder && !selectedNote && <p className="text-xs text-on-surface text-center">global</p>}
-						<p className="text-xs text-on-surface text-center">thread Id: {threadId ? threadId : "no thread id"}</p>
+						{/* Context */}
+						<div className="flex flex-wrap justify-center gap-2">
+							{selectedNote && (
+							<span className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+								📝 {selectedNote.title}
+							</span>
+							)}
+							{selectedFolder ? (
+							<span className="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800">
+								📂 {selectedFolder.name}
+							</span>
+							) : (
+							!selectedNote && (
+								<span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-700">
+								🌍 Global
+								</span>
+							)
+							)}
+						</div>
 					</div>
+
+					{/* Reset Button */}
 					<button
 						className="text-gray-400 hover:text-secondary cursor-pointer hover:-rotate-180 transition-transform"
 						onClick={handleResetConversation}
@@ -225,6 +253,7 @@ export default function ChatPanel() {
 						<RotateCwIcon width={16} />
 					</button>
 				</div>
+
 
 				<div
 					className="flex-1 overflow-y-auto p-4"

@@ -58,7 +58,7 @@ export default function SearchNoteItem({note, onSelect} : SearchNoteItemProps) {
             <div className="flex items-center">
                 { note.snippet && (
                     <Button 
-                        className="text-[10px] pl-4 py-4 cursor-pointer bg-primary dark:bg-on-surface hover:bg-primary"
+                        className="text-[10px] pl-4 py-4 cursor-pointer text-on-primary bg-primary dark:bg-on-surface hover:bg-primary"
                         onClick={(e) => {
                             e.stopPropagation();
                             handleNavigateToSnippet();

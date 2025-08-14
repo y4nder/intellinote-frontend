@@ -80,7 +80,7 @@ export default function Home() {
 			dispatch(setNotes(data.notes));
 			dispatch(setIsQuerying(isLoading));
 		}
-	}, [data, dispatch, isLoading]);
+	}, [data, isLoading]);
 
 	return (
 		<div className="top-0 px-6 pb-6">
