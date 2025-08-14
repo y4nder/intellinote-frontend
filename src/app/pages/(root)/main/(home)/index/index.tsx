@@ -62,10 +62,6 @@ export default function Home() {
 	const isDark = currentTheme === "dark";
 
 	useEffect(() => {
-		console.log("using note grid:", isNoteGrid);
-	}, [isNoteGrid]);
-
-	useEffect(() => {
 		const globalThreadId = getGlobalThread();
 
 		if (globalThreadId) {
@@ -73,14 +69,14 @@ export default function Home() {
 		} else {
 			dispatch(setChatThreadId(undefined));
 		}
-	}, []);
+	}, [dispatch, getGlobalThread]);
 
 	useEffect(() => {
 		dispatch(setSelectedNote(null));
 		dispatch(setSelectedFolder(null));
 		dispatch(setIsQuerying(isLoading));
 		if (data) {
-			console.log("notes arrived");
+			// console.log("notes arrived");
 			dispatch(setNotes(data.notes));
 			dispatch(setIsQuerying(isLoading));
 		}
@@ -110,14 +106,14 @@ export default function Home() {
 					initial="hidden"
 					animate="visible"
 				>
-					{folders.map((folder: Folder) => (
+					{folders.map((folder: Folder) => 
 						<motion.div
 							key={folder.id}
 							variants={itemVariants}
 						>
 							<FolderCard folder={folder} />
 						</motion.div>
-					))}
+					)}
 				</motion.div>
 			</div>
 
@@ -128,13 +124,13 @@ export default function Home() {
 					<ViewToggle className="mr-2" />
 				</div>
 
-				{notes.length === 0 || isQuerying ? (
-					isNoteGrid ? (
+				{notes.length === 0 || isQuerying ? 
+					isNoteGrid ? 
 						<NoteGridSkeleton />
-					) : (
+					 : 
 						<NoteListSkeleton />
-					)
-				) : isNoteGrid ? (
+					
+				 : isNoteGrid ? 
 					<motion.div
 						className={cn(
 							"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:grid-cols-5",
@@ -144,18 +140,18 @@ export default function Home() {
 						initial="hidden"
 						animate="visible"
 					>
-						{notes.map((note: Note) => (
+						{notes.map((note: Note) => 
 							<motion.div
 								key={note.id}
 								variants={itemVariants}
 							>
 								<NoteCard note={note} />
 							</motion.div>
-						))}
+						)}
 					</motion.div>
-				) : (
+				 : 
 					<NoteList notes={notes} />
-				)}
+				}
 			</div>
 		</div>
 	);

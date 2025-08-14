@@ -93,15 +93,13 @@ export default function ChatPanel() {
 		dispatch(setLoading(true));
 
 		const promptContext: PromptContext = {
-			...(selectedNote && { noteId: selectedNote.id }),
-			...(selectedFolder && { folderId: selectedFolder.id }),
+			...selectedNote && { noteId: selectedNote.id },
+			...selectedFolder && { folderId: selectedFolder.id },
 		};
-
-		console.log("context: ", promptContext);
 
 		sendChatMutation(
 			{
-				...(threadId && { threadId }),
+				...threadId && { threadId },
 				promptMessage: message,
 				promptContext,
 			},
@@ -116,13 +114,13 @@ export default function ChatPanel() {
 						timestamp: new Date().toISOString(),
 					};
 
-					const threadId = data.threadId;
+					const resThreadId = data.threadId;
 
-					if (!selectedFolder && !selectedNote) setGlobalThread(threadId);
+					if (!selectedFolder && !selectedNote) setGlobalThread(resThreadId);
 
-					if (selectedNote) setThreadId(selectedNote.id, threadId);
+					if (selectedNote) setThreadId(selectedNote.id, resThreadId);
 
-					if (selectedFolder) setThreadId(selectedFolder.id, threadId);
+					if (selectedFolder) setThreadId(selectedFolder.id, resThreadId);
 
 					dispatch(setLoading(false));
 					dispatch(addChatMessage(noraMessage));

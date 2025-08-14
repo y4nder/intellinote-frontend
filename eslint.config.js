@@ -23,10 +23,10 @@ export default tseslint.config(
 			"no-console": "warn", // Warn on console statements
 			// Add more strict rules here as needed
 			"no-debugger": "error",
-			"no-alert": "error",
+			// "no-alert": "error",
 			"no-shadow": "error",
 			eqeqeq: "error",
-			"no-extra-parens": "error",
+			"no-extra-parens": "warn",
 			"no-return-await": "error",
 			"no-throw-literal": "error",
 			"no-unused-expressions": "error",

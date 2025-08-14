@@ -43,18 +43,18 @@ export default function TopBar() {
 				duration={2000}
 				loop={false}
 			/>
-			<div className="sticky top-0 z-40 flex items-center justify-between px-4 py-2  backdrop-blur-md">
-				{isCollapsed ? (
+			<div className="sticky top-0 z-10 flex items-center justify-between px-4 py-2 backdrop-blur-md">
+				{isCollapsed ? 
 					<div
 						className="rounded-full p-2 hover:bg-primary-container hover:text-on-primary-container"
 						onClick={toggleSidebar}
 					>
 						<SidebarOpenIcon className="h-4 w-4 text-secondary" />
 					</div>
-				) : (
+				 : 
 					<div className="flex" />
-				)}
-				{!isMobile ? (
+				}
+				{!isMobile ? 
 					<>
 						<div className="flex justify-center items-center">
 							<button
@@ -76,11 +76,11 @@ export default function TopBar() {
 							<div className={cn("rounded-full p-1 max-h-[1px]", `${isConnected ? "bg-green-500" : "bg-red-500"}`)} />
 						</div>
 					</>
-				) : (
+				 : 
 					<div className="flex flex-row">
 						<button
 							onClick={() => setSearchOpen(true)}
-							className="flex items-center w-fit gap-2 rounded-3xl bg-white px-4 py-2 text-sm text-muted-foreground dark:border-white/20 dark:bg-brand h-12 hover:shadow-md transition-all duration-300 shadow-sm cursor-pointer"
+							className="flex items-center w-fit gap-2 rounded-3xl bg-surface-container-highest dark:bg-surface-container px-4 py-2 text-sm text-muted-foreground dark:border-white/20 dark:bg-brand h-fit hover:shadow-md transition-all duration-300 shadow-sm cursor-pointer"
 						>
 							<Search className="h-4 w-4 text-secondary" />
 							<span className="text-secondary/50  sm:text-sm font-medium">
@@ -89,7 +89,7 @@ export default function TopBar() {
 						</button>
 						<TopBarAddNew />
 					</div>
-				)}
+				}
 			</div>
 
 			<SearchModal

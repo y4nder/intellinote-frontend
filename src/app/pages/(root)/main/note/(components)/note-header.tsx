@@ -46,9 +46,9 @@ export default function NoteHeader() {
 
     // listen for mock sockets
     useSummarizerSocket((notification) => {
-        console.log("notif", notification);
+        // console.log("notif", notification);
         const {response , id: notifId} = notification;
-        console.log("ids", notifId, selectedNote!.id);
+        // console.log("ids", notifId, selectedNote!.id);
         if(notifId === selectedNote!.id){
           dispatch(setSummarized(response));
           setIsSummarizing(false);
@@ -57,7 +57,7 @@ export default function NoteHeader() {
     })
 
     useSummarizerFailedSocket((notification) => {
-        console.log("failed notif ", notification);
+        // console.log("failed notif ", notification);
         if(notification.id === selectedNote!.id){
           setIsSummarizing(false);
         }
@@ -66,18 +66,18 @@ export default function NoteHeader() {
     
     // todo delegate action callback if id exists
     const handleSave = useCallback((latestNoteTitle: string | undefined) => {
-      if (!latestNoteTitle || (latestNoteTitle === selectedNote?.title)) return;
+      if (!latestNoteTitle || latestNoteTitle === selectedNote?.title) return;
       if(!id) return;
-      console.log("saving");
+      // console.log("saving");
       dispatch(setIsSaving(true));
-      console.log("saving title...");
+      // console.log("saving title...");
       mutate({
           noteId: selectedNote!.id,
           title: noteTitle
         }, {
           onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ["user-notes"]})
-            console.log("saved title...");
+            // console.log("saved title...");
           },
           onSettled : () => {
               dispatch(setIsSaving(false));
@@ -215,9 +215,9 @@ export default function NoteHeader() {
         {isSummarizing && (
             <NoteSummaryLoading type={"Summarizing"}/>
         )}
-        <div className="mt-4 flex gap-2 justify-items-center text-white pl-6 pb-4">
+        <div className="mt-4 flex flex-wrap gap-2 justify-items-center text-white pl-6 pb-4">
             <Button 
-              className="text-xs rounded-2xl bg-primary-hard/50 hover:bg-primary-hard/80"
+              className="text-xs rounded-2xl bg-primary-hard/50 hover:bg-primary-hard/80 cursor-pointer hover:-translate-y-0.5 transition-transform"
               disabled={isSummarizing}
               onClick={handleSummarize}
             >
@@ -232,7 +232,7 @@ export default function NoteHeader() {
                 </>
               }
             </Button>
-              <MindMapModal/>
+            <MindMapModal/>
             <Button className="text-xs rounded-2xl text-on-primary cursor-pointer hover:-translate-y-0.5 transition-transform"
               onClick={() => {
                 dispatch(toggleChat());

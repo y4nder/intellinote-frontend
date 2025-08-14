@@ -4,6 +4,7 @@ import { BackgroundGradientAnimation } from "@/components/ui/background-gradient
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/ui/mode-toggle"
 import { PageLoadingProgress } from "@/components/ui/page-loading-progress"
+import { Spinner } from "@/components/ui/spinner"
 import { useIsMobile } from "@/hooks/use-is-mobile"
 import { loginUser } from "@/redux/slice/auth"
 
@@ -47,9 +48,9 @@ const Login = () => {
         if(data.access_token !== null) dispatch(loginUser(data));
         navigate("/");
       },
-      onError : (e) => {
-        alert(JSON.stringify(e, null, 2));
-        console.log(JSON.stringify(e, null, 2));
+      onError : (error) => {
+        alert(JSON.stringify(error, null, 2));
+        console.log(JSON.stringify(error, null, 2));
       }
     })
   }
@@ -117,8 +118,9 @@ const Login = () => {
             <Button
               type="submit"
               className="w-full bg-primary-hard text-white dark:bg-primary-container dark:text-on-surface py-2 md:py-3 rounded-md hover:bg-primary-hard/60 transition duration-300 cursor-pointer"
+              disabled={isPending}
             >
-              Login
+              {isPending ?  <Spinner/> : "Login"}
             </Button>
           </form>
           <p className="text-center mt-4 md:mt-6 text-on-surface">

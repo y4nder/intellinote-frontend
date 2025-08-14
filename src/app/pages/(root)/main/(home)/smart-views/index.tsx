@@ -29,13 +29,13 @@ export default function SmartViewsPage() {
         if(notes){
             dispatch(setNotes(notes.notes));
         }
-    }, [notes])
+    }, [dispatch, notes])
 
     useEffect(() => {
         if(userViews){
             dispatch(setViews(userViews));
         }
-    }, [userViews])
+    }, [dispatch, userViews])
 
     return (
         <div className="relative overflow-hidden min-h-screen">
@@ -49,7 +49,7 @@ export default function SmartViewsPage() {
           </div>
       
           {/* Main Content */}
-          <div className="relative z-10 mt-12">
+          <div className="relative z-[5] mt-12">
             {/* Breadcrumb */}
             <div className="pb-4 px-4 max-w-screen-xl mx-auto">
               <BreadcrumbUi />
@@ -75,7 +75,7 @@ export default function SmartViewsPage() {
             </div>
       
             {/* Views */}
-            <div className="mt-16 columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 px-4 max-w-screen-xl mx-auto space-y-4">
+            <div className="mt-16 mb-16 columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 px-4 max-w-screen-xl mx-auto space-y-4">
             <AnimatePresence>
                 {views.length > 0 &&
                 views.map((view, index) => (

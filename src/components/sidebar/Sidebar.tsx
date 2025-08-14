@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { cn, gradientsCombos } from "@/lib/utils";
 
 import { Home, Folder, SidebarCloseIcon, Triangle, View, Trash } from "lucide-react";
@@ -16,7 +16,8 @@ interface SidebarItemProps {
 }
 
 export function SidebarItem({ icon, label, to }: SidebarItemProps) {
-	const { isCollapsed } = useSidebar();
+	const { isCollapsed, toggleSidebar } = useSidebar();
+	const isMobile = useIsMobile();
 
 	return (
 		<li className="px-4 py-2">
@@ -29,6 +30,11 @@ export function SidebarItem({ icon, label, to }: SidebarItemProps) {
 						isCollapsed && "justify-center"
 					)
 				}
+				onClick={() => {
+					if(isMobile){
+						toggleSidebar();
+					}
+				}}
 			>
 				{icon}
 				{!isCollapsed && <span className="ml-3">{label}</span>}
@@ -41,23 +47,15 @@ export default function Sidebar() {
 	const { isCollapsed, toggleSidebar } = useSidebar();
 	const { user } = useSelector((state: RootState) => state.auth);
 
-	useEffect(() => {
-		console.log("user: ", user);
-	}, [user]);
-
 	const isMobile = useIsMobile();
 
 	return (
 		<div className="relative h-full">
-			{/* Overlay for mobile when sidebar is open */}
-			{isMobile && !isCollapsed && <div className=" inset-0 bg-opacity-50 z-99"></div>}
-
 			<div
 				className={cn(
 					"h-screen flex flex-col transition-all duration-300 ease-in-out shadow-lg",
 					isCollapsed ? "w-16" : "w-52",
 					isMobile && !isCollapsed && "w-full max-w-[250px] z-30",
-					// light mode gradient
 					"bg-gradient-to-b from-[#F8F5FF] to-[#F6F8F9] dark:bg-surface dark:bg-none "
 				)}
 			>
@@ -73,14 +71,14 @@ export default function Sidebar() {
 						</div>
 						{!isCollapsed && <span className="text-xs ml-3 text-primary font-medium truncate w-20">{user?.email}</span>}
 					</div>
-					{!isCollapsed && (
+					{!isCollapsed && 
 						<div
 							className="rounded-full p-2 hover:bg-primary-container hover:text-on-primary-container"
 							onClick={toggleSidebar}
 						>
 							<SidebarCloseIcon className="h-4 w-4 text-secondary" />
 						</div>
-					)}
+					}
 				</div>
 
 				<nav className="flex-1 overflow-y-auto py-4">

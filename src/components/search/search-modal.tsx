@@ -43,10 +43,9 @@ export function SearchModal({ open, onOpenChange }: { open: boolean; onOpenChang
 
     useEffect(() => {
         if(debouncedQuery.trim().length === 0) {
-            console.log("note querying with empty query");
-            return;
+            // console.log("note querying with empty query");
         } else {
-            console.log("querying with term: ", debouncedQuery);
+            // console.log("querying with term: ", debouncedQuery);
             fetchData(debouncedQuery);
         }
 
@@ -57,13 +56,13 @@ export function SearchModal({ open, onOpenChange }: { open: boolean; onOpenChang
     const fetchData = async (query: string) => {
         setLoading(true)
         try {
-            const {notes} = await getUserNotes({term: query,skip: 0,take: 5})
-            const { folders } = await getUserFolders({term: query,skip: 0,take: 5})
-            setNotes(notes)
-            setFolders(folders)
+            const {notes: fetchedNotes} = await getUserNotes({term: query,skip: 0,take: 5})
+            const { folders: fetchedFolders } = await getUserFolders({term: query,skip: 0,take: 5})
+            setNotes(fetchedNotes)
+            setFolders(fetchedFolders)
 
-        } catch (error) {
-            console.error("Error fetching data:", error)
+        } catch {
+            // console.error("Error fetching data:", error)
         } finally {
             setLoading(false)
         }
@@ -81,11 +80,11 @@ export function SearchModal({ open, onOpenChange }: { open: boolean; onOpenChang
             setNotes(recentNotes.slice(0,5));
             setFolders(stateFolders.slice(0,5));
         }
-    }, [open])
+    }, [open, recentNotes, stateFolders])
 
     return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className={cn("border border-secondary/20 p-0 gap-0 min-w-[750px] max-h-[750px] top-[450px] backdrop-blur-[80px] dark:bg-surface-container shadow-2xl",
+        <DialogContent className={cn("border border-secondary/20 p-0 gap-0 w-full sm:min-w-[750px] sm:max-h-[750px] top-[450px] backdrop-blur-[80px] dark:bg-surface-container shadow-2xl",
             ``
         )}>
             <DialogHeader>
@@ -106,13 +105,13 @@ export function SearchModal({ open, onOpenChange }: { open: boolean; onOpenChang
             </DialogHeader>
 
             <div className="overflow-y-auto">
-                {loading ? (
+                {loading ? 
                     <SearchModalSkeleton/>
-                ) : (
+                 : 
                 <>
 
                     {/* Notes Section */}
-                    {notes.length > 0 && (
+                    {notes.length > 0 && 
                         <div className="py-2">
                             <div className="px-4 py-1 text-xs font-medium text-on-background uppercase tracking-wider">
                                 Notes{" "}
@@ -120,14 +119,14 @@ export function SearchModal({ open, onOpenChange }: { open: boolean; onOpenChang
                                     {notes.length}
                                 </Badge>
                             </div>
-                            {notes.map((note) => (
+                            {notes.map((note) => 
                                 <SearchNoteItem key={note.id} note={note} onSelect={() => onOpenChange(false)}/>
-                            ))}
+                            )}
                         </div>
-                    )}
+                    }
 
                     {/* Folders Section */}
-                    {folders.length > 0 && (
+                    {folders.length > 0 && 
                         <div className="py-2">
                             <div className="px-4 py-1 text-xs font-medium text-on-background uppercase tracking-wider">
                                 Folders{" "}
@@ -135,18 +134,18 @@ export function SearchModal({ open, onOpenChange }: { open: boolean; onOpenChang
                                     {folders.length}
                                 </Badge>
                             </div>
-                            {folders.map((folder) => (
+                            {folders.map((folder) => 
                                 <SearchFolderItem key={folder.id} folder={folder} onSelect={() => onOpenChange(false)} />
-                            ))}
+                            )}
                         </div>
-                    )}
+                    }
 
                     {/* No Results */}
-                    {folders.length === 0 && notes.length === 0 && (
+                    {folders.length === 0 && notes.length === 0 && 
                         <div className="flex justify-center p-8 text-on-background">No results found</div>
-                    )}
+                    }
                 </>
-                )}
+                }
             </div>
         </DialogContent>
     </Dialog>

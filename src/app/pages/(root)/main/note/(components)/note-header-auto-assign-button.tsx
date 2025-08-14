@@ -14,6 +14,9 @@ import { useCreateFolder } from "@/service/folders/create-folder";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+
+
 
 
 export default function NoteHeaderAutoAssignButton() {
@@ -38,20 +41,22 @@ export default function NoteHeaderAutoAssignButton() {
         if(data){
             dispatch(setFolders(data.folders));
         }
-    },[data])
+    },[data, dispatch])
 
     const handleAutoAssign = () => {
+      if(!selectedNote) return;
+
         //done replace with api call
-        mutate(selectedNote?.id!,{
-            onSuccess: (data) => {
-                const {folder} = data;
+        mutate(selectedNote.id,{
+            onSuccess: (fetchedData) => {
+                const {folder} = fetchedData;
                 if(folder.folderId){
-                    const folderToAssign = folders.find(f => f.id == folder.folderId);
-                    console.log("folder to Assign: ", folderToAssign);
+                    const folderToAssign = folders.find(f => f.id === folder.folderId);
+                    // console.log("folder to Assign: ", folderToAssign);
                     setToAssignFolder(folderToAssign!);
                     setIsOpen(true);
                 } else {
-                    console.log("folder to create", folder);
+                    // console.log("folder to create", folder);
                     setToCreateFolder(folder);
                     setIsOpen(true);
                 }
@@ -74,11 +79,11 @@ export default function NoteHeaderAutoAssignButton() {
         }, {
         onSuccess: () => {
                 dispatch(setNoteFolder({
-                    noteId: selectedNote?.id!,
+                    noteId: selectedNote!.id!,
                     folderId: toAssignFolder.id
                 }));
                 queryClient.invalidateQueries({queryKey:["user-notes", "user-folders"]})
-                console.log("assigning folder")
+                // console.log("assigning folder")
                 setIsOpen(false);
             }
         })
@@ -94,15 +99,16 @@ export default function NoteHeaderAutoAssignButton() {
 
     const handleCreateAutoAssignNote = () => {
         if(!toCreateFolder) return;
+        if(!selectedNote) return;
         newFolderMutation({
             name: folderNameInput,
             description: "",
-            noteIds: [selectedNote?.id!],
+            noteIds: [selectedNote.id],
             auto: false
         }, {
-            onSuccess : (data) => {
+            onSuccess : (fetchedFolder) => {
                 queryClient.invalidateQueries({queryKey: ["user-folders"]});
-                const {folder} = data;
+                const {folder} = fetchedFolder;
                 dispatch(setSelectedFolder(folder));
                 const folderId = `${folder.name.toLowerCase().replace(/\s+/g, "-")}-${folder.id}`;
                 navigate(`/Folder/${folderId}`);
@@ -112,19 +118,27 @@ export default function NoteHeaderAutoAssignButton() {
 
     return (
         <div>
+          <Button
+            disabled={isPending}
+            onClick={handleAutoAssign}
+            className="flex items-center gap-1 bg-on-primary-fixed text-xs text-background dark:text-on-background hover:bg-primary-fixed-dim hover:text-on-primary-fixed rounded-2xl px-3 py-2 cursor-pointer"
+          >
+            {isPending ? 
+              <>
+                <Spinner/> 
+                Assigning note...
+              </>
+            : 
+              <>
+                <Sparkle className="w-4 h-4" />
+                Auto Assign
+              </>
+            }
+          </Button>
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <Button
-              disabled={isPending}
-              onClick={handleAutoAssign}
-              className="flex items-center gap-1 bg-on-primary-fixed text-xs text-background dark:text-on-background hover:bg-primary-fixed-dim hover:text-on-primary-fixed rounded-2xl px-3 py-2 cursor-pointer"
-            >
-              <Sparkle className="w-4 h-4" />
-              Auto Assign
-            </Button>
-      
             <DialogContent className="min-w-[820px] w-full rounded-2xl p-6 bg-surface shadow-xl">
               <DialogHeader>
-                {toAssignFolder ? (
+                {toAssignFolder ? 
                   <>
                     <DialogTitle className="text-lg font-semibold text-on-surface flex items-center gap-2">
                       <FolderOpen className="h-5 w-5 text-blue-600" />
@@ -155,7 +169,7 @@ export default function NoteHeaderAutoAssignButton() {
                       </div>
                     </DialogDescription>
                   </>
-                ) : toCreateFolder ? (
+                 : toCreateFolder ? 
                   <>
                     <DialogTitle className="text-lg font-semibold text-on-surface flex items-center gap-2">
                       <PlusCircle className="h-5 w-5 text-green-600 dark:text-green-300" />
@@ -181,7 +195,7 @@ export default function NoteHeaderAutoAssignButton() {
                       </div>
                     </DialogDescription>
                   </>
-                ) : null}
+                 : null}
               </DialogHeader>
       
               <DialogFooter className="mt-6 flex justify-end gap-2">
@@ -192,21 +206,21 @@ export default function NoteHeaderAutoAssignButton() {
                 >
                   Cancel
                 </Button>
-                {toAssignFolder ? (
+                {toAssignFolder ? 
                   <Button
                     onClick={handleConfirmAutoAssignNote}
                     className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white dark:text-on-surface hover:bg-blue-700 cursor-pointer"
                   >
                     Confirm Assignment
                   </Button>
-                ) : toCreateFolder ? (
+                 : toCreateFolder ? 
                   <Button
                     onClick={handleCreateAutoAssignNote}
                     className="rounded-md bg-green-600 dark:bg-green-800 px-4 py-2 text-sm font-medium text-white cursor-pointer hover:bg-green-700"
                   >
                     Create Folder & Assign
                   </Button>
-                ) : null}
+                 : null}
               </DialogFooter>
             </DialogContent>
           </Dialog>

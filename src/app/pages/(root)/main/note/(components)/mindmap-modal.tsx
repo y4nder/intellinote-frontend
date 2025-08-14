@@ -26,7 +26,7 @@ export default function MindMapModal() {
         }, {
             onSuccess : (data) => {
                 dispatch(setMindMap(data));
-                console.log("created mind map");
+                // console.log("created mind map");
             },
             onSettled : () => {
                 setIsOpen(true);
@@ -35,20 +35,20 @@ export default function MindMapModal() {
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <Button 
+        <>
+            <Button
                 onClick={() => {
                     if (!selectedNote || isLoading) return;
                     if (selectedNote.mindmap) {
-                        console.log("there is mind map");
+                        // console.log("there is mind map");
                         handleOpen();
                     } else {
-                        console.log("no mind map");
+                        // console.log("no mind map");
                         handleCreateThenOpen();
                     }
                 }}
                 disabled={isLoading}
-                className="text-xs rounded-2xl bg-red-400 hover:bg-red-600 font-bold cursor-pointer flex gap-2 items-center px-4"
+                className="text-xs rounded-2xl bg-red-400 hover:bg-red-600 font-bold cursor-pointer flex gap-2 items-center px-4 hover:-translate-y-0.5 transition-transform"
             >
                 {isLoading ? (
                     <>
@@ -62,28 +62,30 @@ export default function MindMapModal() {
                     </>
                 )}
             </Button>
-            <DialogContent className="backdrop-blur-2xl min-w-[90vw] min-h-[90vh]">
-                <DialogHeader className="">
-                    <DialogTitle className="text-on-surface text-3xl">
-                        Mind Map: {selectedNote?.title}
-                    </DialogTitle>
-                    <DialogDescription className="text-on-surface text-sm">
-                    {/* <div className="space-y-4">
-                        {selectedNote?.summary && (
-                            <p className="italic text-xs">"{selectedNote.summary}"</p>
-                        )}  
-                    </div>  */}
-                    </DialogDescription>
-                </DialogHeader>
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <DialogContent className="backdrop-blur-2xl min-w-[90vw] min-h-[90vh]">
+                    <DialogHeader className="">
+                        <DialogTitle className="text-on-surface text-3xl">
+                            Mind Map: {selectedNote?.title}
+                        </DialogTitle>
+                        <DialogDescription className="text-on-surface text-sm">
+                        {/* <div className="space-y-4">
+                            {selectedNote?.summary && (
+                                <p className="italic text-xs">"{selectedNote.summary}"</p>
+                            )}  
+                        </div>  */}
+                        </DialogDescription>
+                    </DialogHeader>
 
-                <div className="">
-                    {selectedNote?.mindmap ? (
-                    <MarkmapHooks note={selectedNote} />
-                    ) : (
-                    <p>Loading mind map...</p>
-                    )}
-                </div>
-            </DialogContent>
-        </Dialog>
+                    <div className="">
+                        {selectedNote?.mindmap ? (
+                        <MarkmapHooks note={selectedNote} />
+                        ) : (
+                        <p>Loading mind map...</p>
+                        )}
+                    </div>
+                </DialogContent>
+            </Dialog>
+        </>
     )
 }
